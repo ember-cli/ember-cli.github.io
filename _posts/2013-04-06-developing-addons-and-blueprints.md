@@ -3,7 +3,7 @@ layout: post
 title: "Developing Addons and Blueprints"
 permalink: developing-addons-and-blueprints
 category: extending
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2013-04-06-developing-addons-and-blueprints.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-06-developing-addons-and-blueprints.md"
 ---
 
 Addons make it possible to easily share common code between

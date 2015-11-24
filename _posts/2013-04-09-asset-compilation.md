@@ -3,7 +3,7 @@ layout: post
 title: "Asset Compilation"
 permalink: asset-compilation
 category: user-guide
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2013-04-09-asset-compilation.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-09-asset-compilation.md"
 ---
 
 ### Raw Assets

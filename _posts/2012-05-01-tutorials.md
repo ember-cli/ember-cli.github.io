@@ -3,7 +3,7 @@ layout: post
 title: "tutorials"
 permalink: tutorials
 category: user-guide
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2012-05-01-tutorials.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2012-05-01-tutorials.md"
 ---
 
 ### Getting Started

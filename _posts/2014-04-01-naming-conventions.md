@@ -3,7 +3,7 @@ layout: post
 title: "Naming Conventions"
 permalink: naming-conventions
 category: user-guide
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2014-04-01-naming-conventions.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2014-04-01-naming-conventions.md"
 ---
 
 When using Ember CLI it's important to keep in mind that the Resolver changes

@@ -3,7 +3,7 @@ layout: post
 title: "Generators & Blueprints"
 permalink: generators-and-blueprints
 category: extending
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2013-04-08-generators-and-blueprints.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-08-generators-and-blueprints.md"
 ---
 
 

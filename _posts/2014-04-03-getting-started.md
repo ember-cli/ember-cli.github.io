@@ -3,7 +3,7 @@ layout: post
 title: "Getting Started"
 permalink: getting-started
 category: user-guide
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2014-04-03-getting-started.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2014-04-03-getting-started.md"
 ---
 
 ### Prerequisites

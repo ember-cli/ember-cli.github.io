@@ -3,7 +3,7 @@ layout: post
 title: "Managing Dependencies"
 permalink: managing-dependencies
 category: user-guide
-github: "https://github.com/stefanpenner/ember-cli/blob/gh-pages/_posts/2013-04-08-managing-dependencies.md"
+github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-08-managing-dependencies.md"
 ---
 
 Ember CLI uses [Bower](http://bower.io/) for dependency management.
