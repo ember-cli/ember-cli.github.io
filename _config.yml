@@ -1,8 +1,11 @@
+# Site settings
 baseurl: ''
+url: 'http://ember-cli.github.io'
 
+# Build settings
+markdown: kramdown
 highlighter: pygments
-markdown:    kramdown
-exclude: [node_modules, vendor]
+exclude: ['node_modules', 'vendor']
 
 # TODO: Automate version bump on release
 version: 1.13.13
