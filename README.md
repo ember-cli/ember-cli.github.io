@@ -1,21 +1,23 @@
 ## ember-cli website
 
-getting started
+Install Jekyll and a special gem provided by GitHub:
 
 ```sh
-bundle install
-bundle exec ruby run.rb
+gem install jekyll
+gem install github-pages
 ```
 
-You can now view the result at [http://localhost:4000/](http://localhost:4000/).
+Open the directory which contains the repo and run Jekyll:
+
+```sh
+jekyll serve --watch
+```
+
+You can now view the result at [http://localhost:4000][2].
 
 ## Windows Users, read on
 
-On Windows, yajl is a little bit uncooperative. You need to specify `--platform ruby` which is not possible via Gemfile. Run this:
+If you want to help with the development of this site and you're using Windows, please read [this guide] about how to run Jekyll on your OS.
 
-```sh
-gem uninstall yajl-ruby
-gem install yajl-ruby -v 1.1 --platform ruby
-```
-
-More information on [jekyll on Windows](https://github.com/juthilo/run-jekyll-on-windows/)
+[1]: http://jekyll-windows.juthilo.com
+[2]: http://localhost:4000
