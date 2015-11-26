@@ -9,3 +9,6 @@ exclude: ['node_modules', 'vendor']
 
 # TODO: Automate version bump on release
 version: 1.13.13
+
+gems:
+  - jekyll-feed
