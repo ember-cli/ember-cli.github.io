@@ -254,22 +254,27 @@ Add this import to the top of `ember-cli-build.js`, just below the `EmberApp` re
 var Funnel = require('broccoli-funnel');
 {% endhighlight %}
 
-At the bottom of `ember-cli-build.js` we merge assets from a bower dependency with the main app tree:
+Within `ember-cli-build.js`, we merge assets from a bower dependency with the main app tree:
 
 {% highlight javascript linenos %}
-// Remove this line:
-// module.exports = app.toTree()
+module.exports = function(defaults) {
 
-// Copy only the relevant files. For example the WOFF-files and stylesheets for a webfont:
-var extraAssets = new Funnel('bower_components/a-lovely-webfont', {
-   srcDir: '/',
-   include: ['**/*.woff', '**/stylesheet.css'],
-   destDir: '/assets/fonts'
-});
+   ...
 
-// Providing additional trees to the `toTree` method will result in those
-// trees being merged in the final output.
-module.exports = app.toTree(extraAssets);
+   // Copy only the relevant files. For example the WOFF-files and stylesheets for a webfont:
+
+   var extraAssets = new Funnel('bower_components/a-lovely-webfont', {
+      srcDir: '/',
+      include: ['**/*.woff', '**/stylesheet.css'],
+      destDir: '/assets/fonts'
+   });
+
+   // Providing additional trees to the `toTree` method will result in those
+   // trees being merged in the final output.
+
+   return app.toTree(extraAssets);
+
+}
 {% endhighlight %}
 
 In the above example the assets from the fictive bower dependency called `a-lovely-webfont` can now
