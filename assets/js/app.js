@@ -21,16 +21,28 @@
 
   })();
 
-  var sheight = $('#showcase').css('height');
+  function setSwap() {
+    var sheight = $('#showcase').css('height');
+    $('#swap').height(sheight);
+  }
 
-  $('#swap').height(sheight);
-
-  if($('.sidebar').length) {
+  function setAffix() {
     $('.sidebar').affix({
       offset: {
         top: $('.sidebar').offset().top
       }
     });
+  }
+
+  $(window).resize(function() {
+    setSwap();
+    setAffix();
+  });
+
+  setSwap();
+
+  if($('.sidebar').length) {
+    setAffix();
   }
 
   $('h1, h2, h3, h4, h5, h6').each(function() {
