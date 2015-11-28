@@ -454,10 +454,10 @@ body {
     li.active,
     li.active:hover {
       margin-right: -6px;
-      border-bottom: 1px solid lighten($lgtred,10%);
+      border-bottom-color: #fff;
       font-weight: 500;
-
-      @include css-gradient(lighten($lgtred,18%),lighten($lgtred,5%));
+      background: #fff;
+  
       a {
         color: desaturate(darken($red,15%),25%);
         letter-spacing: .04em;
@@ -483,7 +483,7 @@ body {
         letter-spacing: .04em;
         text-transform: uppercase;
         &:hover {
-          @include css-gradient(lighten($lgtred,7%),lighten($lgtred,2%));
+          background: #f4d8d3;
         }
       }
     }
