@@ -156,12 +156,15 @@ body {
   }
 }
 
+#sidenav {
 
-#sidenav h1 {
-  margin: 20px;
-  text-align: center;
+  h1 {
+    margin: 0 0 20px 0;
+    padding-top: 20px;
+    text-align: center;
+  }
+
 }
-
 
 .content-section {
   overflow-x: hidden;
