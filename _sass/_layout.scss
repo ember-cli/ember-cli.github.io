@@ -309,12 +309,6 @@ body {
       display: table-cell;
       vertical-align: middle;
 
-      .primary-nav {
-        #viewguide {
-          display: inline-block;
-        }
-      }
-
       p.tagline {
         font-size: 1.6em;
       }
@@ -388,6 +382,10 @@ body {
 
         a {
           padding: .95em 1.45em;
+        }
+
+        #viewguide {
+          display: inline-block;
         }
 
       }
