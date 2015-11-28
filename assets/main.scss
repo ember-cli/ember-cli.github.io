@@ -301,14 +301,22 @@ body {
   }
 }
 
-/*  INTRO ANIMATION  */
+@media (min-width: 768px) {
 
+  .navbar-header {
+    border: 0 !important;
+    background: none !important;
+  }
 
+  .navbar {
+    border-bottom: 3px solid desaturate(darken($drkred,25%),20%);
+    @include css-gradient($drkred,desaturate(darken($drkred,10%),20%));
+  }
 
-/*  MEDIA QUERIES   */
+  .navbar-collapse {
+    float: right;
+  }
 
-
-@media (min-width:768px) {
   #showcase {
     display: table;
     padding-top: 0;
