@@ -3,7 +3,7 @@
 Install Jekyll and a special gem provided by GitHub:
 
 ```sh
-gem install jekyll github-pages
+bundle install
 ```
 
 Open the directory which contains the repo and run Jekyll:
