@@ -1,4 +1,4 @@
-## ember-cli website
+## Ember-CLI's official website
 
 Install Jekyll and a special gem provided by GitHub:
 
