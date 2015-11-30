@@ -55,6 +55,10 @@
     $('nav.navbar-collapse').height(1).removeClass('in');
   });
 
+  $( 'body' ).click(function() {
+    $( '#menu').collapse('hide');
+  });
+
   $('.content-section table').addClass('table'); // TODO Remove this after tables are styled in CSS
 
 })();
