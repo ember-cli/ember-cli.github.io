@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Ember CLI User guide"
+title: "User guide"
 permalink: /user-guide/index.html
 category: user-guide
 ---

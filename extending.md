@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Extending Ember CLI"
+title: "Extending"
 category: extending
 permalink: /extending/index.html
 ---
