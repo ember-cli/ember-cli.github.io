@@ -29,14 +29,29 @@ production-env by default. You can pass custom options to the minifier via the
 you may supply a boolean value for `minifyJS:enabled`.
 
 For example, to disable minifying of CSS and JS, add in `ember-cli-build.js`:
-{% highlight bash %}
-minifyCSS: {
+{% highlight javascript %}
+app.options.minifyCSS.options = {
   enabled: false
-},
-minifyJS: {
+};
+
+app.options.minifyJS.options = {
   enabled: false
-}
+};
 {% endhighlight %}
+
+
+#### Exclude from minification
+
+To exclude assets from `dist/assets` from being minificated, one can pass options for
+[broccoli-uglify-sourcemap](https://github.com/ef4/broccoli-uglify-sourcemap) like so:
+
+{% highlight javascript %}
+app.options.minifyJS.options = {
+  exclude: ["**/vendor.js"]
+};
+{% endhighlight %}
+
+This would exclude the resulting `vendor.js` file from being minificated.
 
 ### Source Maps
 
