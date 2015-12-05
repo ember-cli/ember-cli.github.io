@@ -29,14 +29,49 @@ production-env by default. You can pass custom options to the minifier via the
 you may supply a boolean value for `minifyJS:enabled`.
 
 For example, to disable minifying of CSS and JS, add in `ember-cli-build.js`:
-{% highlight bash %}
-minifyCSS: {
-  enabled: false
-},
-minifyJS: {
-  enabled: false
-}
+{% highlight js linenos %}
+// ember-cli-build.js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    minifyJS: {
+      enabled: false
+    },
+    minifyCSS: {
+      enabled: false
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
+
+#### Exclude from minification
+
+To exclude assets from `dist/assets` from being minificated, one can pass options for
+[broccoli-uglify-sourcemap](https://github.com/ef4/broccoli-uglify-sourcemap) like so:
+
+{% highlight js linenos %}
+// ember-cli-build.js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    minifyJS: {
+      options: {
+        exclude: ["**/vendor.js"]
+      }
+    }
+  });
+
+  //...
+  return app.toTree();
+};
+{% endhighlight %}
+
+This would exclude the resulting `vendor.js` file from being minificated.
 
 ### Source Maps
 
