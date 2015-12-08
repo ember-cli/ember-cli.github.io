@@ -339,6 +339,20 @@ module.exports = {
 
 This will insert the current environment the app is running under wherever `{% raw %}{{content-for 'environment'}}{% endraw %}` is placed. The `contentFor` function will be called for each `{% raw %}{{content-for}}{% endraw %}` tag in `index.html`.
 
+### Writing to the Command Line
+
+Every addon is sent an instance of the parent application's command line output stream. If you want to write out to the command line in your addon's `index.js` file, you should use `this.ui.writeLine` rather than `console.log`. This will make the output obey the `--silent` flag available with many ember-cli commands.
+
+{% highlight javascript %}
+module.exports = {
+  name: 'ember-cli-command-line-output',
+  
+  included: function(app) {
+    this.ui.writeLine('Including external files!');
+  }
+}
+{% endhighlight %}
+
 ### Advanced customization
 If you want to go beyond the built in customizations or want/need more
 advanced control in general, the following are some of the hooks
