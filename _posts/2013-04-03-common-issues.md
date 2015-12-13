@@ -18,23 +18,6 @@ Refused to execute inline script because it violates the following Content Secur
 
 You can get rid of these errors by modifing the CSP for your app. This is described in the [addon readme](https://github.com/rwjblue/ember-cli-content-security-policy).
 
-#### Unsafe-Eval (CSP)
-
-Some platforms that run on open web technology (ex. FirefoxOS) enforce strict CSP restrictions for apps. One of the more common restrictions is the Unsafe-Eval restriction, disallowing use of the eval() function or the eval operator. Since Ember CLI currently uses eval() for part of it's integration with ES6 modules, this can be a problem.
-
-To disable evals, add the `wrapInEval: false` flag to your `ember-cli-build.js`, for example:
-
-{% highlight javascript linenos %}
-// ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
-...
-var app = new EmberApp({
-  wrapInEval: false
-});
-...
-module.exports = app.toTree();
-{% endhighlight %}
-
 ### npm package management with sudo
 
 Installing packages such as bower with sudo powers can lead to permissions
