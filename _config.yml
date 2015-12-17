@@ -12,3 +12,4 @@ version: 2.2.0-beta.1
 
 gems:
   - jekyll-feed
+  - github-pages
