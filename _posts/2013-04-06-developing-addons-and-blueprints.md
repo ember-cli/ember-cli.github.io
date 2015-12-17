@@ -641,7 +641,7 @@ This avoids any conflict with the parent application's `app.css` file
 Likewise if your Ember CLI application uses `.less` or `.scss`, use the
 appropriate file extension for your addon stylesheet file.
 
-### Using templates with an in-repro-addon
+### Using templates with an in-repo-addon
 In order to complile HTMLBars templates that are part of your in-repo-addon,
 your `package.json` file will need to include following dependencies:
 
