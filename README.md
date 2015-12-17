@@ -3,6 +3,7 @@
 Install Jekyll and a special gem provided by GitHub:
 
 ```sh
+gem install bundler
 bundle install
 ```
 
