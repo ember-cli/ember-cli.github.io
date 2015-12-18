@@ -1,6 +1,6 @@
 # Site settings
 baseurl: ''
-url: 'http://ember-cli.github.io'
+url: 'http://ember-cli.com'
 
 # Build settings
 markdown: kramdown
