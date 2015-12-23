@@ -83,9 +83,9 @@ Wipe your vendor directory clean then run `npm install && bower install`.
 
 `npm rm ember-data --save-dev`
 
-* To use ember-cli without ic-ajax
+* To use ember-cli without ember-ajax
 
-`npm rm ember-cli-ic-ajax --save-dev`
+`npm rm ember-ajax --save-dev`
 
 * To reinstall latest Ember Data version
 
