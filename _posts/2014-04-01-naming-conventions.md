@@ -212,46 +212,6 @@ export default Ember.Controller.extend({
 {% endraw %}
 {% endhighlight %}
 
-### Views and Templates
-
-Let's say we were using Ember out of the box with the following view:
-
-{% highlight javascript %}
-import Ember from "ember";
-App.UserView = Ember.View.extend({});
-{% endhighlight %}
-
-We could easily embed this view into a container/parent using the Handlebars view helper:
-
-{% highlight html %}
-{% raw %}
-{{view App.UserView}}
-{% endraw %}
-{% endhighlight %}
-
-This is great. However, Ember CLI customizes the default Ember Resolver to help alleviate
-the issue of namespacing your objects (views, controllers, models, etc.) manually.
-The above example, as such, will not work in an Ember CLI project.
-
-In Ember CLI our view would be declared like so:
-
-{% highlight javascript linenos %}
-// app/views/user.js
-import Ember from "ember";
-export default Ember.View.extend({});
-{% endhighlight %}
-
-We can then embed our view using the following convention:
-
-{% highlight html %}
-{% raw %}
-{{view "user"}}
-{% endraw %}
-{% endhighlight %}
-
-Note, that we did not namespace `UserView`. The resolver takes care of this for you.
-For more information about the default Ember resolver, check out the source [here](https://github.com/emberjs/ember.js/blob/master/packages/ember-application/lib/system/resolver.js).
-
 ### Tests
 
 Test filenames should be suffixed with `-test.js` in order to run.
