@@ -101,14 +101,13 @@ For more information, see [Naming Conventions](#naming-conventions).
 Custom Handlebars helpers are one of the ways that you can use the same HTML multiple
 times in your web application. Registering your custom helper allows it to
 be invoked from any of your Handlebars templates. Custom helpers are located
-under `app/helpers`. If your custom helper contains a dash(`upper-case`,
-`reverse-word`, etc.), it will be found and loaded automatically by the resolver.
+under `app/helpers`. 
 
 {% highlight javascript linenos %}
 // app/helpers/upper-case.js
 import Ember from "ember";
 
-export default Ember.Handlebars.makeBoundHelper(function(value, options) {
+export default Ember.Helper.helper(function([value]) {
   return value.toUpperCase();
 });
 {% endhighlight %}
@@ -121,37 +120,9 @@ In `some-template.hbs`:
 {% endraw %}
 {% endhighlight %}
 
-Limiting automatically-loaded helpers to those that contain dashes is an explicit
-decision made by Ember. It helps disambiguate properties from helpers, and helps
-mitigate the performance hit of helper resolution for all bindings. The other
-loading option is to define only the function used by the helper and to load it
-explicitly:
-
-{% highlight javascript linenos %}
-// app/helpers/trim.js
-export default function(value, options) {
-  return value.trim();
-};
-
-// app.js
-import Ember from "ember";
-import trimHelper from './helpers/trim';
-
-Ember.Handlebars.registerBoundHelper('trim', trimHelper);
-{% endhighlight %}
-
-In `some-template.hbs`:
-
-{% highlight html %}
-{% raw %}
-{{trim "     foo"}}
-{% endraw %}
-{% endhighlight %}
-
-In this example the helper is loaded explicitly. It's the first
-argument to `registerBoundHelper` which makes the Handlebars renderer find it.
-The file name (`trim.js`) and the name of the variable it's been imported
-into (`trimHelper`) could have been anything.
+While previous versions of ember-cli required auto-resolved helpers only if they
+contain a dash, now all helpers are auto-resolved, regardless of whether
+they contain a dash or not.
 
 A common pattern with helpers is to define a helper to use your views
 (e.g. for a custom text field view, `MyTextField` a helper `my-text-field`
