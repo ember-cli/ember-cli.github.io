@@ -590,7 +590,7 @@ the account password.
 ### Install and use addon
 In order to use the addon from you hosting application:
 
-To install your addon from the [npm.org](https://www.npmjs.org/) repository:
+To install your addon from the [npmjs.org](https://www.npmjs.org/) repository:
 
 `ember install <your-addon-name-here>`.
 
