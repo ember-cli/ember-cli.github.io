@@ -49,7 +49,7 @@ like such: `app/controllers/posts/index.js`.
 // app/helpers/format-time.js
 import Ember from "ember";
 
-export default Ember.Handlebars.makeBoundHelper(function(){});
+export default Ember.Helper.helper(function(){});
 {% endhighlight %}
 
 ##### Initializers
