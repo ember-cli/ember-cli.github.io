@@ -6,6 +6,19 @@ category: user-guide
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2014-04-01-naming-conventions.md"
 ---
 
+
+### Overview
+
+- `kebap-case`
+  - file names
+  - directory names
+  - html tags/ember components
+  - CSS classes
+  - URLs
+- `camelCase`
+  - JavaScript
+  - JSON
+
 When using Ember CLI it's important to keep in mind that the Resolver changes
 some of the naming conventions you would typically use out of the box with Ember,
 Ember Data and Handlebars. In this section we review some of these naming conventions.
@@ -153,18 +166,6 @@ export default Ember.TextField.extend({});
 It is important to keep in mind that the Resolver uses filenames to create
 the associations correctly. This helps you by not having to namespace everything
 yourself. But there are a couple of things you should know.
-
-##### Overview
-
-- Dashes
-  - file names
-  - directory names
-  - html tags/ember components
-  - CSS classes
-  - URLs
-- camelCase
-  - JavaScript
-  - JSON
 
 ##### All filenames should be lowercased
 
