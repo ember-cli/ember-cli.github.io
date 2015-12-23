@@ -108,7 +108,7 @@ under `app/helpers`. If your custom helper contains a dash(`upper-case`,
 // app/helpers/upper-case.js
 import Ember from "ember";
 
-export default Ember.Handlebars.makeBoundHelper(function(value, options) {
+export default Ember.Helper.helper(function(value, options) {
   return value.toUpperCase();
 });
 {% endhighlight %}
@@ -137,7 +137,7 @@ export default function(value, options) {
 import Ember from "ember";
 import trimHelper from './helpers/trim';
 
-Ember.Handlebars.registerBoundHelper('trim', trimHelper);
+Ember.Helper.helper('trim', trimHelper);
 {% endhighlight %}
 
 In `some-template.hbs`:
@@ -149,7 +149,7 @@ In `some-template.hbs`:
 {% endhighlight %}
 
 In this example the helper is loaded explicitly. It's the first
-argument to `registerBoundHelper` which makes the Handlebars renderer find it.
+argument to `helper` which makes the Handlebars renderer find it.
 The file name (`trim.js`) and the name of the variable it's been imported
 into (`trimHelper`) could have been anything.
 
