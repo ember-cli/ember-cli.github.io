@@ -11,7 +11,7 @@ The following changes are required if you are upgrading from the previous versio
 
 - Users
   + [`ember new` diff](https://github.com/kellyselden/ember-cli-output/compare/v1.13.13...v2.2.0-beta.1)
-  + Upgrade your project's ember-cli version - [docs](http://www.ember-cli.com/#project-update)
+  + Upgrade your project's ember-cli version - [docs](http://www.ember-cli.com/user-guide/#upgrading)
   + Users of `ember-cli-styles-reloader` should uninstall (as this functionality is now included in ember-cli by default).
   + Update the following entries in your `package.json`:
     * Remove `ember-cli-ic-ajax` (it is replaced by `ember-ajax`)
