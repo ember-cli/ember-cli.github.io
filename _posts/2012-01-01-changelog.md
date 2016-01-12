@@ -4,6 +4,27 @@ title: "Changelog"
 permalink: changelog
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2012-01-01-changelog.md"
 ---
+### 2.2.0-beta.4
+
+The following changes are required if you are upgrading from the previous
+version:
+
+- Users
+  + Upgrade your project's ember-cli version - [docs](http://www.ember-cli.com/#project-update)
+- Addon Developers
+  + No changes required
+- Core Contributors
+  + No changes required
+
+#### Community Contributions
+
+- [#5291](https://github.com/ember-cli/ember-cli/pull/5291) getCallerFile now comes from its own node_module [@stefanpenner](https://github.com/stefanpenner)
+- [#5312](https://github.com/ember-cli/ember-cli/pull/5312) Add information about testing new features/bugfixes to the contributing.md file [@ohcibi](https://github.com/ohcibi)
+- [#5313](https://github.com/ember-cli/ember-cli/pull/5313) Add missing `--silent` option to the output of `ember test --help` [@ohcibi](https://github.com/ohcibi)
+- [#5327](https://github.com/ember-cli/ember-cli/pull/5327) [BUGFIX release] pin jQuery version [@stefanpenner](https://github.com/stefanpenner)
+
+Thank you to all who took the time to contribute!
+
 ### 2.2.0-beta.3
 
 The following changes are required if you are upgrading from the previous
@@ -145,6 +166,26 @@ The following changes are required if you are upgrading from the previous versio
 - [#5209](https://github.com/ember-cli/ember-cli/pull/5209) Ensure loader.js warning is easier to spot. [@rwjblue](https://github.com/rwjblue)
 - [#5211](https://github.com/ember-cli/ember-cli/pull/5211) Update ember-cli-qunit to 1.1.0. [@rwjblue](https://github.com/rwjblue)
 - [#5212](https://github.com/ember-cli/ember-cli/pull/5212) Update ember-data to 2.2.1. [@rwjblue](https://github.com/rwjblue)
+
+### 1.13.14
+
+The following changes are required if you are upgrading from the previous
+version:
+
+- Users
+  + default jQuery.js version is now locked at  `1.11.3`
+- Addon Developers
+  + app-prefix and app-suffix have been deprecated, addons will need to move away from them.
+- Core Contributors
+  + No changes required
+
+#### Community Contributions
+
+- [#5327](https://github.com/ember-cli/ember-cli/pull/5327) [BUGFIX release] pin jQuery version [@stefanpenner](https://github.com/stefanpenner)
+- [#5245](https://github.com/ember-cli/ember-cli/pull/5245) Deprecate app-prefix and app-suffix. [@nathanhammond](https://github.com/nathanhammond)
+- [#5251](https://github.com/ember-cli/ember-cli/pull/5251) [BUGFIX] ensure we stat the symlink target, not the symlink (fixes tests/index.html not updating) [@stefanpenner](https://github.com/stefanpenner)
+
+Thank you to all who took the time to contribute!
 
 ### 1.13.13
 
