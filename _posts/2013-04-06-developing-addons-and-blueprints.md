@@ -578,7 +578,7 @@ You can upload your addon code to a private git repository and call `ember insta
 with a valid [git URL](https://www.npmjs.org/doc/files/package.json.html#git-urls-as-dependencies)
 as the version.
 
-If you are using [bitbucket.org](https://bitbucket.org) the [URL formats can be found here](https://confluence.atlassian.com/display/BITBUCKET/Use+the+SSH+protocol+with+Bitbucket#UsetheSSHprotocolwithBitbucket-RepositoryURLformatsbyconnectionprotocol).
+If you are using [bitbucket.org](https://bitbucket.org) the [URL formats can be found here](https://confluence.atlassian.com/bitbucket/use-the-ssh-protocol-with-bitbucket-cloud-221449711.html#UsetheSSHprotocolwithBitbucketCloud-RepositoryURLformatsbyconnectionprotocol).
 
 When using the `git+ssh` format, the `ember install` command will require there to
 be an available ssh key with read access to the repository. This can be tested
