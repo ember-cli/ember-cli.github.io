@@ -8,7 +8,7 @@ highlighter: pygments
 exclude: ['node_modules', 'vendor']
 
 # TODO: Automate version bump on release
-version: 2.2.0-beta.4
+version: 2.2.0-beta.5
 
 gems:
   - jekyll-feed
