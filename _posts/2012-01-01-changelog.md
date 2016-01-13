@@ -4,6 +4,24 @@ title: "Changelog"
 permalink: changelog
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2012-01-01-changelog.md"
 ---
+### 2.2.0-beta.6
+
+Re-releaing 2.2.0-beta.5, but without the line-ending issue.
+
+The following changes are required if you are upgrading from the previous
+version:
+
+- Users
+  + [`ember new` diff](https://github.com/kellyselden/ember-cli-output/compare/v1.13.13...v2.2.0-beta.6)
+  + Upgrade your project's ember-cli version - [docs](http://www.ember-cli.com/#project-update)
+- Addon Developers
+  + [`ember addon` diff](https://github.com/kellyselden/ember-addon-output/compare/v1.13.13...v2.2.0-beta.6)
+  + No changes required
+- Core Contributors
+  + No changes required
+
+Thank you to all who took the time to contribute!
+
 ### 2.2.0-beta.5
 
 The following changes are required if you are upgrading from the previous
