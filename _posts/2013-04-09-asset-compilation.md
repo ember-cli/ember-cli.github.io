@@ -158,14 +158,24 @@ your NPM modules.
 ember install ember-cli-less
 {% endhighlight %}
 
-#### Sass
+#### SCSS/SASS
 
-To enable [Sass](http://sass-lang.com/), you'll need to
+To enable [SCSS/SASS](http://sass-lang.com/), you'll need to
 install the [ember-cli-sass](https://github.com/aexmachina/ember-cli-sass) addon
-to your project *(both .scss/.sass are allowed)*.
+to your project *(defaults to .scss, .sass allowed via configuration)*.
 
 {% highlight bash %}
 ember install ember-cli-sass
+{% endhighlight %}
+
+You can configure your project to use .sass in your `ember-cli-build.js`:
+
+{% highlight javascript %}
+var app = new EmberApp(defaults, {
+  sassOptions: {
+    extension: 'sass'
+  }
+});
 {% endhighlight %}
 
 #### Compass
