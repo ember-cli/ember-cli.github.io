@@ -9,7 +9,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Overview
 
-- `kebap-case`
+- `kebab-case`
   - file names
   - directory names
   - html tags/ember components
