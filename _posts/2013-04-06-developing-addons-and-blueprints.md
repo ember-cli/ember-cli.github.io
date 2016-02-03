@@ -181,6 +181,8 @@ module.exports = {
 };
 {% endhighlight %}
 
+The exported object extends the `Addon` class. So any hooks that exist on the `Addon` class may be overridden by addon author.
+
 ### Configuring your ember-addon properties
 By default, the `"ember-addon"` hash in the `package.json` file has the `"configPath"` property defined to point to the `config` directory of the test dummy application.
 
