@@ -48,12 +48,12 @@ really slow down your CSS. Don't overdo it.
 
 /* @include css-gradient(#dfdfdf,#f8f8f8); */
 @mixin css-gradient($from: #dfdfdf, $to: #f8f8f8) {
-	background-color: $to;
-	background-image: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
-	background-image: -webkit-linear-gradient(top, $from, $to);
-	background-image: -moz-linear-gradient(top, $from, $to);
-	background-image: -o-linear-gradient(top, $from, $to);
-	background-image: linear-gradient(to bottom, $from, $to);
+  background-color: $to;
+  background-image: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+  background-image: -webkit-linear-gradient(top, $from, $to);
+  background-image: -moz-linear-gradient(top, $from, $to);
+  background-image: -o-linear-gradient(top, $from, $to);
+  background-image: linear-gradient(to bottom, $from, $to);
 }
 
 /*********************
@@ -64,10 +64,10 @@ BOX SIZING
 /* NOTE: value of "padding-box" is only supported in Gecko. So
 probably best not to use it. I mean, were you going to anyway? */
 @mixin box-sizing($type: border-box) {
-	-webkit-box-sizing: $type;
-	-moz-box-sizing:    $type;
-	-ms-box-sizing:     $type;
-	box-sizing:         $type;
+  -webkit-box-sizing: $type;
+  -moz-box-sizing:    $type;
+  -ms-box-sizing:     $type;
+  box-sizing:         $type;
 }
 
 /*********************
@@ -77,10 +77,10 @@ BORDER RADIUS
 /* @include border-radius(5px); */
 
 @mixin border-radius($type: 8px) {
-	-webkit-border-radius: 		$type;
-	-moz-border-radius:    		$type;
-	-khtml-border-radius:     	$type;
-	border-radius:         		$type;
+  -webkit-border-radius: 		$type;
+  -moz-border-radius:    		$type;
+  -khtml-border-radius:     	$type;
+  border-radius:         		$type;
 }
 
 /*********************
@@ -94,7 +94,6 @@ FONT FACE
     font-family: $font-name;
     src: url("fonts/#{$file-name}.eot");
     src: url("fonts/#{$file-name}.eot?#iefix") format("embedded-opentype"),
-         url("fonts/#{$file-name}.woff2") format("woff2"),
          url("fonts/#{$file-name}.woff") format("woff"),
          url("fonts/#{$file-name}.ttf") format("truetype"),
          url("fonts/#{$file-name}.svg#svg#{$file-name}") format("svg");

@@ -12,7 +12,7 @@ functions, and templates that Ember needs to resolve its dependencies, for examp
 
 In the past, Ember's Default Resolver worked by putting everything into a global namespace, so you will come across the following pattern:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 App.IndexRoute = Ember.Route.extend({
   model: function() {
     return ['red', 'yellow', 'blue'];
@@ -30,7 +30,7 @@ For example, this route definition in `app/routes/index.js` would result in a
 module called `your-app/routes/index`. Using the resolver, when Ember looks up
 the index route, it will find this module and use the object that it exports.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/routes/index.js
 import Ember from "ember";
 
@@ -44,7 +44,7 @@ export default Ember.Route.extend({
 
 You can also require modules directly with the following syntax:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import FooMixin from "./mixins/foo";
 {% endhighlight %}
 
@@ -52,7 +52,7 @@ You can reference a module by using either a relative or absolute path.
 If you would like to reference a module using absolute begin
 the path with the app name defined in `package.json`:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import FooMixin from "appname/mixins/foo";
 {% endhighlight %}
 
@@ -66,7 +66,7 @@ when doing so manually; see how the module `mixins/foo` is assigned to variable
 
 To use `Ember` or `DS` (for Ember Data) in your modules you must import them:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import Ember from "ember";
 import DS from "ember-data";
 {% endhighlight %}
@@ -101,9 +101,9 @@ For more information, see [Naming Conventions](#naming-conventions).
 Custom Handlebars helpers are one of the ways that you can use the same HTML multiple
 times in your web application. Registering your custom helper allows it to
 be invoked from any of your Handlebars templates. Custom helpers are located
-under `app/helpers`. 
+under `app/helpers`.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/helpers/upper-case.js
 import Ember from "ember";
 
@@ -130,7 +130,7 @@ to use it). It is advised to leverage Components instead.
 
 Do this:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // Given... app/components/my-text-field.js
 import Ember from "ember";
 

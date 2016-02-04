@@ -310,6 +310,10 @@ body {
       code {
         color: #efeaea;
 
+        span {
+          color: inherit;
+        }
+
         .lineno {
           color: #ccc;
         }
