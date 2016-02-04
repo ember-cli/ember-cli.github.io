@@ -21,7 +21,7 @@ Your server is not ready yet and you want to test this new route. You can easily
 To test it this is the first step as in ember everything starts with router.
 `app/router.js`
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 Router.map(function() {
   this.route('songs');
 {% endhighlight %}
@@ -29,7 +29,7 @@ Router.map(function() {
 Next step could be to define a route on express which will respond with Mock data when appropriate request is made.
 `server/routes/songs.js`
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 module.exports = function(app) {
   app.get('/fav/songs', function(req, res) {
   res.json( [{"name":"Foo"},{"name":"Bar"}] );
@@ -39,7 +39,7 @@ module.exports = function(app) {
 
 `app/adapters/RESTadapter.js`
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import ajax from 'ic-ajax';
 
 var Adapter = Ember.Object.extend( {} );
@@ -53,7 +53,7 @@ Adapter.reopenClass( {
 
 `app/routes/songs.js`
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import Adapter from 'app/adapters/RESTadapter';
 
 export default Ember.Route.extend( {

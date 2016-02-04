@@ -14,7 +14,7 @@ You can access these environment variables in your application code by importing
 
 For example:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import ENV from 'your-application-name/config/environment';
 
 if (ENV.environment === 'development') {

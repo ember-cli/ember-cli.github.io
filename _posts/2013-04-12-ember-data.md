@@ -25,7 +25,7 @@ models extremely easy.
 
 For example, we can create a `todo` model like so:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // models/todo.js
 import DS from "ember-data";
 
@@ -55,7 +55,7 @@ can be resolved like any other.
 
 Adapters can be placed at `/app/adapters/type.js`:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // adapters/post.js
 import DS from "ember-data";
 
@@ -64,7 +64,7 @@ export default DS.RESTAdapter.extend({});
 
 And it's serializer can be placed in `/app/serializers/type.js`:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // serializers/post.js
 import DS from "ember-data";
 
@@ -107,7 +107,7 @@ If you decide to use fixtures instead of mocks, you'll need to use
 `reopenClass` within your model class definitions. First, create a fixture
 adapter, either for a single model or your entire application:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // adapters/application.js
 import DS from "ember-data";
 
@@ -116,7 +116,7 @@ export default DS.FixtureAdapter.extend({});
 
 Then add fixture data to your model class:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // models/author.js
 import DS from "ember-data";
 

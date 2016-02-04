@@ -29,7 +29,7 @@ production-env by default. You can pass custom options to the minifier via the
 you may supply a boolean value for `minifyJS:enabled`.
 
 For example, to disable minifying of CSS and JS, add in `ember-cli-build.js`:
-{% highlight js linenos %}
+{% highlight js %}
 // ember-cli-build.js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
@@ -53,7 +53,7 @@ module.exports = function(defaults) {
 To exclude assets from `dist/assets` from being minificated, one can pass options for
 [broccoli-uglify-sourcemap](https://github.com/ef4/broccoli-uglify-sourcemap) like so:
 
-{% highlight js linenos %}
+{% highlight js %}
 // ember-cli-build.js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
@@ -131,7 +131,7 @@ To use plain CSS with `app.css`:
 
 Example `app.css` with valid `@import` usage:
 
-{% highlight css linenos %}
+{% highlight css %}
 /* @imports must appear at top of stylesheet to be valid CSS */
 @import 'typography.css';
 @import 'forms.css';
@@ -215,7 +215,7 @@ The ES6 module transpiler does not directly support CoffeeScript, but using them
 together is simple. Use the `` ` `` character to escape out to JavaScript from
 your `.coffee` files, and use the ES6 syntax there:
 
-{% highlight coffeescript linenos %}
+{% highlight coffeescript %}
 # app/models/post.coffee
 `import Ember from 'ember'`
 `import User from 'appkit/models/user'`
@@ -284,7 +284,7 @@ of the md5. Pass `null` to suppress the hash, which can be useful when using `pr
 As an example, this `ember-cli-build` will exclude any file in the fonts/169929
 directory as well as add a cloudfront domain to each fingerprinted asset.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 var app = new EmberApp({
   fingerprint: {
     exclude: ['fonts/169929'],

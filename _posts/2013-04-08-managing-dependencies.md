@@ -45,14 +45,14 @@ directories. The following example scenarios illustrate how this works.
 
 First, provide the asset path as the first and only argument:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('bower_components/moment/moment.js');
 {% endhighlight %}
 
 From here you would use the package as specified by its documentation, usually a global variable.
 In this case it would be:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import Ember from 'ember';
 /* global moment */
 // No import for moment, it's a global called `moment`
@@ -75,13 +75,13 @@ ember generate vendor-shim moment
 
 Next, provide the vendor asset path:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('vendor/shims/moment.js');
 {% endhighlight %}
 
 Finally, use the package by adding the appropriate `import` statement:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import moment from 'moment';
 
 // ...
@@ -92,7 +92,7 @@ var day = moment('Dec 25, 1995');
 
 Provide the asset path as the first argument, and the list of modules and exports as the second:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('bower_components/ic-ajax/dist/named-amd/main.js', {
   exports: {
     'ic-ajax': [
@@ -109,7 +109,7 @@ app.import('bower_components/ic-ajax/dist/named-amd/main.js', {
 To use this asset in your app, import it.
 For example, with `ic-ajax`, when to use `ic.ajax.raw`:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 import { raw as icAjaxRaw } from 'ic-ajax';
 //...
 icAjaxRaw( /* ... */ );
@@ -119,7 +119,7 @@ icAjaxRaw( /* ... */ );
 
 If you need to use different assets in different environments, specify an object as the first parameter. That object's key should be the environment name, and the value should be the asset to use in that environment.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import({
   development: 'bower_components/ember/ember.js',
   production:  'bower_components/ember/ember.prod.js'
@@ -128,7 +128,7 @@ app.import({
 
 If you need to import an asset in one environment but not import it or any alternatives in other environments then you can wrap `app.import` in an `if` statement.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 if (app.env === 'development') {
   app.import('vendor/ember-renderspeed/ember-renderspeed.js');
 }
@@ -139,7 +139,7 @@ if (app.env === 'development') {
 This is somewhat non-standard and discouraged, but suppose that due to a requirement in your application that you need to use the full version of
 Handlebars even in the production environment.  You would simply provide the path to the `EmberApp` constructor:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 var app = new EmberApp({
   vendorFiles: {
     'handlebars.js': {
@@ -153,7 +153,7 @@ var app = new EmberApp({
 Alternatively, if you want to exclude the built-in asset from being
 automatically included in `vendor.js`, you can set its value to `false`:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 var app = new EmberApp({
   vendorFiles: {
     'handlebars.js': false
@@ -170,7 +170,7 @@ some, you should still be including them in some other way._
 
 You may have additional libraries that should only be included when running tests (such as qunit-bdd or sinon). These can be imported into your app in your ember-cli-build.js:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
     isProduction = EmberApp.env() === 'production';
 
@@ -193,7 +193,7 @@ module.exports = app.toTree();
 
 Provide the asset path as the first argument:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('bower_components/foundation/css/foundation.css');
 {% endhighlight %}
 
@@ -203,7 +203,7 @@ All style assets added this way will be concatenated and output as `/assets/vend
 
 The vendor trees that are provided upon instantiation are available to your dynamic style files.  Take the following example (in `app/styles/app.scss`):
 
-{% highlight scss linenos %}
+{% highlight scss %}
 @import "bower_components/foundation/scss/normalize.scss";
 {% endhighlight %}
 
@@ -214,7 +214,7 @@ The vendor trees that are provided upon instantiation are available to your dyna
 All other assets like images or fonts can also be added via `import()`. By default, they
 will be copied to `dist/` as they are.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('bower_components/font-awesome/fonts/fontawesome-webfont.ttf');
 {% endhighlight %}
 
@@ -223,7 +223,7 @@ This example would create the font file in `dist/font-awesome/fonts/fontawesome-
 You can also optionally tell `import()` to place the file at a different path.
 The following example will copy the file to `dist/assets/fontawesome-webfont.ttf`.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', {
   destDir: 'assets'
 });
@@ -231,7 +231,7 @@ app.import('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', {
 
 If you need to load certain dependencies before others, you can set the `prepend` property equal to `true` on the second argument of `import()`. This will prepend the dependency to the vendor file instead of appending it, which is the default behavior.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 app.import('bower_components/es5-shim/es5-shim.js', {
   type: 'vendor',
   prepend: true
@@ -250,13 +250,13 @@ npm install broccoli-funnel --save-dev
 
 Add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 var Funnel = require('broccoli-funnel');
 {% endhighlight %}
 
 Within `ember-cli-build.js`, we merge assets from a bower dependency with the main app tree:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 module.exports = function(defaults) {
 
    ...
@@ -286,7 +286,7 @@ be found under `/assets/fonts/`, and might be linked to from `index.html` like s
 
 You can exclude assets from the final output in a similar fashion. For example, to exclude all `.gitkeep` files from the final output:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // Again, add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:
 var Funnel = require('broccoli-funnel');
 

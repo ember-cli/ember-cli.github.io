@@ -27,7 +27,7 @@ Ember Data and Handlebars. In this section we review some of these naming conven
 
 ##### Adapters
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/adapters/application.js
 import Ember from "ember";
 import DS from "ember-data";
@@ -37,7 +37,7 @@ export default DS.RESTAdapter.extend({});
 
 ##### Components
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/components/time-input.js
 import Ember from "ember";
 
@@ -46,7 +46,7 @@ export default Ember.TextField.extend({});
 
 ##### Controllers
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/controllers/stop-watch.js
 import Ember from "ember";
 
@@ -58,7 +58,7 @@ like such: `app/controllers/posts/index.js`.
 
 ##### Helpers
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/helpers/format-time.js
 import Ember from "ember";
 
@@ -67,7 +67,7 @@ export default Ember.Helper.helper(function(){});
 
 ##### Initializers
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/initializers/observation.js
 export default {
   name: 'observation',
@@ -81,7 +81,7 @@ Note: `initializers` are loaded automatically.
 
 ##### Mixins
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/mixins/evented.js
 import Ember from "ember";
 
@@ -90,7 +90,7 @@ export default Ember.Mixin.create({});
 
 ##### Models
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/models/observation.js
 import DS from "ember-data";
 
@@ -99,7 +99,7 @@ export default DS.Model.extend({});
 
 ##### Routes
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/routes/timer.js
 import Ember from "ember";
 
@@ -110,7 +110,7 @@ Nested routes as such: `app/routes/timer/index.js` or `app/routes/timer/record.j
 
 ##### Serializers
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/serializers/observation.js
 import DS from "ember-data";
 
@@ -119,7 +119,7 @@ export default DS.RESTSerializer.extend({});
 
 ##### Transforms
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/transforms/time.js
 import DS from "ember-data";
 
@@ -128,7 +128,7 @@ export default DS.Transform.extend({});
 
 ##### Utilities
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/utils/my-ajax.js
 export default function myAjax() {};
 {% endhighlight %}
@@ -140,7 +140,7 @@ export default function myAjax() {};
 {% raw %}{{view 'stop-watch'}}{% endraw %}
 {% endhighlight %}
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/views/stop-watch.js
 import Ember from "ember";
 
@@ -154,7 +154,7 @@ And views, which can be referenced in sub-directories, but have no inheritance.
 {% raw %}{{view 'inputs/time-input'}}{% endraw %}
 {% endhighlight %}
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // app/views/inputs/time-input.js
 import Ember from "ember";
 
@@ -169,7 +169,7 @@ yourself. But there are a couple of things you should know.
 
 ##### All filenames should be lowercased
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // models/user.js
 import Ember from "ember";
 export default Ember.Model.extend();
@@ -187,7 +187,7 @@ export default Ember.Controller.extend();
 
 If you prefer to nest your files to better manage your application, you can easily do so.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // controllers/posts/new.js results in a controller named "controllers.posts/new"
 import Ember from "ember";
 export default Ember.Controller.extend();
@@ -196,7 +196,7 @@ export default Ember.Controller.extend();
 You cannot use paths containing slashes in your templates because Handlebars will translate
 them back to dots. Simply create an alias like this:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // controllers/posts.js
 import Ember from "ember";
 export default Ember.Controller.extend({
@@ -229,7 +229,7 @@ In this case, you should name the file as its functionality. Given a resource `U
 
 Rather than hold your resource directories on the root of your app you can define a POD path using the attribute `podModulePrefix` within your environment configs. The POD path should use the following format: `{appname}/{poddir}`.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // config/environment.js
 module.exports = function(environment) {
   var ENV = {

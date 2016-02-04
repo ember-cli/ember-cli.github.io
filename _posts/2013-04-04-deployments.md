@@ -68,7 +68,7 @@ If you are deploying the app to somewhere other than the root URL (`/`),
 you will need to configure the value of `baseUrl` in `config/environment.js`.
 For example
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // config/environment.js
 if (environment === 'production') {
   ENV.baseURL = '/path/to/ember/app/';

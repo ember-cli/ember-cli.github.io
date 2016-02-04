@@ -98,7 +98,7 @@ to `true` (setting was previously named `usePodsByDefault`). To generate or dest
 type structure while `usePods` is `true`, use the `--classic` flag.
 
 With the `usePods` set to `true`.
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // .ember-cli
 {
     "usePods": true
@@ -222,7 +222,7 @@ Variables can be inserted into templates with
 For example, the built-in `util` blueprint
 `files/app/utils/__name__.js` looks like this:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 export default function <%= camelizedModuleName %>() {
   return true;
 }
@@ -255,7 +255,7 @@ export a plain object, which will extend the prototype of the
 `Blueprint` class. If needed, the original `Blueprint` prototype
 can be accessed through the `_super` property.
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 module.exports = {
   locals: function(options) {
     // Return custom template variables here.
@@ -312,7 +312,7 @@ ember generate controller foo --type=array --dry-run
 
 The object passed to `locals` looks like this:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 {
   entity: {
     name: 'foo',
@@ -343,7 +343,7 @@ Use `fileMapTokens` to add custom fileMap tokens for use
 in the `mapFile` method. The hook must return an object in the
 following pattern:
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 {
   __token__: function(options){
     // logic to determine value goes here
