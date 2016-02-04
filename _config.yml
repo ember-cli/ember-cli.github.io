@@ -4,7 +4,6 @@ url: 'http://ember-cli.com'
 
 # Build settings
 markdown: kramdown
-highlighter: pygments
 exclude: ['node_modules', 'vendor']
 
 # TODO: Automate version bump on release
