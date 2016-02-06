@@ -11,6 +11,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 - [ember-cli-101 (book)](http://leanpub.com/ember-cli-101)
 - [Rails + Ember.js (with the Ember CLI)](https://www.devmynd.com/blog/2014-7-rails-ember-js-with-the-ember-cli-redux)
 - [Rock and Roll with EmberJS (book)](http://balinterdi.com/rock-and-roll-with-emberjs/)
+- [Ember.js tutorial](http://yoember.com) (Free, with the latest Ember 2 and Ember CLI)
 
 ### Testing
 - [Creating an Integration Test with Ember.js (Video)](https://www.youtube.com/watch?v=2O24ltr0pPU&feature=youtu.be&list=PLxP_o-ABjKLFuDpuJ2Tw_3__OzxE7kFnh)
