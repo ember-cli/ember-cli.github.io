@@ -86,7 +86,7 @@ Default Brocfile.js:
 import EmberApp from 'ember-cli/lib/broccoli/ember-app';
 var app = new EmberApp({
   sourcemaps: {
-    enabled: EmberApp.env() !== 'production'
+    enabled: EmberApp.env() !== 'production',
     extensions: ['js']
   }
 });
