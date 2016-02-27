@@ -93,7 +93,7 @@ via [npm](https://www.npmjs.com/package/phantomjs) or the [PhantomJS website](ht
 If you want to use PhantomJS to run your integration tests, it must be globally installed:
 
 {% highlight bash %}
-npm install -g phantomjs
+npm install -g phantomjs-prebuilt
 {% endhighlight %}
 
 #### Create a new project
