@@ -128,6 +128,7 @@ ember build --environment="production"
 
         ## default location ##
         location / {
+            include /etc/nginx/mime.types;
             try_files $uri $uri/ /index.html?/$request_uri;
         }
 
