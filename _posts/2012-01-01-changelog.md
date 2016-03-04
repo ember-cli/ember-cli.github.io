@@ -14,7 +14,7 @@ version:
 
 - Users
   + [`ember new` diff](https://github.com/kellyselden/ember-cli-output/compare/v2.4.0...v2.4.1)
-  + Upgrade your project's ember-cli version - [docs](http://www.ember-cli.com/#project-update)
+  + Upgrade your project's ember-cli version - [docs](http://www.ember-cli.com/user-guide/#upgrading)
   + Update `ember-cli-sri` in `package.json` to `2.1.0`.
 - Addon Developers
   + [`ember addon` diff](https://github.com/kellyselden/ember-addon-output/compare/v2.4.0...v2.4.1)
