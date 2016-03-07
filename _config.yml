@@ -7,7 +7,7 @@ markdown: kramdown
 exclude: ['node_modules', 'vendor']
 
 # TODO: Automate version bump on release
-version: 2.4.1
+version: 2.4.2
 
 gems:
   - jekyll-feed
