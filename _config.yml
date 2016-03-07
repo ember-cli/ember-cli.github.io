@@ -1,10 +1,9 @@
 # Site settings
 baseurl: ''
-url: 'http://ember-cli.com'
+url: http://ember-cli.com
 
 # Build settings
 markdown: kramdown
-exclude: ['node_modules', 'vendor']
 
 gems:
   - jekyll-feed
