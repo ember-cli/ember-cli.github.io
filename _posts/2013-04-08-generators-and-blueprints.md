@@ -324,8 +324,8 @@ The object passed to `locals` looks like this:
 }
 {% endhighlight %}
 
-This hook must return an object. It will be merged with the
-aforementioned default locals.
+This hook must return an object or a Promise which resolves to an object.
+The resolved object will be merged with the aforementioned default locals.
 
 ### normalizeEntityName
 
