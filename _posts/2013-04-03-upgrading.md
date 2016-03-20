@@ -42,7 +42,8 @@ project directory.
 
 #### Project Update
 
-* Delete temporary development directories - Windows has some file-path length limits in its rm command so robocopy is needed
+* Delete temporary development directories - Windows has some file-path length 
+  limits in its rm command so robocopy is needed if still on npm v2
 
     {% highlight bash %}
     // linux:
