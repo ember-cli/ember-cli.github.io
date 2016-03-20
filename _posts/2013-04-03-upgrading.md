@@ -48,25 +48,16 @@ project directory.
     // linux:
     rm -rf node_modules bower_components dist tmp
     
-    // windows powershell - more complicated due to some file-length limits, etc.
+    // windows powershell npm 3
+    rm _blank,tmp,dist,node_modules,bower_components -force -recurse
+    
+    // windows powershell npm 2 - more complicated due to some file-length limits, etc.
     md _blank
     robocopy _blank tmp /purge /nfl /ndl /njh /njs /nc /ns /np > $null
     robocopy _blank dist /purge /nfl /ndl /njh /njs /nc /ns /np > $null
     robocopy _blank node_modules /purge /nfl /ndl /njh /njs /nc /ns /np > $null
     robocopy _blank bower_components /purge /nfl /ndl /njh /njs /nc /ns /np > $null
     rm _blank,tmp,dist,node_modules,bower_components
-    
-    // windows CMD window (DOS-box) - also complicated
-    md _blank
-    robocopy _blank tmp /purge /nfl /ndl /njh /njs /nc /ns /np > nul
-    robocopy _blank dist /purge /nfl /ndl /njh /njs /nc /ns /np > nul
-    robocopy _blank node_modules /purge /nfl /ndl /njh /njs /nc /ns /np > nul
-    robocopy _blank bower_components /purge /nfl /ndl /njh /njs /nc /ns /np > nul
-    rd _blank
-    rd tmp
-    rd dist
-    rd node_modules
-    rd bower_components
     {% endhighlight %}
 
 * Update your project's `package.json` file to use the latest version of
