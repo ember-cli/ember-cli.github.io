@@ -58,10 +58,10 @@ project directory.
     
     // windows CMD window (DOS-box) - also complicated
     md _blank
-    robocopy _blank tmp /purge /nfl /ndl /njh /njs /nc /ns /np > $null
-    robocopy _blank dist /purge /nfl /ndl /njh /njs /nc /ns /np > $null
-    robocopy _blank node_modules /purge /nfl /ndl /njh /njs /nc /ns /np > $null
-    robocopy _blank bower_components /purge /nfl /ndl /njh /njs /nc /ns /np > $null
+    robocopy _blank tmp /purge /nfl /ndl /njh /njs /nc /ns /np > nul
+    robocopy _blank dist /purge /nfl /ndl /njh /njs /nc /ns /np > nul
+    robocopy _blank node_modules /purge /nfl /ndl /njh /njs /nc /ns /np > nul
+    robocopy _blank bower_components /purge /nfl /ndl /njh /njs /nc /ns /np > nul
     rd _blank
     rd tmp
     rd dist
