@@ -7,8 +7,6 @@
     $('.latest-version').html(plain)
   })
 
-  FastClick.attach(document.body);
-
   (function() {
 
     $(function() {
