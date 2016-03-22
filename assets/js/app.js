@@ -7,24 +7,20 @@
     $('.latest-version').html(plain)
   })
 
-  (function() {
-
-    $(function() {
-      $('#viewguide, #info h6 a').click(function(e) {
-        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-          var target = $(this.hash);
-          target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-          if (target.length) {
-            $('html,body').animate({
-              scrollTop: target.offset().top
-            }, 750);
-            e.preventDefault();
-          }
+  $(function() {
+    $('#viewguide, #info h6 a').click(function(e) {
+      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+        if (target.length) {
+          $('html,body').animate({
+            scrollTop: target.offset().top
+          }, 750);
+          e.preventDefault();
         }
-      });
+      }
     });
-
-  })();
+  });
 
   function setSwap() {
     var sheight = $('#showcase').css('height');
