@@ -9,7 +9,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 ### Upgrading an Ember CLI App
 
 Steps to upgrade to the latest version of Ember CLI are included with [each
-release](https://github.com/stefanpenner/ember-cli/releases), but these are the
+release](https://github.com/ember-cli/ember-cli/releases), but these are the
 common steps one would follow to update Ember CLI using NPM from within your
 project directory.
 

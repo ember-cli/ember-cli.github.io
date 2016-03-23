@@ -513,7 +513,7 @@ property for the addon (see *advanced customization* section below).
 
 If you are familiar with *Yeoman* (or Rails) generators, blueprints follow very similar conventions and structure.
 
-To dive deeper into blueprints design, please see the [Ember CLI blueprints](https://github.com/stefanpenner/ember-cli/tree/master/blueprints) where you get a feeling for the blueprints API.
+To dive deeper into blueprints design, please see the [Ember CLI blueprints](https://github.com/ember-cli/ember-cli/tree/master/blueprints) where you get a feeling for the blueprints API.
 
 ### Blueprints file structure
 {% highlight bash %}
