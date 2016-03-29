@@ -10,7 +10,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 #### Node
 
-First, install the latest stable version of Node (version 4.4.x).
+First, install the latest version of Node.
 
 To do so, either follow the installation instructions on
 [nodejs.org](http://nodejs.org/), or use your preferred package manager (such
