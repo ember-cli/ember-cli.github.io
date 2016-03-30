@@ -256,6 +256,7 @@ export a plain object, which will extend the prototype of the
 can be accessed through the `_super` property.
 
 {% highlight javascript %}
+// index.js
 module.exports = {
   locals: function(options) {
     // Return custom template variables here.
