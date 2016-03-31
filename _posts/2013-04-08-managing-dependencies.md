@@ -171,6 +171,7 @@ some, you should still be including them in some other way._
 You may have additional libraries that should only be included when running tests (such as qunit-bdd or sinon). These can be imported into your app in your ember-cli-build.js:
 
 {% highlight javascript %}
+// ember-cli-build.js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
     isProduction = EmberApp.env() === 'production';
 

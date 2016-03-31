@@ -22,6 +22,7 @@ To test it this is the first step as in ember everything starts with router.
 `app/router.js`
 
 {% highlight javascript %}
+// app/router.js
 Router.map(function() {
   this.route('songs');
 {% endhighlight %}
@@ -30,6 +31,7 @@ Next step could be to define a route on express which will respond with Mock dat
 `server/routes/songs.js`
 
 {% highlight javascript %}
+// server/routes/songs.js
 module.exports = function(app) {
   app.get('/fav/songs', function(req, res) {
   res.json( [{"name":"Foo"},{"name":"Bar"}] );
@@ -40,6 +42,7 @@ module.exports = function(app) {
 `app/adapters/RESTadapter.js`
 
 {% highlight javascript %}
+// app/adapters/RESTadapter.js
 import ajax from 'ic-ajax';
 
 var Adapter = Ember.Object.extend( {} );
@@ -54,6 +57,7 @@ Adapter.reopenClass( {
 `app/routes/songs.js`
 
 {% highlight javascript %}
+// app/routes/songs.js
 import Adapter from 'app/adapters/RESTadapter';
 
 export default Ember.Route.extend( {

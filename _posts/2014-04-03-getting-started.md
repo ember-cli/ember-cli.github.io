@@ -201,6 +201,7 @@ Addons are registered in npm with a keyword of `ember-addon`. See a full list of
 If your app isn't running on the root URL (`/`), but on a subpath (like `/my-app/`), your app will only be accessible on `/my-app/` and not on `/my-app`, too. Sometimes, this can be a bit annoying. Therefore you should take the following snippet as an example for a simple route which takes you to the right URL if you've entered the wrong one:
 
 {% highlight javascript %}
+// index.js
 app.get('/my-app', function(req, res, next) {
 
   if (req.path != '/my-app/') {

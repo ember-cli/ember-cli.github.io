@@ -275,7 +275,7 @@ To create the blueprint, add the file `blueprints/ember-cli-x-button/index.js`.
 This follows the usual Ember blueprints naming conventions.
 
 {% highlight javascript %}
-//blueprints/ember-cli-x-button/index.js
+// blueprints/ember-cli-x-button/index.js
 module.exports = {
   normalizeEntityName: function() {}, // no-op since we're just adding dependencies
 
@@ -328,6 +328,7 @@ from the consuming application access it as:
 If you want to add content to a page directly, you can use the `content-for` tag. An example of this is `{% raw %}{{content-for 'head'}}{% endraw %}` in `app/index.html`, which Ember CLI uses to insert it's own content at build time. Addons can access the `contentFor` hook to insert their own content.
 
 {% highlight javascript %}
+// index.js
 module.exports = {
   name: 'ember-cli-display-environment',
 
@@ -346,6 +347,7 @@ This will insert the current environment the app is running under wherever `{% r
 Every addon is sent an instance of the parent application's command line output stream. If you want to write out to the command line in your addon's `index.js` file, you should use `this.ui.writeLine` rather than `console.log`. This will make the output obey the `--silent` flag available with many ember-cli commands.
 
 {% highlight javascript %}
+// index.js
 module.exports = {
   name: 'ember-cli-command-line-output',
   

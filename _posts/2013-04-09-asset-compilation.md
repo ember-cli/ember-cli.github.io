@@ -171,6 +171,7 @@ ember install ember-cli-sass
 You can configure your project to use .sass in your `ember-cli-build.js`:
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp(defaults, {
   sassOptions: {
     extension: 'sass'
@@ -285,6 +286,7 @@ As an example, this `ember-cli-build` will exclude any file in the fonts/169929
 directory as well as add a cloudfront domain to each fingerprinted asset.
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   fingerprint: {
     exclude: ['fonts/169929'],
@@ -310,6 +312,7 @@ background: url('https://subdomain.cloudfront.net/images/foo-735d6c098496507e26b
 You can disable fingerprinting in your `ember-cli-build.js`:
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   fingerprint: {
     enabled: false
@@ -336,6 +339,7 @@ If you prefer to have this tag be part of your compiled javascript files
 instead, you may use the `storeConfigInMeta` flag in `ember-cli-build.js`.
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   storeConfigInMeta: false
 });
@@ -357,6 +361,7 @@ The compiled files are output to the following paths:
 To change these paths, specify the `outputPaths` config option in `ember-cli-build.js`. The default setting is shown here:
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   outputPaths: {
     app: {
@@ -377,6 +382,7 @@ var app = new EmberApp({
 You may edit any of these output paths, but make sure to update your `app.outputPaths.app.html`, default it is `index.html`, and `tests/index.html`.
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   outputPaths: {
     app: {
@@ -391,6 +397,7 @@ The `outputPaths.app.css` option uses a key value relationship. The *key* is the
 When using CSS preprocessing, only the `app/styles/app.scss` (or `.less` etc) is compiled. If you need to process multiple files, you must add another key:
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   outputPaths: {
     app: {
@@ -408,6 +415,7 @@ var app = new EmberApp({
 When using Ember inside another project, you may want to launch Ember only when a specific route is accessed. If you're preloading the Ember javascript before you access the route, you have to disable `autoRun`:
 
 {% highlight javascript %}
+// ember-cli-build.js
 var app = new EmberApp({
   autoRun: false
 });
