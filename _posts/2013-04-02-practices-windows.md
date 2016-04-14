@@ -14,6 +14,8 @@ Build times on Windows are longer than on Linux or Mac OS X. Much of that penalt
 
 *Remember to always open up PowerShell/CMD with elevated privileges ("run as Administrator").
 
+Some have found success in doing a system cleanup with tools such as [ccleaner](https://www.piriform.com/ccleaner/builds).  Clean out temp files, recycle bin, memory dumps, old prefetch data, etc.  Additionally, do a registry cleanup to fix potentially issues that might indirectly impact tools.  While these side-effects aren't clearly understood yet, it shouldn't hurt and should generally aid overall system performance.
+
 ##### Ember Addon
 
 The addon has the benefit of being shippable with your project, meaning that other developers on the project do not need to install anything to use the automatic configuration. To install the addon, run the following in the root of your project directory:
