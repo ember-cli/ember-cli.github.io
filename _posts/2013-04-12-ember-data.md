@@ -100,8 +100,8 @@ appropriate JSON response, you're ready to go. The next time you run
 `ember server`, your new mock server will be listening for any API requests
 from your Ember app.
 
-> Note: Mocks are just for development and testing. The entire `/server`
-directory will be ignored during `ember build`.
+> Note: Mocks are just for development. The entire `/server`
+directory will be ignored during `ember build` and `ember test`.
 
 If you decide to use fixtures instead of mocks, you'll need to use
 `reopenClass` within your model class definitions. First, create a fixture
