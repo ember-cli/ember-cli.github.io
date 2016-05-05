@@ -80,7 +80,7 @@ Ember CLI supports producing source maps for your concatenated and minified JS s
 Source maps are configured by the EmberApp `sourcemaps` option, and
 are disabled in production by default. Pass `sourcemaps: {enabled: true}` to your EmberApp constructor to enable source maps for javascript. Use the `extensions` option to add other formats, such as coffeescript and CSS: `{extensions: ['js', 'css', 'coffee']}`. JS is supported out-of-the-box. CSS is not currently supported. For other source formats (Sass, Coffee, etc) refer to their addons. 
 
-Default Brocfile.js:
+Default ember-cli-build.js:
 
 {% highlight bash %}
 import EmberApp from 'ember-cli/lib/broccoli/ember-app';
