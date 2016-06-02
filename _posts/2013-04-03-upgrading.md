@@ -42,10 +42,23 @@ project directory.
 
 #### Project Update
 
-* Delete temporary development directories
+* Delete temporary development directories - Windows has some file-path length 
+  limits in its rm command so robocopy is needed if still on npm v2
 
     {% highlight bash %}
+    // linux:
     rm -rf node_modules bower_components dist tmp
+    
+    // windows powershell npm 3
+    rm _blank,tmp,dist,node_modules,bower_components -force -recurse
+    
+    // windows powershell npm 2 - more complicated due to some file-length limits, etc.
+    md _blank
+    robocopy _blank tmp /purge /nfl /ndl /njh /njs /nc /ns /np > $null
+    robocopy _blank dist /purge /nfl /ndl /njh /njs /nc /ns /np > $null
+    robocopy _blank node_modules /purge /nfl /ndl /njh /njs /nc /ns /np > $null
+    robocopy _blank bower_components /purge /nfl /ndl /njh /njs /nc /ns /np > $null
+    rm _blank,tmp,dist,node_modules,bower_components
     {% endhighlight %}
 
 * Update your project's `package.json` file to use the latest version of
@@ -59,7 +72,7 @@ project directory.
 
     {% highlight bash %}
     npm install
-bower install
+    bower install
     {% endhighlight %}
 
 * Run the new project blueprint on your projects directory. Please follow the
