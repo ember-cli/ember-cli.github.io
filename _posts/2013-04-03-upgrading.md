@@ -17,57 +17,57 @@ project directory.
 
 * Remove old global ember-cli
 
-    {% highlight bash %}
-    npm uninstall -g ember-cli
-    {% endhighlight %}
+{% highlight bash %}
+npm uninstall -g ember-cli
+{% endhighlight %}
 
 * Clear NPM cache
 
-    {% highlight bash %}
-    npm cache clean
-    {% endhighlight %}
+{% highlight bash %}
+npm cache clean
+{% endhighlight %}
 
 * Clear Bower cache
 
-    {% highlight bash %}
-    bower cache clean
-    {% endhighlight %}
+{% highlight bash %}
+bower cache clean
+{% endhighlight %}
 
 * Install a new global ember-cli, replacing X.X.X with the version of ember-cli
   you want to install
 
-    {% highlight bash %}
-    npm install -g ember-cli@X.X.X
-    {% endhighlight %}
+{% highlight bash %}
+npm install -g ember-cli@X.X.X
+{% endhighlight %}
 
 #### Project Update
 
 * Delete temporary development directories
 
-    {% highlight bash %}
-    rm -rf node_modules bower_components dist tmp
-    {% endhighlight %}
+{% highlight bash %}
+rm -rf node_modules bower_components dist tmp
+{% endhighlight %}
 
 * Update your project's `package.json` file to use the latest version of
   ember-cli, replacing X.X.X with the version of ember-cli you want to install
 
-    {% highlight bash %}
-    npm install ember-cli@X.X.X --save-dev
-    {% endhighlight %}
+{% highlight bash %}
+npm install ember-cli@X.X.X --save-dev
+{% endhighlight %}
 
 * Reinstall NPM and Bower dependencies
 
-    {% highlight bash %}
-    npm install
+{% highlight bash %}
+npm install
 bower install
-    {% endhighlight %}
+{% endhighlight %}
 
 * Run the new project blueprint on your projects directory. Please follow the
   prompts, and review all changes (tip: you can see a diff by pressing d).
 
-    {% highlight bash %}
-    ember init
-    {% endhighlight %}
+{% highlight bash %}
+ember init
+{% endhighlight %}
 
 The most common sources of upgrade pain are not clearing out old packages in the
 first step of the project update and missing a change in the last step of the
