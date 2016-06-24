@@ -138,6 +138,11 @@ body {
       font-size: 1em;
       text-align: center;
       background: darken(#CF483B, 5%);
+      -ms-user-select: all;
+      -moz-user-select: all;
+      -khtml-user-select: all;
+      -webkit-user-select: all;
+      -webkit-touch-callout: all;
     }
 
     iframe {
