@@ -1,9 +1,11 @@
 # Site settings
 baseurl: ''
 url: http://ember-cli.com
-
-# Build settings
 markdown: kramdown
+
+# Build
+sass:
+  style: :compressed
 
 gems:
   - jekyll-feed
