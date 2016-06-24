@@ -92,7 +92,7 @@ body {
 
     p.tagline {
       margin: 1.3em 0;
-      color: desaturate(lighten($red,20%),50%);
+      color: #ffcec9;
       font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
       font-weight: 300;
       font-size: 1.3em;
@@ -102,7 +102,7 @@ body {
     }
 
     .latest-version {
-      color: #d4a49c;
+      color: #ffcec9;
       font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
       font-size: .9em;
       letter-spacing: .04em;
@@ -134,7 +134,7 @@ body {
       display: block;
       margin: 0 auto;
       padding: .75em 0;
-      color: desaturate(lighten($red,25%),40%);
+      color: #ffcec9;
       font-size: 1em;
       text-align: center;
       background: darken(#CF483B, 5%);
