@@ -73,7 +73,7 @@ body {
   z-index: 5000;
 
   @include box-sizing(border-box);
-  @include css-gradient(desaturate(darken($drkred,30%),20%), $drkred);
+  background: #CF483B;
 
   .content {
     position: relative;
@@ -86,24 +86,23 @@ body {
     p.tagline {
       margin: 1.5em 0;
       color: desaturate(lighten($red,20%),50%);
-      font-family: $exo1;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      font-weight: 300;
       font-size: 1.3em;
       letter-spacing: .02em;
       line-height: 1.3em;
       text-align: center;
     }
 
-    h6 {
-      color: desaturate(lighten($red,10%),38%);
-      font-family: "Helvetica Neue", Arial, sans-serif;
+    .latest-version {
+      color: #d4a49c;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
       font-size: .9em;
       letter-spacing: .04em;
-      text-shadow: 0 1px darken($drkred,35%);
+    }
 
-      a {
-        color: desaturate(lighten($red,10%),38%);
-      }
-
+    #info {
+      text-align: center;
     }
 
     .brand {
@@ -113,8 +112,8 @@ body {
       margin: auto;
       margin-bottom: 20px;
       padding: 0;
-      background: url(/assets/images/ember-cli-logo.png)  center no-repeat;
-      background-size: cover;
+      background: url(/assets/images/logo.svg) center no-repeat;
+      background-size: contain;
       text-indent: -999em;
     }
 
@@ -122,12 +121,10 @@ body {
       display: block;
       margin: 0 auto;
       padding: .75em 0;
-      border-top: 2px solid darken($drkred,45%);
-      border-bottom: 1px solid lighten($drkred,1%);
       color: desaturate(lighten($red,25%),40%);
       font-size: 1em;
       text-align: center;
-      @include css-gradient(darken($drkred,38%),darken($drkred,48%));
+      background: darken(#CF483B, 5%);
     }
 
     iframe {
@@ -145,7 +142,6 @@ body {
     #viewguide {
       display: none;
     }
-
   }
 
   .primary-nav li {
@@ -158,8 +154,6 @@ body {
     margin: 3em auto 0;
     padding: .6em 1.45em;
     float: none;
-    border-top: 2px solid darken($lgtred,4%);
-    border-bottom: 1px solid lighten($lgtred,2%);
     background: $lgtred;
     color: darken(desaturate($red,35%),10%);
     font-family: $exo2;
@@ -171,24 +165,18 @@ body {
 
     &:hover,
     &:active {
-      border-top: 2px solid darken($lgtred,24%);
-      border-bottom: 1px solid darken($lgtred,24%);
       background: darken($lgtred,20%);
       text-decoration: none;
     }
-
   }
-
 }
 
 #sidenav {
-
   h1 {
     margin: 0 0 20px 0;
     padding-top: 20px;
     text-align: center;
   }
-
 }
 
 .content-section {

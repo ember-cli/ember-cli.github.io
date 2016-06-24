@@ -4,7 +4,7 @@
     var version = data.tag_name
     var plain = version.substring(1, version.length)
 
-    $('.latest-version').html(plain)
+    $('.latest-version span').html(plain)
   })
 
   $(function() {
@@ -16,6 +16,7 @@
           $('html,body').animate({
             scrollTop: target.offset().top
           }, 750);
+
           e.preventDefault();
         }
       }
