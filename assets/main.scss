@@ -73,7 +73,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
   @include box-sizing(border-box);
   background: #CF483B;
 
@@ -156,17 +155,18 @@ body {
     padding: .6em 1.45em;
     float: none;
     background: $lgtred;
-    color: darken(desaturate($red,35%),10%);
+    color: darken(desaturate($red, 35%), 10%);
     font-family: $exo2;
     font-size: 1.1em;
     letter-spacing: .04em;
     text-align: center;
     text-transform: uppercase;
     @include border-radius(4px);
+    transition: background 0.3s;
 
     &:hover,
     &:active {
-      background: darken($lgtred,20%);
+      background: darken($lgtred, 10%);
       text-decoration: none;
     }
   }
@@ -410,7 +410,6 @@ body {
 }
 
 @media (max-width: 500px) {
-
   #showcase .content .brand {
     width: 290px;
     height: 78px;
@@ -436,7 +435,6 @@ body {
   nav .navbar-nav li.ectop {
     text-indent: 0;
   }
-
 }
 
 @media (min-width: 992px) {
