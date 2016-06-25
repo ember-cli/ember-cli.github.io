@@ -10,7 +10,7 @@ $ bundle install
 Open the directory which contains the repo and run Jekyll:
 
 ```sh
-$ jekyll serve --watch
+$ jekyll serve -w
 ```
 
 You can now view the result at [http://localhost:4000][2].
