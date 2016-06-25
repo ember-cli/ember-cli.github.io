@@ -1,6 +1,5 @@
 (function() {
-
-  $.getJSON('https://api.github.com/repos/ember-cli/ember-cli/releases/latest', function(data) {
+  $.getJSON('//api.github.com/repos/ember-cli/ember-cli/releases/latest', function(data) {
     var version = data.tag_name
     var plain = version.substring(1, version.length)
 
