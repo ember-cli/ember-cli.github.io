@@ -1,4 +1,6 @@
 # Site settings
+name: EmberCLI
+description: A command line utility for creating ambitious web applications
 baseurl: ''
 url: http://ember-cli.com
 markdown: kramdown

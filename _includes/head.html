@@ -16,12 +16,17 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" media="screen" href="{{site.baseurl}}/assets/main.css">
 
-  <title>Ember CLI &mdash; A command line utility for creating ambitious web applications</title>
+  {% if page.path == "index.html" %}
+    <title>{{site.name}} &dash; {{site.description}}</title>
+  {% else if page.title %}
+    <title>{{site.name}} &dash; {{page.title}}</title>
+  {% else %}
+    <title>{{site.name}}</title>
+  {% endif %}
 
   <script type="text/javascript">
     if (window.location.href.match('http://iamstef.net/ember-cli')) {
       window.location = 'http://www.ember-cli.com';
     }
   </script>
-
 </head>
