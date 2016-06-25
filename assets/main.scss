@@ -24,8 +24,11 @@ body {
   background: desaturate(darken($drkred,33%),20%);
 
   .navbar-header {
-    border-bottom: 3px solid desaturate(darken($drkred,25%),20%);
-    @include css-gradient($drkred,desaturate(darken($drkred,10%),20%));
+    background: #CF483B;
+
+    .navbar-toggle {
+      margin-right: 8px;
+    }
   }
 
   nav {
@@ -39,9 +42,7 @@ body {
       &:active {
         background: desaturate(darken($drkred,25%),20%);
       }
-
     }
-
   }
 
   nav.in {
@@ -55,10 +56,9 @@ body {
 
   .icon-bar {
     height: 2px;
-    border-bottom: 1px solid $drkred;
+    border-bottom: 1px solid #fff;
     background-color: desaturate(darken($drkred,25%),20%);
   }
-
 }
 
 #showcase {
