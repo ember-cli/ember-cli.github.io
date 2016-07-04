@@ -1,4 +1,4 @@
-## Ember-CLI's official website <a href="https://ember-community-slackin.herokuapp.com" target="_blank"><img align="right" src="https://ember-community-slackin.herokuapp.com/badge.svg"></a>
+## Ember-CLI's official website <a href="https://ember-community-slackin.herokuapp.com" target="_blank"><img src="https://ember-community-slackin.herokuapp.com/badge.svg"></a>
 
 Install Jekyll and a special gem provided by GitHub:
 
