@@ -93,17 +93,7 @@ var day = moment('Dec 25, 1995');
 Provide the asset path as the first argument, and the list of modules and exports as the second:
 
 {% highlight javascript %}
-app.import('bower_components/ic-ajax/dist/named-amd/main.js', {
-  exports: {
-    'ic-ajax': [
-      'default',
-      'defineFixture',
-      'lookupFixture',
-      'raw',
-      'request',
-    ]
-  }
-});
+app.import('bower_components/ic-ajax/dist/named-amd/main.js');
 {% endhighlight %}
 
 To use this asset in your app, import it.
