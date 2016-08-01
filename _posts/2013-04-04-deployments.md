@@ -62,22 +62,45 @@ firebase deploy
 
 For more configuration options, check out Firebase's [Hosting Guide](https://www.firebase.com/docs/hosting/guide/).
 
-### History API and Base URL
+### History API and Root URL
 
 If you are deploying the app to somewhere other than the root URL (`/`),
-you will need to configure the value of `baseUrl` in `config/environment.js`.
+you will need to configure the value of `rootURL` in `config/environment.js`.
+This is required for the History API, and thus also the Router, to function correctly.
+
 For example
 
 {% highlight javascript %}
 // config/environment.js
 if (environment === 'production') {
-  ENV.baseURL = '/path/to/ember/app/';
+  ENV.rootURL = '/path/to/ember/app/';
 }
 {% endhighlight %}
 
-This value is used to set the value of `base` in `index.html`, e.g. `<base href="/path/to/ember/app/" />`,
-as this is required for the History API,
-and thus also the Router, to function correctly.
+This will also be used as a prefix for assets, eg `/path/to/ember/app/assets/vendor.js`. However when
+building for production the value of `prepend` for `fingerprint` will be used used instead. So for 
+
+{% highlight bash %}
+ember build --prod
+{% endhighlight %}
+
+with
+
+{% highlight javascript %}
+// ember-cli-build.js
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    // Add options here
+    fingerprint: {
+      prepend: 'https://cdn.example.com/'
+    }
+  });
+{% endhighlight %}
+
+the asset URLs will not use `rootURL` and will be like `https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
+
+As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead. See this 
+[blog post](http://emberjs.com/blog/2016/04/28/baseURL.html) for more details.
 
 <a id="deploy-content-security-policy"></a>
 
