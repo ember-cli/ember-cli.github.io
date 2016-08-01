@@ -78,7 +78,7 @@ if (environment === 'production') {
 {% endhighlight %}
 
 This will also be used as a prefix for assets, eg `/path/to/ember/app/assets/vendor.js`. However when
-building for production the value of prepend for fingerprint will be used used instead. So for 
+building for production the value of `prepend` for `fingerprint` will be used used instead. So for 
 
 {% highlight bash %}
 ember build --prod
@@ -99,7 +99,7 @@ module.exports = function(defaults) {
 
 the asset URLs will not use `rootURL` and will be like `https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
 
-As of version 2.7, baseURL is deprecated and rootURL should be used instead. See this 
+As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead. See this 
 [blog post](http://emberjs.com/blog/2016/04/28/baseURL.html) for more details.
 
 <a id="deploy-content-security-policy"></a>
