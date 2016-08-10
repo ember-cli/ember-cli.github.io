@@ -376,7 +376,9 @@ serverMiddleware:
 lintTree:
 {% endhighlight %}
 
-An example of advanced customization can be found [here](https://github.com/poetic/ember-cli-cordova/blob/master/index.js) and for server middleware [here](https://github.com/rwjblue/ember-cli-inject-live-reload/blob/master/index.js)
+Documentation for the addon hooks is available [here](https://ember-cli.com/api/classes/Addon.html).
+
+An example of advanced customization can be found [here](https://github.com/poetic/ember-cli-cordova/blob/master/index.js) and for server middleware [here](https://github.com/rwjblue/ember-cli-inject-live-reload/blob/master/index.js).
 
 ### Testing the addon with QUnit
 The addon project contains a `/tests` directory which contains the
