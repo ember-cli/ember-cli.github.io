@@ -15,6 +15,8 @@ example, if you place `logo.png` in `public/assets/images`, you can reference it
 templates with `assets/images/logo.png` or in stylesheets with
 `url('/assets/images/logo.png')`.
 
+This functionality of Ember-CLI comes from [broccoli-asset-rev](https://github.com/rickharrison/broccoli-asset-rev). Be sure to check out all the options and usage notes
+
 ### Minifying
 
 The compiled css-files are minified by `broccoli-clean-css` or `broccoli-csso`,
