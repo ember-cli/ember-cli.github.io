@@ -46,6 +46,10 @@ npm install -g ember-cli@X.X.X
 
 {% highlight bash %}
 rm -rf node_modules bower_components dist tmp
+{% endhighlight %}<br>
+For Windows, use this command.<br>
+{% highlight bash %}
+rd /s /q node_modules bower_components dist tmp
 {% endhighlight %}
 
 * Update your project's `package.json` file to use the latest version of
