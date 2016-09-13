@@ -134,6 +134,13 @@ Error: EINVAL, invalid argument
 Try to launch cygwin using the following command:
 C:\cygwin\bin\bash.exe --login -i -c "cd /cygdrive/c/Users/username/; exec bash"
 
+### Usage with Docker
+
+When building your own [Docker](http://docker.com) image to build ember applications and run tests, there are a copuple of pitfalls to avoid.
+* Phantomjs requires `bzip2` and `fontconfig` to already be installed.
+* After installing phantomjs, you will need to manually link phantomjs to /usr/local/bin if that is not done by the install process.
+* Testem uses the `which` command to locate phantomjs, so you must install `which` if it is not included in your base OS.  
+
 ### Usage with Vagrant
 
 [Vagrant](http://vagrantup.com) is a system for automatically creating and setting up development environments that run in a virtual machine (VM).
