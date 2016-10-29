@@ -12,9 +12,11 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 First, install the latest version of Node.
 
-To do so, either follow the installation instructions on
-[nodejs.org](http://nodejs.org/), or use your preferred package manager (such
-as [Homebrew](http://brew.sh/) on OSX) if you have one.
+Node is available for a variety of platforms at [nodejs.org](http://nodejs.org/).
+It is important that you _not_ install Node with `sudo` in order to avoid permission problems with some ember-cli commands.
+On Unix, [nvm](https://github.com/creationix/nvm) provides a convenient way to do this.
+On OS X, you can also [use Homebrew](https://changelog.com/posts/install-node-js-with-homebrew-on-os-x).
+On Windows, [chocolatey](https://chocolatey.org/packages/nodejs) is an option.
 
 After the installation is complete, verify that Node is set up correctly by
 typing the below commands on the command line. Both should output a version
