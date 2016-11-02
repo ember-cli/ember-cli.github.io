@@ -511,6 +511,10 @@ See the built-in `resource` blueprint for an example of this.
   * Generates a test for a given ember data serializer
   * `ember generate serializer-test application`
 
+* **Server**
+  * Generates a server directory for mocks and proxies.
+  * `ember generate server`
+
 * **Service**
   * Generates a service and initializer for injections. These are commonly used for cases like websocket initialization, geolocation, feature flags, etc.
   * `ember generate service geolocation`
