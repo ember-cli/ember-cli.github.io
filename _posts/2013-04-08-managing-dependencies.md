@@ -229,6 +229,18 @@ app.import('bower_components/es5-shim/es5-shim.js', {
 });
 {% endhighlight %}
 
+If you need some of your assets to be included into specific file you can provide an `outputFile` option for your import:
+
+{% highlight javascript %}
+// ember-cli-build.js
+app.import('vendor/dependency-1.js', { outputFile: 'assets/additional-script.js'});
+app.import('vendor/dependency-2.js', { outputFile: 'assets/additional-script.js'});
+{% endhighlight %}
+
+As a result both dependencies will end up in `dist/assets/additional-script.js` in the same order they were specified.
+
+_Note: `outputFile` works only for javascript and css files._
+
 ##### Using broccoli-funnel
 
 With the [broccoli-funnel](https://github.com/broccolijs/broccoli-funnel) package,
