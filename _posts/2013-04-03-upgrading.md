@@ -56,7 +56,7 @@ rd /s /q node_modules bower_components dist tmp
   ember-cli, replacing X.X.X with the version of ember-cli you want to install
 
 {% highlight bash %}
-npm install ember-cli@X.X.X --save-dev
+npm install --save-dev ember-cli@X.X.X
 {% endhighlight %}
 
 * Reinstall NPM and Bower dependencies
