@@ -171,6 +171,7 @@ During the build process, the `included` hook on your addon will be called, allo
 module.exports = {
   name: 'ember-cli-x-button',
   included: function(app, parentAddon) {
+    this._super.included.apply(this, arguments);
     var target = (parentAddon || app);
     // Now you can modify the app / parentAddon. For example, if you wanted
     // to include a custom preprocessor, you could add it to the target's
@@ -250,14 +251,12 @@ export default Ember.Component.extend({
 
 In order to allow the consuming application to use the addon component in a template
 directly you need to bridge the component via your addon's `app/components` directory.
-Just import your component, and re-export it:
+Just re-export your component:
 
 {% highlight javascript %}
 // app/components/x-button.js
+export { default } from 'ember-cli-x-button/components/x-button';
 
-import XButton from 'ember-cli-x-button/components/x-button';
-
-export default XButton;
 {% endhighlight %}
 
 This setup allows others to modify the component by extending it while making
@@ -298,7 +297,7 @@ module.exports = {
   name: 'ember-cli-x-button',
 
   included: function(app) {
-    this._super.included(app);
+    this._super.included.apply(this, arguments);
 
     app.import(app.bowerDirectory + '/x-button/dist/js/x-button.js');
     app.import(app.bowerDirectory + '/x-button/dist/css/x-button.css');
@@ -350,8 +349,9 @@ Every addon is sent an instance of the parent application's command line output 
 // index.js
 module.exports = {
   name: 'ember-cli-command-line-output',
-  
+
   included: function(app) {
+    this._super.included.apply(this, arguments);
     this.ui.writeLine('Including external files!');
   }
 }
@@ -547,7 +547,7 @@ available by name.
 
 Then run `npm link <addon-name>` in any hosting application project
 root to make a link to your addon in your `node_modules` directory, and
-add the addon to the `package.json`. Any change in your addon will now 
+add the addon to the `package.json`. Any change in your addon will now
 directly take effect in any project that links to it this way (see
 [npm-tricks](http://www.devthought.com/2012/02/17/npm-tricks) for more
 details).
@@ -659,7 +659,7 @@ your `package.json` file will need to include following dependencies:
 (Use the same versions found in your Ember CLI Application's `package.json`)
 
 ### Broccoli build options for in-repo-addons
-To ensure the you can use babel.js and related polyfills with your in-repo-addon
+To ensure that you can use babel.js and related polyfills with your in-repo-addon
 add babel options to the `included` hook of the in-repo-addon `index.js`:
 
 {% highlight javascript %}
@@ -674,7 +674,7 @@ module.exports = {
     var target = (parentAddon || app);
     target.options = target.options || {};
     target.options.babel = target.options.babel || { includePolyfill: true };
-    return this._super.included(target);
+    return this._super.included.apply(this, arguments);
   }
 };
 {% endhighlight %}
