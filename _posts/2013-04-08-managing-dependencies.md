@@ -156,6 +156,21 @@ _Note: The built-in assets are required dependencies needed by the environment
 to run your app. If you use the above method to specifically exclude
 some, you should still be including them in some other way._
 
+##### Whitelisting and Blacklisting Assets
+
+You can limit which dependencies in your package.json file get imported into your Ember application by using the the addon option of the EmberApp constructor. A whitelist parameter allows you to restrict modules to a specific list. A blacklist parameter excludes specific modules from being imported into your app:
+
+{% highlight javascript %}
+var app = new EmberApp({
+  addon: {
+    blacklist: [
+      'fastboot-app-server'
+    ]
+  }
+});
+
+{% endhighlight %}
+
 ##### Test Assets
 
 You may have additional libraries that should only be included when running tests (such as qunit-bdd or sinon). These can be imported into your app in your ember-cli-build.js:
