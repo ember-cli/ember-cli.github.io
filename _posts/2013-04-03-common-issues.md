@@ -149,13 +149,13 @@ Running your ember-cli development environment from inside of a Vagrant VM will 
 
 #### Ports
 
-In order to access your ember-cli application from your desktop's web browser, you'll have to open some forwarded ports into your VM. The default ports that ember-cli uses are `4200` and `35729` for its internal web server and livereload, respectively:
+In order to access your ember-cli application from your desktop's web browser, you'll have to open some forwarded ports into your VM. The default ports that ember-cli uses are `4200` and `49152` for its internal web server and livereload, respectively:
 
 {% highlight ruby %}
 Vagrant.configure("2") do |config|
   # ...
   config.vm.network "forwarded_port", guest: 4200, host: 4200
-  config.vm.network "forwarded_port", guest: 35729, host: 35729
+  config.vm.network "forwarded_port", guest: 49152, host: 49152
 end
 {% endhighlight %}
 
