@@ -17,6 +17,47 @@ templates with `assets/images/logo.png` or in stylesheets with
 
 This functionality of Ember-CLI comes from [broccoli-asset-rev](https://github.com/rickharrison/broccoli-asset-rev). Be sure to check out all the options and usage notes.
 
+### JS Transpiling
+
+Ember-cli automatically transpiles future javascript (ES6/ES2015, ES2016 and beyond) into standard ES5
+javascript that runs on every browser using [Babel JS](https://babeljs.io) with the [ember-cli-babel](https://github.com/babel/ember-cli-babel) addon.
+
+The default configuration handles most project's needs, but you can provide options to the transpile
+to disable specific transformations if by example your app only targets ES6 capable browsers, or
+on the contrary enable transpilation of some experimental features that not enabled by default just yet.
+
+You can configure how babel works using the `babel` option in  `ember-cli-build.js`. By example for
+disabling ES6/2015 features you'd do:
+
+{% highlight js %}
+// ember-cli-build.js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    babel: {
+      blacklist: [
+        'es6.arrowFunctions',
+        'es6.blockScoping',
+        'es6.classes',
+        'es6.destructuring',
+        'es6.parameters',
+        'es6.properties.computed',
+        // ...more options
+      ]
+    }
+  });
+
+  //...
+  return app.toTree();
+};
+{% endhighlight %}
+
+This options are just forwarded to Babel. Ember-cli uses Babel 5.X at the moment and you can check
+its documentation for a comprehensive list of [all available transformations](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/transformers/index.md) and [options](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/options.md).
+
+Work is being done for upgrading to Babel 6. You can [track the progress and help](https://github.com/ember-cli/ember-cli/issues/5015).
+
 ### Minifying
 
 The compiled css-files are minified by `broccoli-clean-css` or `broccoli-csso`,
@@ -77,10 +118,10 @@ This would exclude the resulting `vendor.js` file from being minificated.
 
 ### Source Maps
 
-Ember CLI supports producing source maps for your concatenated and minified JS source files. 
+Ember CLI supports producing source maps for your concatenated and minified JS source files.
 
 Source maps are configured by the EmberApp `sourcemaps` option, and
-are disabled in production by default. Pass `sourcemaps: {enabled: true}` to your EmberApp constructor to enable source maps for javascript. Use the `extensions` option to add other formats, such as coffeescript and CSS: `{extensions: ['js', 'css', 'coffee']}`. JS is supported out-of-the-box. CSS is not currently supported. For other source formats (Sass, Coffee, etc) refer to their addons. 
+are disabled in production by default. Pass `sourcemaps: {enabled: true}` to your EmberApp constructor to enable source maps for javascript. Use the `extensions` option to add other formats, such as coffeescript and CSS: `{extensions: ['js', 'css', 'coffee']}`. JS is supported out-of-the-box. CSS is not currently supported. For other source formats (Sass, Coffee, etc) refer to their addons.
 
 Default ember-cli-build.js:
 
