@@ -56,17 +56,6 @@ And, following `dependencies` add `resolutions`:
       "ember": "canary"
     }
 
-This can also be applied to Ember Data:
-
-    "ember-data": "components/ember-data#canary",
-
-And, adding to `resolutions`:
-
-    "resolutions": {
-      "ember-data": "canary"
-    }
-
-
 Wipe your vendor directory clean then run `npm install && bower install`.
 
 ### Removing default ember-cli libraries
