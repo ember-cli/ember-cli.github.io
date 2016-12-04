@@ -102,17 +102,11 @@ In order to fix this ensure the following is added to your `PATH`:
 
 ### Cygwin on Windows
 
-When running ember cli command within cygwin the following error can occur:
-
-net.js:156
-    this._handle.open(options.fd);
-                 ^
-Error: EINVAL, invalid argument
-    at new Socket (net.js:156:18)
-    at process.stdin (node.js:664:19)
-
-Try to launch cygwin using the following command:
-C:\cygwin\bin\bash.exe --login -i -c "cd /cygdrive/c/Users/username/; exec bash"
+Node.js on Cygwin is no longer supported [more
+details](https://github.com/nodejs/node/wiki/Installation#building-on-cygwin)
+Rather then using Cygwin, we recommend running ember-cli natively on windows,
+or via the new [Windows Subsystem
+Linux](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide).
 
 ### Usage with Docker
 
