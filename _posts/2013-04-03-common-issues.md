@@ -56,6 +56,11 @@ And, following `dependencies` add `resolutions`:
       "ember": "canary"
     }
 
+For ember-data, as it is now provided by `npm` it's master or canary can be
+consumed by pointing the npm depedency to the appropriate github repository
+
+    npm install --save-dev emberjs/data#master
+
 Wipe your vendor directory clean then run `npm install && bower install`.
 
 ### Removing default ember-cli libraries
