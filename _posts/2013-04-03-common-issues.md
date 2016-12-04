@@ -129,37 +129,39 @@ require some additional configuration and will carry a few caveats.
 #### Ports
 
 In order to access your ember-cli application from your desktop's web browser,
-you'll have to open some forwarded ports into your VM. The default ports that
-ember-cli uses are `4200` and `35729` for its internal web server and
-livereload, respectively:
+you'll have to open some forwarded ports into your VM. EmberCli uses two ports:
+
+* For serving assets, this one defaults to `4200` but can be configured via `--port 4200`
+* For live reload, this one is choosen dynamically, but can be configure via `---live-reload-port=9999`
+
+To make vagrant development seamless these ports will need to be forwarded
 
 {% highlight ruby %}
 Vagrant.configure("2") do |config|
   # ...
   config.vm.network "forwarded_port", guest: 4200, host: 4200
-  config.vm.network "forwarded_port", guest: 35729, host: 35729
+  config.vm.network "forwarded_port", guest: 9999, host: 9999
 end
 {% endhighlight %}
 
 #### Watched Files
 
-The way Vagrant syncs directories between your desktop and the VM will break
-the default mechanism ember-cli uses to watch files and cause issues when
-updates are subsequently compiled. To restore this functionality, you'll have
-to make two changes:
+The way Vagrant syncs directories between your desktop and vm may prevent file
+watching from working correctly. This will prevent rebuilds, and live reloads
+from working correctly. There are several work arounds:
 
-1. Fall back to polling when invoking the serve command: `ember serve --watcher polling`.
-
+1. Watch for changes by polling the file system via: `ember serve --watcher polling`.
 2. Use [nfs for synced folders](https://docs.vagrantup.com/v2/synced-folders/nfs.html).
 
 #### VM Setup
 
 When setting up your VM, install ember-cli dependencies as you normally would.
-If you've already run `ember install` in your project's directory from your
-host machine, you'll have to delete the `node_modules` directory and re-install
-those dependencies from the VM. This is particularly necessary if you have node
-dependencies that use native libraries (e.g., [broccoli-sass](#sass), which
-uses the libsass C library).
+Some of these dependencies (such as [broccoli-sass](#sass)) may have native
+depenencies that may require recompilation. To do so run:
+
+```
+npm rebuild
+```
 
 #### Provider
 
