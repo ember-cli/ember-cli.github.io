@@ -6,28 +6,6 @@ category: user-guide
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-03-common-issues.md"
 ---
 
-### Content security policy
-
-Ember CLI comes bundled with the
-[ember-cli-content-security-policy](https://github.com/rwjblue/ember-cli-content-security-policy)
-addon which enables the [Content Security
-Policy](http://content-security-policy.com/) in modern browsers when running
-the development server.
-
-The default header sent by the addon sends a policy where only content from
-`'self'` is allowed. This means that by default, the browser will restrict your
-app from loading assets and data outside of `localhost:4200` or doing any
-inline style or script modifications. If your app does any of these, you'll see
-a lot of these errors:
-
-{% highlight bash %}
-Refused to execute inline script because it violates the following Content
-Security Policy directive: ... {% endhighlight %}
-
-You can get rid of these errors by modifing the CSP for your app. This is
-described in the [addon
-readme](https://github.com/rwjblue/ember-cli-content-security-policy).
-
 ### npm package management with sudo
 
 Installing packages such as bower with sudo powers can lead to permissions
