@@ -101,10 +101,12 @@ module.exports = function(defaults) {
   });
 {% endhighlight %}
 
-the asset URLs will not use `rootURL` and will be like `https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
+the asset URLs will not use `rootURL` and will be like
+`https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
 
-As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead. See this
-[blog post](http://emberjs.com/blog/2016/04/28/baseURL.html) for more details.
+As of version 2.7, `baseURL` is deprecated and `rootURL` should be used
+instead. See this [blog post](http://emberjs.com/blog/2016/04/28/baseURL.html)
+for more details.
 
 <a id="deploy-content-security-policy"></a>
 
@@ -120,7 +122,9 @@ For more information, see the [ember-cli-content-security-policy readme.]( https
 
 ### Deploying an HTTPS server using Nginx on a Unix/Linux/MacOSx machine
 
-The following is a simple deployment with https using nginx.  Http just redirects to the https server here.  Don't forget to include your ssl keys in your config.
+The following is a simple deployment with https using nginx.  Http just
+redirects to the https server here.  Don't forget to include your ssl keys in
+your config.
 
 Before deployment make sure you run this command to populate the dist directory:
 
