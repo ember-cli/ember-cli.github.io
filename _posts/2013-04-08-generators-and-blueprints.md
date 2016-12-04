@@ -9,9 +9,15 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Blueprints
 
-Ember CLI ships with "Blueprints", snippet generators for many of the entities - models, controllers, components, and so on - that you'll need in your app. Blueprints allow us to share common Ember patterns in the community and you can even define your own.
+Ember CLI ships with "Blueprints", snippet generators for many of the entities
+- models, controllers, components, and so on - that you'll need in your app.
+Blueprints allow us to share common Ember patterns in the community and you can
+even define your own.
 
-To see a list of all available blueprints, with a short description of what they do, run `ember generate --help` or `ember g --help`, for short, at any time. For a longer, more detailed description of each blueprint, look in the appendix to this guide.
+To see a list of all available blueprints, with a short description of what
+they do, run `ember generate --help` or `ember g --help`, for short, at any
+time. For a longer, more detailed description of each blueprint, look in the
+appendix to this guide.
 
 ### Generating Blueprints
 
@@ -65,7 +71,8 @@ installing
 
 {% endhighlight %}
 
-If you have `podModulePrefix` defined in your environment, your generated pod path will be automatically prefixed with it.
+If you have `podModulePrefix` defined in your environment, your generated pod
+path will be automatically prefixed with it.
 
 {% highlight bash %}
 // podModulePrefix: app/pods
@@ -91,10 +98,13 @@ The built-in blueprints that support pods structure are:
  - transform
  - view
 
-Blueprints that don't support pods structure will simply ignore the `--pod` option and use the default structure.
+Blueprints that don't support pods structure will simply ignore the `--pod`
+option and use the default structure.
 
-If you would like to use the pods structure as the default for your project, you can set `usePods` in your `.ember-cli` config file
-to `true` (setting was previously named `usePodsByDefault`). To generate or destroy a blueprint in the classic
+If you would like to use the pods structure as the default for your project,
+you can set `usePods` in your `.ember-cli` config file to `true` (setting was
+previously named `usePodsByDefault`). To generate or destroy a blueprint in the
+classic
 type structure while `usePods` is `true`, use the `--classic` flag.
 
 With the `usePods` set to `true`.
@@ -413,16 +423,23 @@ See the built-in `resource` blueprint for an example of this.
   * `ember addon awesome-addon`
 
 * **App**
-  * This is the default blueprint for ember-cli projects. It contains a conventional project structure and everything you will need to develop your ember apps.
-  * This blueprint is most commonly encountered when starting a new application, as in `ember new`.
+  * This is the default blueprint for ember-cli projects. It contains a
+    conventional project structure and everything you will need to develop your
+    ember apps.
+  * This blueprint is most commonly encountered when starting a new
+    application, as in `ember new`.
 
 * **Blueprint**
-  * Generates a Blueprint and its corresponding definition. You can use this to create your own custom Blueprints. A Blueprint is essentially a bundle of templates with optional install logic.
+  * Generates a Blueprint and its corresponding definition. You can use this to
+    create your own custom Blueprints. A Blueprint is essentially a bundle of
+    templates with optional install logic.
   * `ember generate blueprint example-blueprint`
 
 * **Component**
   * Generates an Ember Component and its accompanying test.
-  * A Component is your own app-specific tag with custom behaviour. They are basically views that are completely isolated. Usually used for building widgets.
+  * A Component is your own app-specific tag with custom behaviour. They are
+    basically views that are completely isolated. Usually used for building
+    widgets.
   * Caveats
     * The component's name must contain a hyphen
     * Slashes are not allowed
@@ -449,11 +466,15 @@ See the built-in `resource` blueprint for an example of this.
   * `ember generate helper-test capitalize`
 
 * **HTTP Mock**
-  * This blueprint generates a mock endpoint with an '/api' prefix that you can use to return canned data. This is commonly used as an API stub, which allows you to develop right away with the RESTAdapter instead of using fixtures.
+  * This blueprint generates a mock endpoint with an '/api' prefix that you can
+    use to return canned data. This is commonly used as an API stub, which
+    allows you to develop right away with the RESTAdapter instead of using
+    fixtures.
   * `ember generate http-mock users`
 
 * **HTTP Proxy**
-  * Generates a relative proxy to another server. You can use this to forward requests to a local development server, for example.
+  * Generates a relative proxy to another server. You can use this to forward
+    requests to a local development server, for example.
   * Options
     * Local Path
     * Remote URL
@@ -466,7 +487,11 @@ See the built-in `resource` blueprint for an example of this.
 
 * **Initializer**
   * Generates an Ember Initializer and its accompanying tests.
-  * Common uses are to setup injection rules, like a current user, services, etc. You shouldn't use them for fetching data via XHR, deferring readiness, or instantiating and using 'container.lookup'. For more about initializers, view the [API docs](http://emberjs.com/api/classes/Ember.Application.html#method_initializer)
+  * Common uses are to setup injection rules, like a current user, services,
+    etc. You shouldn't use them for fetching data via XHR, deferring readiness,
+    or instantiating and using 'container.lookup'. For more about initializers,
+    view the [API
+    docs](http://emberjs.com/api/classes/Ember.Application.html#method_initializer)
   * `ember generate initializer current-user`
 
 * **Initializer Test**
@@ -474,7 +499,8 @@ See the built-in `resource` blueprint for an example of this.
   * `ember generate initializer-test current-user`
 
 * **Mixin**
-  * Generates a Mixin and its test. A mixin is an object whose properties can be added to other classes, like Controllers, Views, Routes, etc.
+  * Generates a Mixin and its test. A mixin is an object whose properties can
+    be added to other classes, like Controllers, Views, Routes, etc.
   * `ember generate mixin filterable`
 
 * **Mixin Test**
@@ -516,7 +542,8 @@ See the built-in `resource` blueprint for an example of this.
   * `ember generate server`
 
 * **Service**
-  * Generates a service and initializer for injections. These are commonly used for cases like websocket initialization, geolocation, feature flags, etc.
+  * Generates a service and initializer for injections. These are commonly used
+    for cases like websocket initialization, geolocation, feature flags, etc.
   * `ember generate service geolocation`
 
 * **Service Test**
@@ -528,7 +555,9 @@ See the built-in `resource` blueprint for an example of this.
   * `ember generate template user`
 
 * **Transform**
-  * Generates an Ember Data value transform, which are used to serialize and deserialize model attributes as they saved and loaded from the adapter. These can be useful for creating custom attributes.
+  * Generates an Ember Data value transform, which are used to serialize and
+    deserialize model attributes as they saved and loaded from the adapter.
+    These can be useful for creating custom attributes.
   * `ember generate transform foo`
 
 * **Transform Test**

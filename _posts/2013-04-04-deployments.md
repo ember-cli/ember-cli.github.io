@@ -6,7 +6,9 @@ category: user-guide
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-04-deployments.md"
 ---
 
-You can easily deploy your Ember CLI application to a number of places using [ember-cli-deploy](http://ember-cli-deploy.com/). Or you can follow some of the recipes below.
+You can easily deploy your Ember CLI application to a number of places using
+[ember-cli-deploy](http://ember-cli-deploy.com/). Or you can follow some of the
+recipes below.
 
 ### Heroku
 
@@ -16,39 +18,58 @@ Prerequistes:
 - [Heroku Account](https://www.heroku.com)
 - [Heroku Toolbelt](https://toolbelt.heroku.com)
 
-Navigate to your Ember CLI application directory. Now, create your new Heroku application with the Ember CLI buildpack...
+Navigate to your Ember CLI application directory. Now, create your new Heroku
+application with the Ember CLI buildpack...
 
 {% highlight bash %}
 heroku create <OPTIONAL_APP_NAME> --buildpack https://github.com/tonycoco/heroku-buildpack-ember-cli.git
 {% endhighlight %}
 
-You should be able to now deploy your Ember CLI application with Heroku's git hooks...
+You should be able to now deploy your Ember CLI application with Heroku's git
+hooks...
 
 {% highlight bash %}
 git commit -am "Empty commit for Heroku deployment" --allow-empty
 git push heroku master
 {% endhighlight %}
 
-Need to make a custom nginx configuration change? No problem. In your Ember CLI application, add a `config/nginx.conf.erb` file. You can copy the [existing configuration](https://github.com/tonycoco/heroku-buildpack-ember-cli/blob/master/config/nginx.conf.erb) file and make your changes to it.
+Need to make a custom nginx configuration change? No problem. In your Ember CLI
+application, add a `config/nginx.conf.erb` file. You can copy the [existing
+configuration](https://github.com/tonycoco/heroku-buildpack-ember-cli/blob/master/config/nginx.conf.erb)
+file and make your changes to it.
 
 ### Azure
-Continuous deployment with [Azure Websites](http://www.azure.com) is enabled through Microsoft's module [ember-cli-azure-deploy](https://github.com/felixrieseberg/ember-cli-azure-deploy). The installation is simple - just run the following commands in your Ember CLI app's root directory:
+
+Continuous deployment with [Azure Websites](http://www.azure.com) is enabled
+through Microsoft's module
+[ember-cli-azure-deploy](https://github.com/felixrieseberg/ember-cli-azure-deploy).
+The installation is simple - just run the following commands in your Ember CLI
+app's root directory:
 
 {% highlight bash %}
 npm install --save-dev -g ember-cli-azure-deploy
 azure-deploy init
 {% endhighlight %}
 
-Next, set up your Azure Website's source control to point to your repo - [either via GitHub, BitBucket, VSO or any of the other available options](http://azure.microsoft.com/en-us/documentation/articles/web-sites-publish-source-control/#Step4). As soon as you push a new commit to your repository, Azure Websites will automatically run `ember build` and deploy the contents of the created `dist` directory to your website's `wwwroot`.
+Next, set up your Azure Website's source control to point to your repo -
+[either via GitHub, BitBucket, VSO or any of the other available
+options](http://azure.microsoft.com/en-us/documentation/articles/web-sites-publish-source-control/#Step4).
+As soon as you push a new commit to your repository, Azure Websites will
+automatically run `ember build` and deploy the contents of the created `dist`
+directory to your website's `wwwroot`.
 
 ### Firebase
-To deploy your Ember CLI application to Firebase, you'll first need to enable hosting from your Firebase's Dashboard. Then, install the [Firebase Tools](https://github.com/firebase/firebase-tools):
+
+To deploy your Ember CLI application to Firebase, you'll first need to enable
+hosting from your Firebase's Dashboard. Then, install the [Firebase
+Tools](https://github.com/firebase/firebase-tools):
 
 {% highlight bash %}
 npm install -g firebase-tools
 {% endhighlight %}
 
-You can then configure your application for deployment by running the following in your app's root directory and following the prompts:
+You can then configure your application for deployment by running the following
+in your app's root directory and following the prompts:
 
 {% highlight bash %}
 firebase init
@@ -60,7 +81,8 @@ Finally, to deploy your application, run:
 firebase deploy
 {% endhighlight %}
 
-For more configuration options, check out Firebase's [Hosting Guide](https://www.firebase.com/docs/hosting/guide/).
+For more configuration options, check out Firebase's [Hosting
+Guide](https://www.firebase.com/docs/hosting/guide/).
 
 ### History API and Root URL
 
@@ -78,7 +100,7 @@ if (environment === 'production') {
 {% endhighlight %}
 
 This will also be used as a prefix for assets, eg `/path/to/ember/app/assets/vendor.js`. However when
-building for production the value of `prepend` for `fingerprint` will be used used instead. So for 
+building for production the value of `prepend` for `fingerprint` will be used used instead. So for
 
 {% highlight bash %}
 ember build --prod
@@ -99,7 +121,7 @@ module.exports = function(defaults) {
 
 the asset URLs will not use `rootURL` and will be like `https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
 
-As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead. See this 
+As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead. See this
 [blog post](http://emberjs.com/blog/2016/04/28/baseURL.html) for more details.
 
 <a id="deploy-content-security-policy"></a>

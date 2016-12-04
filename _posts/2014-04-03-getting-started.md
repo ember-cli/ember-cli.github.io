@@ -12,11 +12,14 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 First, install the latest version of Node.
 
-Node is available for a variety of platforms at [nodejs.org](http://nodejs.org/).
-It is important that you _not_ install Node with `sudo` in order to avoid permission problems with some ember-cli commands.
-On Unix, [nvm](https://github.com/creationix/nvm) provides a convenient way to do this.
-On OS X, you can also [use Homebrew](https://changelog.com/posts/install-node-js-with-homebrew-on-os-x).
-On Windows, [chocolatey](https://chocolatey.org/packages/nodejs) is an option.
+Node is available for a variety of platforms at
+[nodejs.org](http://nodejs.org/). It is important that you _not_ install Node
+with `sudo` in order to avoid permission problems with some ember-cli commands.
+On Unix, [nvm](https://github.com/creationix/nvm) provides a convenient way to
+do this. On OS X, you can also [use
+  Homebrew](https://changelog.com/posts/install-node-js-with-homebrew-on-os-x).
+  On Windows, [chocolatey](https://chocolatey.org/packages/nodejs) is an
+  option.
 
 After the installation is complete, verify that Node is set up correctly by
 typing the below commands on the command line. Both should output a version
@@ -39,7 +42,9 @@ This will give you access to the `ember` command-line runner.
 
 #### Bower
 
-You'll need to globally install [Bower](http://bower.io), a package manager that keeps your front-end dependencies (including jQuery, Ember, and QUnit) up-to-date:
+You'll need to globally install [Bower](http://bower.io), a package manager
+that keeps your front-end dependencies (including jQuery, Ember, and QUnit)
+up-to-date:
 
 {% highlight bash %}
 npm install -g bower
@@ -49,12 +54,15 @@ This will give you access to the `bower` command-line runner.
 
 #### Watchman
 
-On OSX and UNIX-like operating systems, we recommend installing [Watchman](https://facebook.github.io/watchman/)
-version 3.x, which provides Ember CLI a more effective way for watching project changes.
+On OSX and UNIX-like operating systems, we recommend installing
+[Watchman](https://facebook.github.io/watchman/) version 3.x, which provides
+Ember CLI a more effective way for watching project changes.
 
-File-watching on OSX is error-prone and Node's built-in `NodeWatcher` has trouble
-observing large trees. [Watchman](https://facebook.github.io/watchman/) on the other hand, solves these problems and
-performs well on extremely massive file trees. You can read more about Facebook's motivations [here](https://www.facebook.com/notes/facebook-engineering/watchman-faster-builds-with-large-source-trees/10151457195103920).
+File-watching on OSX is error-prone and Node's built-in `NodeWatcher` has
+trouble observing large trees. [Watchman](https://facebook.github.io/watchman/)
+on the other hand, solves these problems and performs well on extremely massive
+file trees. You can read more about Facebook's motivations
+[here](https://www.facebook.com/notes/facebook-engineering/watchman-faster-builds-with-large-source-trees/10151457195103920).
 
 On OSX, you can install Watchman using [Homebrew](http://brew.sh/):
 
@@ -62,13 +70,17 @@ On OSX, you can install Watchman using [Homebrew](http://brew.sh/):
 brew install watchman
 {% endhighlight %}
 
-For complete installation instructions, refer to the docs on the [Watchman website](https://facebook.github.io/watchman/). Note, there exists a similarly named `npm` package (watchman) which is __not__ the intended installation. If you have this package installed you may see the following warning:
+For complete installation instructions, refer to the docs on the [Watchman
+website](https://facebook.github.io/watchman/). Note, there exists a similarly
+named `npm` package (watchman) which is __not__ the intended installation. If
+you have this package installed you may see the following warning:
 
 {% highlight bash %}
 invalid watchman found, version: [2.9.8] did not satisfy [^3.0.0], falling back to NodeWatcher
 {% endhighlight %}
 
-If you intend on using the `npm` version for another purpose, make sure it's not on your `PATH` otherwise, remove it using:
+If you intend on using the `npm` version for another purpose, make sure it's
+not on your `PATH` otherwise, remove it using:
 
 {% highlight bash %}
 npm uninstall -g watchman
@@ -89,8 +101,12 @@ Could not find watchman, falling back to NodeWatcher for file system events
 #### PhantomJS
 
 With Ember CLI, you can use the automated test runner of your choice, however
-most testing services will recommend or require [PhantomJS](http://phantomjs.org/), which you can install
-via [npm](https://www.npmjs.com/package/phantomjs) or the [PhantomJS website](http://phantomjs.org).  Note, PhantomJS is the default test runner for [Testem](https://github.com/airportyh/testem) and [Karma](http://karma-runner.github.io/0.12/index.html).
+most testing services will recommend or require
+[PhantomJS](http://phantomjs.org/), which you can install via
+[npm](https://www.npmjs.com/package/phantomjs) or the [PhantomJS
+website](http://phantomjs.org).  Note, PhantomJS is the default test runner for
+[Testem](https://github.com/airportyh/testem) and
+[Karma](http://karma-runner.github.io/0.12/index.html).
 
 If you want to use PhantomJS to run your integration tests, it must be globally installed:
 
@@ -121,15 +137,17 @@ Navigate to `http://localhost:4200/tests` to see your test results in action.
 
 #### Migrating an existing Ember project that doesn't use Ember CLI
 
-If your app uses the deprecated Ember App Kit, there is a [migration guide](https://github.com/stefanpenner/ember-app-kit#migrating-to-ember-cli) located
-on the README.
+If your app uses the deprecated Ember App Kit, there is a [migration
+guide](https://github.com/stefanpenner/ember-app-kit#migrating-to-ember-cli)
+located on the README.
 
-If your app uses globals (e.g. `App.Post`) from a different build pipeline such as Grunt, Ember-Rails, or Gulp,
-you can try using the [Ember CLI migrator](https://github.com/fivetanley/ember-cli-migrator). The
-Ember CLI migrator is a command line tool that looks at your JavaScript code using
-a JavaScript parser and rewrites it to ES6 following Ember CLI's conventions.
-The migrator keeps your code style and keeps git history available via
-`git log --follow`.
+If your app uses globals (e.g. `App.Post`) from a different build pipeline such
+as Grunt, Ember-Rails, or Gulp, you can try using the [Ember CLI
+migrator](https://github.com/fivetanley/ember-cli-migrator). The Ember CLI
+migrator is a command line tool that looks at your JavaScript code using a
+JavaScript parser and rewrites it to ES6 following Ember CLI's conventions. The
+migrator keeps your code style and keeps git history available via `git log
+--follow`.
 
 #### Cloning an existing project
 
@@ -196,11 +214,17 @@ The `app/index.html` file lays the foundation for your application. This is wher
 
 ### Addons
 
-Addons are registered in npm with a keyword of `ember-addon`. See a full list of existing addons registered in NPM [here](https://www.npmjs.org/browse/keyword/ember-addon).
+Addons are registered in npm with a keyword of `ember-addon`. See a full list
+of existing addons registered in NPM
+[here](https://www.npmjs.org/browse/keyword/ember-addon).
 
 ### Developing on a subpath
 
-If your app isn't running on the root URL (`/`), but on a subpath (like `/my-app/`), your app will only be accessible on `/my-app/` and not on `/my-app`, too. Sometimes, this can be a bit annoying. Therefore you should take the following snippet as an example for a simple route which takes you to the right URL if you've entered the wrong one:
+If your app isn't running on the root URL (`/`), but on a subpath (like
+`/my-app/`), your app will only be accessible on `/my-app/` and not on
+`/my-app`, too. Sometimes, this can be a bit annoying. Therefore you should
+take the following snippet as an example for a simple route which takes you to
+the right URL if you've entered the wrong one:
 
 {% highlight javascript %}
 // index.js

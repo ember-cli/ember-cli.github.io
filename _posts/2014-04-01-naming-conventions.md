@@ -20,8 +20,9 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
   - JSON
 
 When using Ember CLI it's important to keep in mind that the Resolver changes
-some of the naming conventions you would typically use out of the box with Ember,
-Ember Data and Handlebars. In this section we review some of these naming conventions.
+some of the naming conventions you would typically use out of the box with
+Ember, Ember Data and Handlebars. In this section we review some of these
+naming conventions.
 
 ### Module Examples
 
@@ -219,9 +220,13 @@ Test filenames should be suffixed with `-test.js` in order to run.
 
 #### Pod structure
 
-As your app gets bigger, a feature-driven structure may be better. Splitting your application by functionality/resource would give you more power and control to scale and maintain it. As a default, if the file is not found on the POD structure, the Resolver will look it up within the normal structure.
+As your app gets bigger, a feature-driven structure may be better. Splitting
+your application by functionality/resource would give you more power and
+control to scale and maintain it. As a default, if the file is not found on the
+POD structure, the Resolver will look it up within the normal structure.
 
-In this case, you should name the file as its functionality. Given a resource `Users`, the directory structure would be:
+In this case, you should name the file as its functionality. Given a resource
+`Users`, the directory structure would be:
 
 - `app/users/controller.js`
 - `app/users/route.js`

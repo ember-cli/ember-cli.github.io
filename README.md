@@ -4,13 +4,13 @@ Install Jekyll and a special gem provided by GitHub:
 
 ```sh
 $ gem install bundler
-$ bundle install
+$ bundle
 ```
 
 Open the directory which contains the repo and run Jekyll:
 
 ```sh
-$ jekyll serve -w
+$ bundle exec jekyll serve -w
 ```
 
 You can now view the result at [http://localhost:4000](http://localhost:4000).

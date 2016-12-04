@@ -8,9 +8,14 @@ github: "https://github.com/ember-cli/ember-cli/edit/gh-pages/_posts/2014-04-02-
 
 The Ember Resolver is the mechanism responsible for looking up code in your
 application and converting its naming conventions into the actual classes,
-functions, and templates that Ember needs to resolve its dependencies, for example, what template to render for a given route. For an introduction to the Ember Resolver, and a basic example of how it actually works, see [this video](https://www.youtube.com/watch?v=OY0PzrltMYc#t=51) by [Robert Jackson](https://www.twitter.com/@rwjblue).
+functions, and templates that Ember needs to resolve its dependencies, for
+example, what template to render for a given route. For an introduction to the
+Ember Resolver, and a basic example of how it actually works, see [this
+video](https://www.youtube.com/watch?v=OY0PzrltMYc#t=51) by [Robert
+Jackson](https://www.twitter.com/@rwjblue).
 
-In the past, Ember's Default Resolver worked by putting everything into a global namespace, so you will come across the following pattern:
+In the past, Ember's Default Resolver worked by putting everything into a
+global namespace, so you will come across the following pattern:
 
 {% highlight javascript %}
 App.IndexRoute = Ember.Route.extend({
@@ -74,7 +79,8 @@ import DS from "ember-data";
 
 ### Using Pods
 
-One of the enhancements that the new Resolver brings is that it will first look for Pods before the traditional project structure.
+One of the enhancements that the new Resolver brings is that it will first look
+for Pods before the traditional project structure.
 
 
 ### Module Directory Naming Structure
@@ -98,10 +104,10 @@ classes such as `mixins` and `utils` should be loaded manually with an import st
 For more information, see [Naming Conventions](#naming-conventions).
 
 ### Resolving Handlebars helpers
-Custom Handlebars helpers are one of the ways that you can use the same HTML multiple
-times in your web application. Registering your custom helper allows it to
-be invoked from any of your Handlebars templates. Custom helpers are located
-under `app/helpers`.
+Custom Handlebars helpers are one of the ways that you can use the same HTML
+multiple times in your web application. Registering your custom helper allows
+it to be invoked from any of your Handlebars templates. Custom helpers are
+located under `app/helpers`.
 
 {% highlight javascript %}
 // app/helpers/upper-case.js
@@ -120,13 +126,13 @@ In `some-template.hbs`:
 {% endraw %}
 {% endhighlight %}
 
-While previous versions of ember-cli required auto-resolved helpers only if they
-contain a dash, now all helpers are auto-resolved, regardless of whether
+While previous versions of ember-cli required auto-resolved helpers only if
+they contain a dash, now all helpers are auto-resolved, regardless of whether
 they contain a dash or not.
 
-A common pattern with helpers is to define a helper to use your views
-(e.g. for a custom text field view, `MyTextField` a helper `my-text-field`
-to use it). It is advised to leverage Components instead.
+A common pattern with helpers is to define a helper to use your views (e.g. for
+a custom text field view, `MyTextField` a helper `my-text-field` to use it). It
+is advised to leverage Components instead.
 
 Do this:
 
@@ -143,5 +149,5 @@ export default Ember.TextField.extend({
 
 If you want to use external libraries that write to a global namespace (e.g.
 [moment.js](http://momentjs.com/)), you need to add those to the `predef`
-section of your project's `.jshintrc` file and set its value to true. If you use the lib in tests, you need
-to add it to your `tests/.jshintrc` file, too.
+section of your project's `.jshintrc` file and set its value to true. If you
+use the lib in tests, you need to add it to your `tests/.jshintrc` file, too.
