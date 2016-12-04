@@ -8,26 +8,39 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Windows
 
-#### Improve and Optimize Build Performance
+Windows Vista and newer windows versions are fully supported.
 
-Build times on Windows are longer than on Linux or Mac OS X. Much of that
-penalty is not because of node or ember-cli, but because of Windows services
-monitoring your filesystem. [Microsoft wrote a configuration tool as well as an
-Ember
-Addon](http://felixrieseberg.com/improved-ember-cli-performance-with-windows/)
-to automatically configure Windows to optimize build performance. The automatic
-configuration instructs Windows Search and Windows Defender to ignore Ember
-Cli's `tmp` directory.
+To get started ensure the following dependencies are installed:
 
-*Remember to always open up PowerShell/CMD with elevated privileges ("run as
-Administrator").
+* Node.js - [https://nodejs.org/en/](https://nodejs.org/en/)
+* Git - [https://git-scm.com/](https://git-scm.com/)
+* Phantom.js - [http://phantomjs.org/](http://phantomjs.org/)
 
-##### Ember Addon
+### Performance
 
-The addon has the benefit of being shippable with your project, meaning that
-other developers on the project do not need to install anything to use the
-automatic configuration. To install the addon, run the following in the root of
-your project directory:
+Although supported, Windows performance, atleast by default, isn't as good as
+on Linux or MacOS. On a positive note, this story continues to improve. Both
+Microsoft, and the ember-cli team continue to work to improve these developer
+ergonomics.
+
+#### What causes the build slowdown?
+
+The two primary reasons are:
+
+* Lack of enabled-by-default symlinks
+* Generally slower FS operations on NTFS
+
+#### For the best possible windows experience:
+
+* Windows 10, insiders release + development mode enabled (Symlinks enabled by
+  default) [Details from
+  Microsoft](https://blogs.windows.com/buildingapps/2016/12/02/symlinks-windows-10/)
+* or, Windows Subsystem Linux [Installation
+  Guide](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide)
+
+#### Improving your windows experience:
+
+Ensure Search and Defender ignore your projects tmp directory:
 
 {% highlight bash %}
 npm install --save-dev ember-cli-windows-addon
@@ -39,26 +52,31 @@ Then, to start the automatic configuration, run:
 ember windows
 {% endhighlight %}
 
-##### Node Cli Tool
+[Readmore about this from the Microsoft DX Open Source team](http://felixrieseberg.com/improved-ember-cli-performance-with-windows/)
 
-The automatic configuration tool can also be installed directly, making it
-available in PowerShell & CMD. To install, run:
+#### Enabling symlinks
 
-{% highlight bash %}
-npm install ember-cli-windows -g
-{% endhighlight %}
+In order to create symlinks the account running Ember CLI must have the
+`SeCreateSymbolicLinkPrivilege`. Users in the Administrators group have this
+permission already. However if UAC (User Access Control) is enabled users in
+the Administrators group must run their shell using `Run As Administrator`.
+This is because UAC strips away certain permissions from the Administrators
+group, including `SeCreateSymbolicLinkPrivilege`.
 
-Once the tool is installed, you can run it in any Ember Cli project directory.
+![Run As Administrator]({{ site.url }}/assets/images/common-issues/run-as-admin.png)
 
-{% highlight bash %}
-ember-cli-windows
-{% endhighlight %}
+If the user account is not part of the Administrators group you will need to
+add the `SeCreateSymbolicLinkPrivilege` in order to allow the creation of
+symlinks. To do this open the `Local Security Policy` by typing Local Security
+Policy in the Run Box.
 
-Additional performance can be gained by using an elevated prompt, which can be
-achieved by starting PowerShell or CMD 'as Administrator'. If you do not have
-administrative rights on your machine, see the [section on symlinks below for
-information on how to enable additional performance
-gains](#symlinks-on-windows).
+Under `Local Policies` -> `User Rights Assignment` find the `Create symbolic
+links` policy and double click it to add a new user or group. Once you add your
+user or group has been added your user should be able to create symlinks. Keep
+in mind if your user is part of the Administrators group and UAC is enabled you
+will still need to start your shell using `Run as Administrator`.
+
+![Enabling Symlinks]({{ site.url }}/assets/images/common-issues/enabling-symlinks.png)
 
 #### Issues With npm: EEXISTS, Path too Long, etc
 
