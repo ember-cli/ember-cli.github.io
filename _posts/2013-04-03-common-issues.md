@@ -8,15 +8,25 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Content security policy
 
-Ember CLI comes bundled with the [ember-cli-content-security-policy](https://github.com/rwjblue/ember-cli-content-security-policy) addon which enables the [Content Security Policy](http://content-security-policy.com/) in modern browsers when running the development server.
+Ember CLI comes bundled with the
+[ember-cli-content-security-policy](https://github.com/rwjblue/ember-cli-content-security-policy)
+addon which enables the [Content Security
+Policy](http://content-security-policy.com/) in modern browsers when running
+the development server.
 
-The default header sent by the addon sends a policy where only content from `'self'` is allowed. This means that by default, the browser will restrict your app from loading assets and data outside of `localhost:4200` or doing any inline style or script modifications. If your app does any of these, you'll see a lot of these errors:
+The default header sent by the addon sends a policy where only content from
+`'self'` is allowed. This means that by default, the browser will restrict your
+app from loading assets and data outside of `localhost:4200` or doing any
+inline style or script modifications. If your app does any of these, you'll see
+a lot of these errors:
 
 {% highlight bash %}
-Refused to execute inline script because it violates the following Content Security Policy directive: ...
-{% endhighlight %}
+Refused to execute inline script because it violates the following Content
+Security Policy directive: ... {% endhighlight %}
 
-You can get rid of these errors by modifing the CSP for your app. This is described in the [addon readme](https://github.com/rwjblue/ember-cli-content-security-policy).
+You can get rid of these errors by modifing the CSP for your app. This is
+described in the [addon
+readme](https://github.com/rwjblue/ember-cli-content-security-policy).
 
 ### npm package management with sudo
 
@@ -29,11 +39,15 @@ For example
 Uncaught Error: Could not find module ember/resolver loader/loader.js:42
 {% endhighlight %}
 
-can be caused by installing bower with sudo. See [https://gist.github.com/isaacs/579814](https://gist.github.com/isaacs/579814) for a collection of various solutions.
+can be caused by installing bower with sudo. See
+[https://gist.github.com/isaacs/579814](https://gist.github.com/isaacs/579814)
+for a collection of various solutions.
 
 ### Installing from behind a proxy
 
-If you're behind a proxy, you might not be able to install because `ember-cli` &mdash; or some of its dependencies &mdash; tries to `git clone` a `git://` url. (In this scenario, only `http://` urls will work).
+If you're behind a proxy, you might not be able to install because `ember-cli`
+&mdash; or some of its dependencies &mdash; tries to `git clone` a `git://`
+url. (In this scenario, only `http://` urls will work).
 
 You'll probably get an error like this:
 
@@ -93,15 +107,32 @@ Wipe your vendor directory clean then run `npm install && bower install`.
 
 ### Symlinks on Windows
 
-Many Broccoli plugins and Ember CLI addons can use symlinks to speedup the build process. When working on the Windows platform there are some caveats involved in making sure Ember CLI and other plugins can use symlinks. If symlinks are not available plugins should fall back to copying files. However the speed benefits of symlinking are substantial, so it is worth the effort to make sure Ember CLI can take advantage of them.
+Many Broccoli plugins and Ember CLI addons can use symlinks to speedup the
+build process. When working on the Windows platform there are some caveats
+involved in making sure Ember CLI and other plugins can use symlinks. If
+symlinks are not available plugins should fall back to copying files. However
+the speed benefits of symlinking are substantial, so it is worth the effort to
+make sure Ember CLI can take advantage of them.
 
-In order to create symlinks the account running Ember CLI must have the `SeCreateSymbolicLinkPrivilege`. Users in the Administrators group have this permission already. However if UAC (User Access Control) is enabled users in the Administrators group must run their shell using `Run As Administrator`. This is because UAC strips away certain permissions from the Administrators group, including `SeCreateSymbolicLinkPrivilege`.
+In order to create symlinks the account running Ember CLI must have the
+`SeCreateSymbolicLinkPrivilege`. Users in the Administrators group have this
+permission already. However if UAC (User Access Control) is enabled users in
+the Administrators group must run their shell using `Run As Administrator`.
+This is because UAC strips away certain permissions from the Administrators
+group, including `SeCreateSymbolicLinkPrivilege`.
 
 ![Run As Administrator]({{ site.url }}/assets/images/common-issues/run-as-admin.png)
 
-If the user account is not part of the Administrators group you will need to add the `SeCreateSymbolicLinkPrivilege` in order to allow the creation of symlinks. To do this open the `Local Security Policy` by typing Local Security Policy in the Run Box.
+If the user account is not part of the Administrators group you will need to
+add the `SeCreateSymbolicLinkPrivilege` in order to allow the creation of
+symlinks. To do this open the `Local Security Policy` by typing Local Security
+Policy in the Run Box.
 
-Under `Local Policies` -> `User Rights Assignment` find the `Create symbolic links` policy and double click it to add a new user or group. Once you add your user or group has been added your user should be able to create symlinks. Keep in mind if your user is part of the Administrators group and UAC is enabled you will still need to start your shell using `Run as Administrator`.
+Under `Local Policies` -> `User Rights Assignment` find the `Create symbolic
+links` policy and double click it to add a new user or group. Once you add your
+user or group has been added your user should be able to create symlinks. Keep
+in mind if your user is part of the Administrators group and UAC is enabled you
+will still need to start your shell using `Run as Administrator`.
 
 ![Enabling Symlinks]({{ site.url }}/assets/images/common-issues/enabling-symlinks.png)
 
@@ -136,20 +167,28 @@ C:\cygwin\bin\bash.exe --login -i -c "cd /cygdrive/c/Users/username/; exec bash"
 
 ### Usage with Docker
 
-When building your own [Docker](http://docker.com) image to build ember applications and run tests, there are a copuple of pitfalls to avoid.
+When building your own [Docker](http://docker.com) image to build ember
+applications and run tests, there are a copuple of pitfalls to avoid.
 * Phantomjs requires `bzip2` and `fontconfig` to already be installed.
-* After installing phantomjs, you will need to manually link phantomjs to /usr/local/bin if that is not done by the install process.
-* Testem uses the `which` command to locate phantomjs, so you must install `which` if it is not included in your base OS.  
+* After installing phantomjs, you will need to manually link phantomjs to
+  /usr/local/bin if that is not done by the install process.
+* Testem uses the `which` command to locate phantomjs, so you must install
+  `which` if it is not included in your base OS.  
 
 ### Usage with Vagrant
 
-[Vagrant](http://vagrantup.com) is a system for automatically creating and setting up development environments that run in a virtual machine (VM).
+[Vagrant](http://vagrantup.com) is a system for automatically creating and
+setting up development environments that run in a virtual machine (VM).
 
-Running your ember-cli development environment from inside of a Vagrant VM will require some additional configuration and will carry a few caveats.
+Running your ember-cli development environment from inside of a Vagrant VM will
+require some additional configuration and will carry a few caveats.
 
 #### Ports
 
-In order to access your ember-cli application from your desktop's web browser, you'll have to open some forwarded ports into your VM. The default ports that ember-cli uses are `4200` and `35729` for its internal web server and livereload, respectively:
+In order to access your ember-cli application from your desktop's web browser,
+you'll have to open some forwarded ports into your VM. The default ports that
+ember-cli uses are `4200` and `35729` for its internal web server and
+livereload, respectively:
 
 {% highlight ruby %}
 Vagrant.configure("2") do |config|
@@ -161,7 +200,10 @@ end
 
 #### Watched Files
 
-The way Vagrant syncs directories between your desktop and the VM will break the default mechanism ember-cli uses to watch files and cause issues when updates are subsequently compiled. To restore this functionality, you'll have to make two changes:
+The way Vagrant syncs directories between your desktop and the VM will break
+the default mechanism ember-cli uses to watch files and cause issues when
+updates are subsequently compiled. To restore this functionality, you'll have
+to make two changes:
 
 1. Fall back to polling when invoking the serve command: `ember serve --watcher polling`.
 
@@ -169,15 +211,24 @@ The way Vagrant syncs directories between your desktop and the VM will break the
 
 #### VM Setup
 
-When setting up your VM, install ember-cli dependencies as you normally would. If you've already run `ember install` in your project's directory from your host machine, you'll have to delete the `node_modules` directory and re-install those dependencies from the VM. This is particularly necessary if you have node dependencies that use native libraries (e.g., [broccoli-sass](#sass), which uses the libsass C library).
+When setting up your VM, install ember-cli dependencies as you normally would.
+If you've already run `ember install` in your project's directory from your
+host machine, you'll have to delete the `node_modules` directory and re-install
+those dependencies from the VM. This is particularly necessary if you have node
+dependencies that use native libraries (e.g., [broccoli-sass](#sass), which
+uses the libsass C library).
 
 #### Provider
 
-The two most common Vagrant providers, VirtualBox and VMware Fusion, will both work. However, VMware Fusion is substantially faster and will use less battery life if you're on a laptop. As of now, VirtualBox will use 100% of a single CPU core to poll for file system changes inside of the VM.
+The two most common Vagrant providers, VirtualBox and VMware Fusion, will both
+work. However, VMware Fusion is substantially faster and will use less battery
+life if you're on a laptop. As of now, VirtualBox will use 100% of a single CPU
+core to poll for file system changes inside of the VM.
 
 ### Broken Glob npm package issue
 
-The glob package is required by many of ember-cli packages, however there is a version mismatch between various includes which currently is an issue.
+The glob package is required by many of ember-cli packages, however there is a
+version mismatch between various includes which currently is an issue.
 
 {% highlight bash %}
 undefined is not a function

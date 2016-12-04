@@ -15,7 +15,9 @@ example, if you place `logo.png` in `public/assets/images`, you can reference it
 templates with `assets/images/logo.png` or in stylesheets with
 `url('/assets/images/logo.png')`.
 
-This functionality of Ember-CLI comes from [broccoli-asset-rev](https://github.com/rickharrison/broccoli-asset-rev). Be sure to check out all the options and usage notes.
+This functionality of Ember-CLI comes from
+[broccoli-asset-rev](https://github.com/rickharrison/broccoli-asset-rev). Be
+sure to check out all the options and usage notes.
 
 ### Minifying
 
@@ -77,10 +79,10 @@ This would exclude the resulting `vendor.js` file from being minificated.
 
 ### Source Maps
 
-Ember CLI supports producing source maps for your concatenated and minified JS source files. 
+Ember CLI supports producing source maps for your concatenated and minified JS source files.
 
 Source maps are configured by the EmberApp `sourcemaps` option, and
-are disabled in production by default. Pass `sourcemaps: {enabled: true}` to your EmberApp constructor to enable source maps for javascript. Use the `extensions` option to add other formats, such as coffeescript and CSS: `{extensions: ['js', 'css', 'coffee']}`. JS is supported out-of-the-box. CSS is not currently supported. For other source formats (Sass, Coffee, etc) refer to their addons. 
+are disabled in production by default. Pass `sourcemaps: {enabled: true}` to your EmberApp constructor to enable source maps for javascript. Use the `extensions` option to add other formats, such as coffeescript and CSS: `{extensions: ['js', 'css', 'coffee']}`. JS is supported out-of-the-box. CSS is not currently supported. For other source formats (Sass, Coffee, etc) refer to their addons.
 
 Default ember-cli-build.js:
 
@@ -108,7 +110,8 @@ In `ember-cli-build.js` add the following:
 {% highlight bash %}
 app.import('bower_components/bootstrap/dist/css/bootstrap.css');
 {% endhighlight %}
-it's going to tell [Broccoli](https://github.com/joliss/broccoli) that we want this file to be concatenated with our `vendor.css` file.
+it's going to tell [Broccoli](https://github.com/joliss/broccoli) that we want
+this file to be concatenated with our `vendor.css` file.
 
 To use a CSS preprocessor, you'll need to install the appropriate
 [Broccoli](https://github.com/joliss/broccoli) plugin. When using a
@@ -119,16 +122,25 @@ additional stylesheets.
 All your preprocessed stylesheets will be compiled into one file and served at
 `assets/application-name.css`.
 
-If you would like to change this behavior, or compile to multiple output stylesheets, you can adjust the [Output Paths Configuration](#configuring-output-paths)
+If you would like to change this behavior, or compile to multiple output
+stylesheets, you can adjust the [Output Paths
+Configuration](#configuring-output-paths)
 
 #### CSS
 
 To use plain CSS with `app.css`:
 
-* Write your styles in `app.css` and/or organize your CSS into multiple stylesheet files and import these files with `@import` from within `app.css`.
-* [CSS `@import` statements](https://developer.mozilla.org/en-US/docs/Web/CSS/@import) (e.g. `@import 'typography.css';`) must be valid CSS, meaning `@import` statements *must* precede all other rules and so be placed at the *top* of `app.css`.
-* In the production build, the `@import` statements are replaced with the contents of their files and the final minified, concatenated single CSS file is built to `dist/assets/yourappname-FINGERPRINT_GOES_HERE.css`.
-* Any individual CSS files are also built and minified into `dist/assets/` in case you need them as standalone stylesheets.
+* Write your styles in `app.css` and/or organize your CSS into multiple
+  stylesheet files and import these files with `@import` from within `app.css`.
+* [CSS `@import`
+  statements](https://developer.mozilla.org/en-US/docs/Web/CSS/@import) (e.g.
+  `@import 'typography.css';`) must be valid CSS, meaning `@import` statements
+  *must* precede all other rules and so be placed at the *top* of `app.css`.
+* In the production build, the `@import` statements are replaced with the
+  contents of their files and the final minified, concatenated single CSS file
+  is built to `dist/assets/yourappname-FINGERPRINT_GOES_HERE.css`.
+* Any individual CSS files are also built and minified into `dist/assets/` in
+  case you need them as standalone stylesheets.
 * Relative pathing gets changed (how to customize?)
 
 Example `app.css` with valid `@import` usage:
@@ -243,7 +255,9 @@ NPM modules:
 npm install broccoli-ember-script --save-dev
 {% endhighlight %}
 
-Note that the ES6 module transpiler is not directly supported with Emberscript, to allow use of ES6 modules use the `` ` `` character to escape raw Javascript similar to the CoffeeScript example above.
+Note that the ES6 module transpiler is not directly supported with Emberscript,
+to allow use of ES6 modules use the `` ` `` character to escape raw Javascript
+similar to the CoffeeScript example above.
 
 ### Emblem
 
@@ -253,7 +267,9 @@ For [Emblem](http://emblemjs.com/), run the following commands:
 ember install ember-cli-emblem
 {% endhighlight %}
 
-If you're using the older broccoli-emblem-compiler addon, you need to switch to ember-cli-emblem. The older broccoli-emblem-compiler compiles directly to JS instead of Handlebars and therefore is broken on all newer version of HTMLBars.
+If you're using the older broccoli-emblem-compiler addon, you need to switch to
+ember-cli-emblem. The older broccoli-emblem-compiler compiles directly to JS
+instead of Handlebars and therefore is broken on all newer version of HTMLBars.
 
 ### Fingerprinting and CDN URLs
 
@@ -381,7 +397,8 @@ var app = new EmberApp({
 });
 {% endhighlight %}
 
-You may edit any of these output paths, but make sure to update your `app.outputPaths.app.html`, default it is `index.html`, and `tests/index.html`.
+You may edit any of these output paths, but make sure to update your
+`app.outputPaths.app.html`, default it is `index.html`, and `tests/index.html`.
 
 {% highlight javascript %}
 // ember-cli-build.js
@@ -394,9 +411,13 @@ var app = new EmberApp({
 });
 {% endhighlight %}
 
-The `outputPaths.app.css` option uses a key value relationship. The *key* is the input file and the *value* is the output location. Note that we do not include the extension for the input path, because each preprocessor has a different extension.
+The `outputPaths.app.css` option uses a key value relationship. The *key* is
+the input file and the *value* is the output location. Note that we do not
+include the extension for the input path, because each preprocessor has a
+different extension.
 
-When using CSS preprocessing, only the `app/styles/app.scss` (or `.less` etc) is compiled. If you need to process multiple files, you must add another key:
+When using CSS preprocessing, only the `app/styles/app.scss` (or `.less` etc)
+is compiled. If you need to process multiple files, you must add another key:
 
 {% highlight javascript %}
 // ember-cli-build.js
@@ -414,7 +435,9 @@ var app = new EmberApp({
 
 #### Integration
 
-When using Ember inside another project, you may want to launch Ember only when a specific route is accessed. If you're preloading the Ember javascript before you access the route, you have to disable `autoRun`:
+When using Ember inside another project, you may want to launch Ember only when
+a specific route is accessed. If you're preloading the Ember javascript before
+you access the route, you have to disable `autoRun`:
 
 {% highlight javascript %}
 // ember-cli-build.js
@@ -432,11 +455,15 @@ SRI calculation is done using the addon
 [ember-cli-sri](https://github.com/jonathanKingston/ember-cli-sri)
 (which is included by default).
 
-This plugin is used to generate [SRI integrity](http://www.w3.org/TR/SRI/) for your applications.
-Subresource integrity is a security concept used to check JavaScript and stylesheets are loaded with the correct content when using a CDN.
+This plugin is used to generate [SRI integrity](http://www.w3.org/TR/SRI/) for
+your applications. Subresource integrity is a security concept used to check
+JavaScript and stylesheets are loaded with the correct content when using a
+CDN.
 
 #### Why
-The reason to add this to your application is to protect against poisoned CDNs breaking JavaScript or CSS.
+
+The reason to add this to your application is to protect against poisoned CDNs
+breaking JavaScript or CSS.
 
 - [JavaScript DDoS prevention](https://blog.cloudflare.com/an-introduction-to-javascript-based-ddos/)
   - The latest [GitHub DDoS attack](http://googleonlinesecurity.blogspot.co.uk/2015/04/a-javascript-based-ddos-attack-as-seen.html)

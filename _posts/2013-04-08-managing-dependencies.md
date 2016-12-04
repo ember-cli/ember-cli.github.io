@@ -31,12 +31,15 @@ Further documentation about Bower is available at their
 
 ### Compiling Assets
 
-Ember CLI uses the [Broccoli](https://github.com/broccolijs/broccoli) assets pipeline.
+Ember CLI uses the [Broccoli](https://github.com/broccolijs/broccoli) assets
+pipeline.
 
-The assets manifest is located in the `ember-cli-build.js` file in your project root (not the default `ember-cli-build.js`).
+The assets manifest is located in the `ember-cli-build.js` file in your project
+root (not the default `ember-cli-build.js`).
 
-To add an asset specify the dependency in your`ember-cli-build.js` before calling `app.toTree()`. You
-can only import assets that are within the `bower_components` or `vendor`
+To add an asset specify the dependency in your`ember-cli-build.js` before
+calling `app.toTree()`. You can only import assets that are within the
+`bower_components` or `vendor`
 directories. The following example scenarios illustrate how this works.
 
 #### Javascript Assets
@@ -49,8 +52,8 @@ First, provide the asset path as the first and only argument:
 app.import('bower_components/moment/moment.js');
 {% endhighlight %}
 
-From here you would use the package as specified by its documentation, usually a global variable.
-In this case it would be:
+From here you would use the package as specified by its documentation, usually
+a global variable. In this case it would be:
 
 {% highlight javascript %}
 import Ember from 'ember';
@@ -61,11 +64,12 @@ import Ember from 'ember';
 var day = moment('Dec 25, 1995');
 {% endhighlight %}
 
-_Note: Don't forget to make JSHint happy by adding a `/* global MY_GLOBAL */` to your module, or
-by defining it within the `predefs` section of your `.jshintrc` file._
+_Note: Don't forget to make JSHint happy by adding a `/* global MY_GLOBAL */`
+to your module, or by defining it within the `predefs` section of your
+`.jshintrc` file._
 
-Alternatively, you could generate an ES6 shim to make the library accessible via
-`import`.
+Alternatively, you could generate an ES6 shim to make the library accessible
+via `import`.
 
 First, generate the shim:
 
@@ -90,7 +94,8 @@ var day = moment('Dec 25, 1995');
 
 ##### Standard AMD Asset
 
-Provide the asset path as the first argument, and the list of modules and exports as the second:
+Provide the asset path as the first argument, and the list of modules and
+exports as the second:
 
 {% highlight javascript %}
 app.import('bower_components/ic-ajax/dist/named-amd/main.js');
@@ -107,7 +112,9 @@ icAjaxRaw( /* ... */ );
 
 ##### Environment Specific Assets
 
-If you need to use different assets in different environments, specify an object as the first parameter. That object's key should be the environment name, and the value should be the asset to use in that environment.
+If you need to use different assets in different environments, specify an
+object as the first parameter. That object's key should be the environment
+name, and the value should be the asset to use in that environment.
 
 {% highlight javascript %}
 app.import({
@@ -116,7 +123,9 @@ app.import({
 });
 {% endhighlight %}
 
-If you need to import an asset in one environment but not import it or any alternatives in other environments then you can wrap `app.import` in an `if` statement.
+If you need to import an asset in one environment but not import it or any
+alternatives in other environments then you can wrap `app.import` in an `if`
+statement.
 
 {% highlight javascript %}
 if (app.env === 'development') {
@@ -126,8 +135,10 @@ if (app.env === 'development') {
 
 ##### Customizing a built-in Asset
 
-This is somewhat non-standard and discouraged, but suppose that due to a requirement in your application that you need to use the full version of
-Handlebars even in the production environment.  You would simply provide the path to the `EmberApp` constructor:
+This is somewhat non-standard and discouraged, but suppose that due to a
+requirement in your application that you need to use the full version of
+Handlebars even in the production environment.  You would simply provide the
+path to the `EmberApp` constructor:
 
 {% highlight javascript %}
 var app = new EmberApp({
@@ -158,7 +169,11 @@ some, you should still be including them in some other way._
 
 ##### Whitelisting and Blacklisting Assets
 
-You can limit which dependencies in your package.json file get imported into your Ember application by using the addon option of the EmberApp constructor. A whitelist parameter allows you to restrict modules to a specific list. A blacklist parameter excludes specific modules from being imported into your app:
+You can limit which dependencies in your package.json file get imported into
+your Ember application by using the addon option of the EmberApp constructor. A
+whitelist parameter allows you to restrict modules to a specific list. A
+blacklist parameter excludes specific modules from being imported into your
+app:
 
 {% highlight javascript %}
 var app = new EmberApp({
@@ -173,7 +188,9 @@ var app = new EmberApp({
 
 ##### Test Assets
 
-You may have additional libraries that should only be included when running tests (such as qunit-bdd or sinon). These can be imported into your app in your ember-cli-build.js:
+You may have additional libraries that should only be included when running
+tests (such as qunit-bdd or sinon). These can be imported into your app in your
+ember-cli-build.js:
 
 {% highlight javascript %}
 // ember-cli-build.js
@@ -191,7 +208,9 @@ module.exports = app.toTree();
 {% endhighlight %}
 
 **Notes:**
-- Be sure to pass `{ type: 'test' }` as the second argument to `app.import`.  This will ensure that your libraries are compiled into the `test-support.js` file.
+- Be sure to pass `{ type: 'test' }` as the second argument to `app.import`.
+  This will ensure that your libraries are compiled into the `test-support.js`
+  file.
 
 #### Styles
 
@@ -203,11 +222,13 @@ Provide the asset path as the first argument:
 app.import('bower_components/foundation/css/foundation.css');
 {% endhighlight %}
 
-All style assets added this way will be concatenated and output as `/assets/vendor.css`.
+All style assets added this way will be concatenated and output as
+`/assets/vendor.css`.
 
 ##### Dynamic Styles (SCSS, LESS, etc)
 
-The vendor trees that are provided upon instantiation are available to your dynamic style files.  Take the following example (in `app/styles/app.scss`):
+The vendor trees that are provided upon instantiation are available to your
+dynamic style files.  Take the following example (in `app/styles/app.scss`):
 
 {% highlight scss %}
 @import "bower_components/foundation/scss/normalize.scss";
@@ -235,7 +256,10 @@ app.import('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', {
 });
 {% endhighlight %}
 
-If you need to load certain dependencies before others, you can set the `prepend` property equal to `true` on the second argument of `import()`. This will prepend the dependency to the vendor file instead of appending it, which is the default behavior.
+If you need to load certain dependencies before others, you can set the
+`prepend` property equal to `true` on the second argument of `import()`. This
+will prepend the dependency to the vendor file instead of appending it, which
+is the default behavior.
 
 {% highlight javascript %}
 app.import('bower_components/es5-shim/es5-shim.js', {
@@ -244,7 +268,8 @@ app.import('bower_components/es5-shim/es5-shim.js', {
 });
 {% endhighlight %}
 
-If you need some of your assets to be included into specific file you can provide an `outputFile` option for your import:
+If you need some of your assets to be included into specific file you can
+provide an `outputFile` option for your import:
 
 {% highlight javascript %}
 // ember-cli-build.js
@@ -252,14 +277,16 @@ app.import('vendor/dependency-1.js', { outputFile: 'assets/additional-script.js'
 app.import('vendor/dependency-2.js', { outputFile: 'assets/additional-script.js'});
 {% endhighlight %}
 
-As a result both dependencies will end up in `dist/assets/additional-script.js` in the same order they were specified.
+As a result both dependencies will end up in `dist/assets/additional-script.js`
+in the same order they were specified.
 
 _Note: `outputFile` works only for javascript and css files._
 
 ##### Using broccoli-funnel
 
-With the [broccoli-funnel](https://github.com/broccolijs/broccoli-funnel) package,
-(parts of) a bower-installed package can be used as assets as-is. First ensure that the Broccoli
+With the [broccoli-funnel](https://github.com/broccolijs/broccoli-funnel)
+package, (parts of) a bower-installed package can be used as assets as-is.
+First ensure that the Broccoli
 package needed to build is installed:
 
 {% highlight bash %}
@@ -302,7 +329,8 @@ be found under `/assets/fonts/`, and might be linked to from `index.html` like s
 <link rel="stylesheet" href="assets/fonts/lovelyfont_bold/stylesheet.css">
 {% endhighlight %}
 
-You can exclude assets from the final output in a similar fashion. For example, to exclude all `.gitkeep` files from the final output:
+You can exclude assets from the final output in a similar fashion. For example,
+to exclude all `.gitkeep` files from the final output:
 
 {% highlight javascript %}
 // Again, add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:

@@ -7,7 +7,9 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 ---
 
 Addons make it possible to easily share common code between
-applications. However, if an addon only covers a very project specific use-case, [an In-Repo-Addon](#detailed-list-of-blueprints-and-their-use) could be considered instead.
+applications. However, if an addon only covers a very project specific
+use-case, [an In-Repo-Addon](#detailed-list-of-blueprints-and-their-use) could
+be considered instead.
 
 This guide will walk through the development cycle of a fictional
 addon `ember-cli-x-button`.
@@ -153,9 +155,14 @@ An application that consumes your addon will automatically install
 and bundle dependencies specified this way.
 
 ### Addon entry point
-An addon will leverage the npm conventions, and look for an `index.js` as the entry point unless another entry point is specified via the `"main"` property in the `package.json` file. You are encouraged to use `index.js` as the addon entry point.
 
-The generated `index.js` is a simple JavaScript Object (POJO) that you can customize and expand as you see fit.
+An addon will leverage the npm conventions, and look for an `index.js` as the
+entry point unless another entry point is specified via the `"main"` property
+in the `package.json` file. You are encouraged to use `index.js` as the addon
+entry point.
+
+The generated `index.js` is a simple JavaScript Object (POJO) that you can
+customize and expand as you see fit.
 
 {% highlight javascript %}
 // index.js
@@ -164,7 +171,8 @@ module.exports = {
 };
 {% endhighlight %}
 
-During the build process, the `included` hook on your addon will be called, allowing you to perform setup logic or modify the app or addon:
+During the build process, the `included` hook on your addon will be called,
+allowing you to perform setup logic or modify the app or addon:
 
 {% highlight javascript %}
 // index.js
@@ -182,16 +190,28 @@ module.exports = {
 };
 {% endhighlight %}
 
-The exported object extends the `Addon` class. So any hooks that exist on the `Addon` class may be overridden by addon author.
+The exported object extends the `Addon` class. So any hooks that exist on the
+`Addon` class may be overridden by addon author.
 
 ### Configuring your ember-addon properties
-By default, the `"ember-addon"` hash in the `package.json` file has the `"configPath"` property defined to point to the `config` directory of the test dummy application.
 
-Optionally, you may specify whether your `ember-addon` must run `"before"` or `"after"` any other Ember CLI addons.  Both of these properties can take either a string or an array of strings, where the string is the name of the another Ember CLI addon, as defined in the `package.json` of the other addon.
+By default, the `"ember-addon"` hash in the `package.json` file has the
+`"configPath"` property defined to point to the `config` directory of the test
+dummy application.
 
-Optionally, you may specify a different name for the `"defaultBlueprint"`. It defaults to the name in the `package.json`. This blueprint will be run automatically when your addon is installed with the `ember install` command.
+Optionally, you may specify whether your `ember-addon` must run `"before"` or
+`"after"` any other Ember CLI addons.  Both of these properties can take either
+a string or an array of strings, where the string is the name of the another
+Ember CLI addon, as defined in the `package.json` of the other addon.
 
-Optionally, you may specify the `"demoURL"` property with the fully qualified URL of a website showing your addon in action. Sites like [Ember Addons](http://emberaddons.com/) and [Ember Observer](http://emberobserver.com/) will display a link to `"demoURL"`.
+Optionally, you may specify a different name for the `"defaultBlueprint"`. It
+defaults to the name in the `package.json`. This blueprint will be run
+automatically when your addon is installed with the `ember install` command.
+
+Optionally, you may specify the `"demoURL"` property with the fully qualified
+URL of a website showing your addon in action. Sites like [Ember
+Addons](http://emberaddons.com/) and [Ember
+Observer](http://emberobserver.com/) will display a link to `"demoURL"`.
 
 {% highlight javascript %}
 "ember-addon": {
@@ -231,6 +251,7 @@ module.exports = app.toTree();
 {% endhighlight %}
 
 ### Addon Components
+
 The actual code for the addon goes in `addon/components/x-button.js`
 
 {% highlight javascript %}
@@ -324,7 +345,10 @@ from the consuming application access it as:
 {% endhighlight %}
 
 ### Content
-If you want to add content to a page directly, you can use the `content-for` tag. An example of this is `{% raw %}{{content-for 'head'}}{% endraw %}` in `app/index.html`, which Ember CLI uses to insert it's own content at build time. Addons can access the `contentFor` hook to insert their own content.
+If you want to add content to a page directly, you can use the `content-for`
+tag. An example of this is `{% raw %}{{content-for 'head'}}{% endraw %}` in
+`app/index.html`, which Ember CLI uses to insert it's own content at build
+time. Addons can access the `contentFor` hook to insert their own content.
 
 {% highlight javascript %}
 // index.js
@@ -339,11 +363,18 @@ module.exports = {
 };
 {% endhighlight %}
 
-This will insert the current environment the app is running under wherever `{% raw %}{{content-for 'environment'}}{% endraw %}` is placed. The `contentFor` function will be called for each `{% raw %}{{content-for}}{% endraw %}` tag in `index.html`.
+This will insert the current environment the app is running under wherever
+`{% raw %}{{content-for 'environment'}}{% endraw %}` is placed. The `contentFor`
+function will be called for each `{% raw %}{{content-for}}{% endraw %}` tag in
+`index.html`.
 
 ### Writing to the Command Line
 
-Every addon is sent an instance of the parent application's command line output stream. If you want to write out to the command line in your addon's `index.js` file, you should use `this.ui.writeLine` rather than `console.log`. This will make the output obey the `--silent` flag available with many ember-cli commands.
+Every addon is sent an instance of the parent application's command line output
+stream. If you want to write out to the command line in your addon's `index.js`
+file, you should use `this.ui.writeLine` rather than `console.log`. This will
+make the output obey the `--silent` flag available with many ember-cli
+commands.
 
 {% highlight javascript %}
 // index.js
@@ -378,7 +409,10 @@ lintTree:
 
 Documentation for the addon hooks is available [here](https://ember-cli.com/api/classes/Addon.html).
 
-An example of advanced customization can be found [here](https://github.com/poetic/ember-cli-cordova/blob/master/index.js) and for server middleware [here](https://github.com/rwjblue/ember-cli-inject-live-reload/blob/master/index.js).
+An example of advanced customization can be found
+[here](https://github.com/poetic/ember-cli-cordova/blob/master/index.js) and
+for server middleware
+  [here](https://github.com/rwjblue/ember-cli-inject-live-reload/blob/master/index.js).
 
 ### Testing the addon with QUnit
 The addon project contains a `/tests` directory which contains the
@@ -441,8 +475,10 @@ test('is a button tag', function(assert) {
 For how to run and configure tests, see the [Ember CLI Testing](#testing) section.
 
 ### Generating files in the dummy app
-You can generate most of ember-cli's built-in blueprints into your `tests/dummy/app` directory
-to speed up building a dummy app to use for testing. Any blueprint that generates into an `/app` directory is currently supported:
+You can generate most of ember-cli's built-in blueprints into your
+`tests/dummy/app` directory to speed up building a dummy app to use for
+testing. Any blueprint that
+generates into an `/app` directory is currently supported:
 
 `ember g <blueprint-name> <name> --dummy`
 
@@ -463,11 +499,13 @@ tests/
             taco-button.hbs
 {% endhighlight %}
 
-Note that in the above example, the addon-import and component-test were not generated. The
-`--dummy` option generates the blueprint as if you were in a non-addon project.
+Note that in the above example, the addon-import and component-test were not
+generated. The `--dummy` option generates the blueprint as if you were in a
+non-addon project.
 
-You can also create your own blueprints that can generate into the dummy directory. The primary
-requirement is that the blueprint contains a `__root__` token in the files directory path.
+You can also create your own blueprints that can generate into the dummy
+directory. The primary requirement is that the blueprint contains a `__root__`
+token in the files directory path.
 
 {% highlight bash %}
 blueprints/
@@ -481,11 +519,12 @@ blueprints/
 
 
 ### Create blueprint
-A blueprint is a bundle of template files with optional installation logic.
-It is used to scaffold (generate) specific application files based on
-some arguments and options.
-For more details see [generators-and-blueprints](#generators-and-blueprints)). An addon can have
-one or more blueprints.
+
+A blueprint is a bundle of template files with optional installation logic. It
+is used to scaffold (generate) specific application files based on some
+arguments and options. For more details see
+[generators-and-blueprints](#generators-and-blueprints)). An addon can have one
+or more blueprints.
 
 To generate a *blueprint* for your addon:
 
@@ -515,9 +554,12 @@ If you have your blueprints in another directory in your addon, you need
 to tell ember-cli where to find them by specifying a `blueprintsPath`
 property for the addon (see *advanced customization* section below).
 
-If you are familiar with *Yeoman* (or Rails) generators, blueprints follow very similar conventions and structure.
+If you are familiar with *Yeoman* (or Rails) generators, blueprints follow very
+similar conventions and structure.
 
-To dive deeper into blueprints design, please see the [Ember CLI blueprints](https://github.com/ember-cli/ember-cli/tree/master/blueprints) where you get a feeling for the blueprints API.
+To dive deeper into blueprints design, please see the [Ember CLI
+blueprints](https://github.com/ember-cli/ember-cli/tree/master/blueprints)
+where you get a feeling for the blueprints API.
 
 ### Blueprints file structure
 {% highlight bash %}
@@ -583,7 +625,9 @@ You can upload your addon code to a private git repository and call `ember insta
 with a valid [git URL](https://www.npmjs.org/doc/files/package.json.html#git-urls-as-dependencies)
 as the version.
 
-If you are using [bitbucket.org](https://bitbucket.org) the [URL formats can be found here](https://confluence.atlassian.com/bitbucket/use-the-ssh-protocol-with-bitbucket-cloud-221449711.html#UsetheSSHprotocolwithBitbucketCloud-RepositoryURLformatsbyconnectionprotocol).
+If you are using [bitbucket.org](https://bitbucket.org) the [URL formats can be
+found
+here](https://confluence.atlassian.com/bitbucket/use-the-ssh-protocol-with-bitbucket-cloud-221449711.html#UsetheSSHprotocolwithBitbucketCloud-RepositoryURLformatsbyconnectionprotocol).
 
 When using the `git+ssh` format, the `ember install` command will require there to
 be an available ssh key with read access to the repository. This can be tested
