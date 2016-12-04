@@ -109,11 +109,14 @@ As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead.
 <a id="deploy-content-security-policy"></a>
 
 ### Content security policy
-To enable the Content Security Policy on your production stack, you'll need to copy the
-`Content-Security-Policy` and `X-Content-Security-Policy` (for IE) from the headers generated
-by `ember server`. If you'd like to enable it in report-only mode, use `Content-Security-Policy-Report-Only`
-and `X-Content-Security-Policy-Report-Only`. Make sure you've set a `report-uri` if you enable
-the CSP in report-only mode.
+
+
+For those interested in enhanced security for their web application, they
+should consider the setting up a content-security policy even for development.
+That way security violations can be discovered immediately, rather then in
+production.
+
+For more information, see the [ember-cli-content-security-policy readme.]( https://github.com/rwjblue/ember-cli-content-security-policy)
 
 ### Deploying an HTTPS server using Nginx on a Unix/Linux/MacOSx machine
 
