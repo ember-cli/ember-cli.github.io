@@ -46,36 +46,13 @@ git config --global url."https://".insteadOf git://
 
 ### Using canary build instead of release
 
-In bower.json instead of a version number use:
+For ember:
 
-    "ember": "components/ember#canary",
+    bower install ember#canary --resolution canary
 
-And, following `dependencies` add `resolutions`:
-
-    "resolutions": {
-      "ember": "canary"
-    }
-
-For ember-data, as it is now provided by `npm` it's master or canary can be
-consumed by pointing the npm depedency to the appropriate github repository
+For ember-data
 
     npm install --save-dev emberjs/data#master
-
-Wipe your vendor directory clean then run `npm install && bower install`.
-
-### Removing default ember-cli libraries
-
-* To use ember-cli without Ember Data
-
-`npm rm ember-data --save-dev`
-
-* To use ember-cli without ember-ajax
-
-`npm rm ember-ajax --save-dev`
-
-* To reinstall latest Ember Data version
-
-`npm update ember-data`
 
 ### Symlinks on Windows
 
