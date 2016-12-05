@@ -25,7 +25,7 @@ Official Buildpack and instructions can be found [here](https://github.com/herok
 Continuous deployment with [Azure Websites](http://www.azure.com) is enabled
 through Microsoft's module
 [ember-cli-azure-deploy](https://github.com/felixrieseberg/ember-cli-azure-deploy).
-The installation is simple - just run the following commands in your Ember CLI
+The installation is simple just run the following commands in your Ember CLI
 app's root directory:
 
 {% highlight bash %}
@@ -68,7 +68,7 @@ Guide](https://www.firebase.com/docs/hosting/guide/).
 
 ### History API and Root URL
 
-If you are deploying the app to somewhere other than the root URL (`/`),
+If you are deploying the app to somewhere other than the `rootURL` (`/`),
 you will need to configure the value of `rootURL` in `config/environment.js`.
 This is required for the History API, and thus also the Router, to function correctly.
 
@@ -101,24 +101,21 @@ module.exports = function(defaults) {
   });
 {% endhighlight %}
 
-the asset URLs will not use `rootURL` and will be like
+the asset URLs will not use `rootURL` and will instead be:
 `https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
 
 As of version 2.7, `baseURL` is deprecated and `rootURL` should be used
 instead. See this [blog post](http://emberjs.com/blog/2016/04/28/baseURL.html)
 for more details.
 
-<a id="deploy-content-security-policy"></a>
-
-### Content security policy
-
+### Content Security Policy
 
 For those interested in enhanced security for their web application, they
 should consider the setting up a content-security policy even for development.
-That way security violations can be discovered immediately, rather then in
+That way security violations can be discovered immediately, rather than in
 production.
 
-For more information, see the [ember-cli-content-security-policy readme.]( https://github.com/rwjblue/ember-cli-content-security-policy)
+For more information, see the [`ember-cli-content-security-policy` README.]( https://github.com/rwjblue/ember-cli-content-security-policy)
 
 ### Deploying an HTTPS server using Nginx on a Unix/Linux/MacOSx machine
 
