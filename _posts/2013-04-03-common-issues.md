@@ -104,8 +104,8 @@ require some additional configuration and will carry a few caveats.
 In order to access your ember-cli application from your desktop's web browser,
 you'll have to open some forwarded ports into your VM. EmberCli uses two ports:
 
-* For serving assets, this one defaults to `4200` but can be configured via `--port 4200`
-* For live reload, this one is choosen dynamically, but can be configure via `---live-reload-port=9999`
+* One port for, For serving assets, this one defaults to `4200` but can be configured via `--port 4200`
+* One port for, For live reload, this one is choosen dynamically, but can be configure via `---live-reload-port=9999`
 
 To make vagrant development seamless these ports will need to be forwarded
 

@@ -52,29 +52,29 @@ Then, to start the automatic configuration, run:
 ember windows
 {% endhighlight %}
 
-[Readmore about this from the Microsoft DX Open Source team](http://felixrieseberg.com/improved-ember-cli-performance-with-windows/)
+[Read more about this from the Microsoft DX Open Source team](http://felixrieseberg.com/improved-ember-cli-performance-with-windows/)
 
 #### Enabling symlinks
 
-In order to create symlinks the account running Ember CLI must have the
+To create symlinks the account running Ember CLI must have the
 `SeCreateSymbolicLinkPrivilege`. Users in the Administrators group have this
-permission already. However if UAC (User Access Control) is enabled users in
-the Administrators group must run their shell using `Run As Administrator`.
-This is because UAC strips away certain permissions from the Administrators
-group, including `SeCreateSymbolicLinkPrivilege`.
+permission already. However, if UAC (User Access Control) is enabled, users in
+the Administrators group must run their shell using Run As Administrator
+because UAC strips away certain permissions from the Administrators +group,
+including SeCreateSymbolicLinkPrivilege.
 
 ![Run As Administrator]({{ site.url }}/assets/images/common-issues/run-as-admin.png)
 
 If the user account is not part of the Administrators group you will need to
-add the `SeCreateSymbolicLinkPrivilege` in order to allow the creation of
-symlinks. To do this open the `Local Security Policy` by typing Local Security
-Policy in the Run Box.
+add the `SeCreateSymbolicLinkPrivilege` to allow the creation of symlinks. To
+do this open the `Local Security Policy` by typing Local Security Policy in the
+Run Box.
 
 Under `Local Policies` -> `User Rights Assignment` find the `Create symbolic
-links` policy and double click it to add a new user or group. Once you add your
-user or group has been added your user should be able to create symlinks. Keep
-in mind if your user is part of the Administrators group and UAC is enabled you
-will still need to start your shell using `Run as Administrator`.
+links` policy and double click it to add a new user or group. Once your user or
+group has been added, your user should be able to create symlinks. Keep in mind
+if your user is part of the Administrators group and UAC is enabled you will
+  still need to start your shell using `Run as Administrator`.
 
 ![Enabling Symlinks]({{ site.url }}/assets/images/common-issues/enabling-symlinks.png)
 
