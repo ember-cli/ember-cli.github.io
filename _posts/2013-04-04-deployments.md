@@ -18,32 +18,14 @@ Prerequistes:
 - [Heroku Account](https://www.heroku.com)
 - [Heroku Toolbelt](https://toolbelt.heroku.com)
 
-Navigate to your Ember CLI application directory. Now, create your new Heroku
-application with the Ember CLI buildpack...
-
-{% highlight bash %}
-heroku create <OPTIONAL_APP_NAME> --buildpack https://github.com/tonycoco/heroku-buildpack-ember-cli.git
-{% endhighlight %}
-
-You should be able to now deploy your Ember CLI application with Heroku's git
-hooks...
-
-{% highlight bash %}
-git commit -am "Empty commit for Heroku deployment" --allow-empty
-git push heroku master
-{% endhighlight %}
-
-Need to make a custom nginx configuration change? No problem. In your Ember CLI
-application, add a `config/nginx.conf.erb` file. You can copy the [existing
-configuration](https://github.com/tonycoco/heroku-buildpack-ember-cli/blob/master/config/nginx.conf.erb)
-file and make your changes to it.
+Official Buildpack and instructions can be found [here](https://github.com/heroku/heroku-buildpack-ember-cli).
 
 ### Azure
 
 Continuous deployment with [Azure Websites](http://www.azure.com) is enabled
 through Microsoft's module
 [ember-cli-azure-deploy](https://github.com/felixrieseberg/ember-cli-azure-deploy).
-The installation is simple - just run the following commands in your Ember CLI
+The installation is simple just run the following commands in your Ember CLI
 app's root directory:
 
 {% highlight bash %}
@@ -86,7 +68,7 @@ Guide](https://www.firebase.com/docs/hosting/guide/).
 
 ### History API and Root URL
 
-If you are deploying the app to somewhere other than the root URL (`/`),
+If you are deploying the app to somewhere other than the `rootURL` (`/`),
 you will need to configure the value of `rootURL` in `config/environment.js`.
 This is required for the History API, and thus also the Router, to function correctly.
 
@@ -119,23 +101,27 @@ module.exports = function(defaults) {
   });
 {% endhighlight %}
 
-the asset URLs will not use `rootURL` and will be like `https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
+the asset URLs will not use `rootURL` and will instead be:
+`https://cdn.example.com/assets/vendor-3b1b39893d8e34a6d0bd44095afcd5c4.js`.
 
-As of version 2.7, `baseURL` is deprecated and `rootURL` should be used instead. See this
-[blog post](http://emberjs.com/blog/2016/04/28/baseURL.html) for more details.
+As of version 2.7, `baseURL` is deprecated and `rootURL` should be used
+instead. See this [blog post](http://emberjs.com/blog/2016/04/28/baseURL.html)
+for more details.
 
-<a id="deploy-content-security-policy"></a>
+### Content Security Policy
 
-### Content security policy
-To enable the Content Security Policy on your production stack, you'll need to copy the
-`Content-Security-Policy` and `X-Content-Security-Policy` (for IE) from the headers generated
-by `ember server`. If you'd like to enable it in report-only mode, use `Content-Security-Policy-Report-Only`
-and `X-Content-Security-Policy-Report-Only`. Make sure you've set a `report-uri` if you enable
-the CSP in report-only mode.
+For those interested in enhanced security for their web application, they
+should consider the setting up a content-security policy even for development.
+That way security violations can be discovered immediately, rather than in
+production.
+
+For more information, see the [`ember-cli-content-security-policy` README.]( https://github.com/rwjblue/ember-cli-content-security-policy)
 
 ### Deploying an HTTPS server using Nginx on a Unix/Linux/MacOSx machine
 
-The following is a simple deployment with https using nginx.  Http just redirects to the https server here.  Don't forget to include your ssl keys in your config.
+The following is a simple deployment with https using nginx.  Http just
+redirects to the https server here.  Don't forget to include your ssl keys in
+your config.
 
 Before deployment make sure you run this command to populate the dist directory:
 
