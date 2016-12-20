@@ -6,28 +6,38 @@ category: user-guide
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-08-managing-dependencies.md"
 ---
 
-Ember CLI uses [Bower](http://bower.io/) for dependency management.
+### NPM and Bower Configuration
 
-### Bower Configuration
-
-The Bower configuration file, `bower.json`, is located at the root of your Ember
-CLI project, and lists the dependencies for your project. Changes to your
-dependencies should be managed through this file, rather than manually
+Ember CLI uses [NPM](https://www.npmjs.com) and [Bower](http://bower.io/) for 
+dependency management. Both configuration files (`package.json` for NPM and
+`bower.json` for Bower) are located at the root of your Ember CLI project, and
+together they list all the dependencies for your project. Changes to your
+dependencies should be managed through these files, rather than manually
 installing packages individually.
 
-Executing `bower install` will install all of the dependencies listed in
-`bower.json` in one step.
+Executing `npm install` will install all of the dependencies listed in
+`package.json` in one step. Similarly, executing `bower install` will install
+all of the dependencies listed in `bower.json` in one step.
 
-Ember CLI is configured to have git ignore your `bower_components` directory by
-default. Using the Bower configuration file allows collaborators to fork your
-repo and get their dependencies installed locally by executing
-`bower install` themselves.
+Ember CLI is configured to have git ignore your `bower_components` and 
+`node_modules` directories by default. Using the Bower and NPM configuration 
+files allows collaborators to fork your repo and get their dependencies installed 
+locally by executing `npm install` and `bower install` themselves.
 
 Ember CLI watches `bower.json` for changes. Thus it reloads your app if you
-install new dependencies via `bower install <dependencies> --save`.
+install new dependencies via `bower install <dependencies> --save`. If you
+install NPM dependencies via `npm install <dependencies> --save`, you will need
+to restart your Ember CLI server session manually.
 
-Further documentation about Bower is available at their
-[official documentation page](http://bower.io/).
+Further documentation about NPM and Bower is available at their official
+documentation pages:
+
+* [Bower](http://bower.io/)
+* [NPM](https://www.npmjs.com)
+
+Note that it is often easiest to install Ember addon dependencies using the
+`ember install` command, which will save all dependencies to the correct
+configuration files and run any further setup steps required.
 
 ### Compiling Assets
 
