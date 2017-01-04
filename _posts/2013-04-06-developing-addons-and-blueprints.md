@@ -308,9 +308,9 @@ module.exports = {
 ### Working with Dependencies
 You can pull in addons, npm packages, and bower packages, in your blueprint, by using various hooks provided to you. 
 They are as follows:
-* `addAddon(s)ToProject` Adds an addon to the project's package.json and runs its defaultBlueprint if it provides one.
-* `addBowerPackage(s)ToProject` Adds a package to the project's `bower.json`.
-* `addPackage(s)ToProject` Adds a package to the project's `package.json`.
+- `addAddon(s)ToProject` Adds an addon to the project's package.json and runs its defaultBlueprint if it provides one.
+- `addBowerPackage(s)ToProject` Adds a package to the project's `bower.json`.
+- `addPackage(s)ToProject` Adds a package to the project's `package.json`.
 
 Each of these returns a promise, so it is all thenable. The following is an example of each of these:
 {% highlight javascript %}
