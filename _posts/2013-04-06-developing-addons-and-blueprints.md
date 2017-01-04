@@ -305,6 +305,45 @@ module.exports = {
 };
 {% endhighlight %}
 
+### Working with Dependencies
+You can pull in addons, npm packages, and bower packages, in your blueprint, by using various hooks provided to you. 
+They are as follows:
+* `addAddon(s)ToProject` Adds an addon to the project's package.json and runs its defaultBlueprint if it provides one.
+* `addBowerPackage(s)ToProject` Adds a package to the project's `bower.json`.
+* `addPackage(s)ToProject` Adds a package to the project's `package.json`.
+
+Each of these returns a promise, so it is all thenable. The following is an example of each of these:
+{% highlight javascript %}
+// blueprints/ember-cli-x-button/index.js
+module.exports = {
+  normalizeEntityName: function() {}, // no-op since we're just adding dependencies
+
+  afterInstall: function() {
+    // Add addons to package.json and run defaultBlueprint
+    return this.addAddonsToProject({
+      // a packages array defines the addons to install
+      packages: [
+        // name is the addon name, and target (optional) is the version
+        {name: 'ember-cli-code-coverage', target: '0.3.9'},
+        {name: 'ember-cli-sass'}
+      ]
+    })
+    .then(() => {
+      // Add npm packages to package.json
+      return this.addPackagesToProject([
+        {name: 'babel-eslint'},
+        {name: 'eslint-plugin-ship-shape'}
+      ]);
+    })
+    .then(() => {
+      return this.addBowerPackagesToProject([
+        {name: 'bootstrap', target: '3.0.0'}
+      ]);
+    });
+  }
+};
+{% endhighlight %}
+
 ### Importing Dependency Files
 As stated earlier the `included` hook on your addon's main entry point is run during
 the build process. This is where you want to add `import` statements to actually
