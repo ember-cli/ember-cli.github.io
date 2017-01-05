@@ -102,13 +102,35 @@ import moment from 'moment';
 var day = moment('Dec 25, 1995');
 {% endhighlight %}
 
-##### Standard AMD Asset
+##### Standard Named AMD Asset
 
 Provide the asset path as the first argument, and the list of modules and
 exports as the second:
 
 {% highlight javascript %}
 app.import('bower_components/ic-ajax/dist/named-amd/main.js');
+{% endhighlight %}
+
+To use this asset in your app, import it.
+For example, with `ic-ajax`, when to use `ic.ajax.raw`:
+
+{% highlight javascript %}
+import { raw as icAjaxRaw } from 'ic-ajax';
+//...
+icAjaxRaw( /* ... */ );
+{% endhighlight %}
+
+##### Standard Anonymous AMD Asset
+
+Provide the asset path as the first argument, and the desired module name
+in the second:
+
+{% highlight javascript %}
+app.import('bower_components/ic-ajax/dist/amd/main.js', {
+  using: [
+    { transformation: 'amd', as: 'ic-ajax' }
+  ]
+});
 {% endhighlight %}
 
 To use this asset in your app, import it.
