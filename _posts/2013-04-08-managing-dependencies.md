@@ -203,8 +203,8 @@ some, you should still be including them in some other way._
 
 You can limit which dependencies in your package.json file get imported into
 your Ember application by using the addon option of the EmberApp constructor. A
-whitelist parameter allows you to restrict modules to a specific list. A
-blacklist parameter excludes specific modules from being imported into your
+`whitelist` parameter allows you to restrict modules to a specific list. A
+`blacklist` parameter excludes specific modules from being imported into your
 app:
 
 {% highlight javascript %}
