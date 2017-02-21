@@ -73,7 +73,8 @@ Linux](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide).
 ### Usage with Docker
 
 When building your own [Docker](http://docker.com) image to build Ember
-applications and run tests, there are a copuple of pitfalls to avoid.
+applications and run tests, there are a couple of pitfalls to avoid.
+
 * PhantomJS requires `bzip2` and `fontconfig` to already be installed.
 * After installing PhantomJS, you will need to manually link PhantomJS to
   `/usr/local/bin` if that is not done by the install process.
