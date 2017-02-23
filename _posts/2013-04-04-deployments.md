@@ -10,62 +10,6 @@ You can easily deploy your Ember CLI application to a number of places using
 [ember-cli-deploy](http://ember-cli-deploy.com/). Or you can follow some of the
 recipes below.
 
-### Heroku
-
-Prerequistes:
-
-- An Ember CLI application
-- [Heroku Account](https://www.heroku.com)
-- [Heroku Toolbelt](https://toolbelt.heroku.com)
-
-Official Buildpack and instructions can be found [here](https://github.com/heroku/heroku-buildpack-ember-cli).
-
-### Azure
-
-Continuous deployment with [Azure Websites](http://www.azure.com) is enabled
-through Microsoft's module
-[ember-cli-azure-deploy](https://github.com/felixrieseberg/ember-cli-azure-deploy).
-The installation is simple just run the following commands in your Ember CLI
-app's root directory:
-
-{% highlight bash %}
-npm install --save-dev -g ember-cli-azure-deploy
-azure-deploy init
-{% endhighlight %}
-
-Next, set up your Azure Website's source control to point to your repo -
-[either via GitHub, BitBucket, VSO or any of the other available
-options](http://azure.microsoft.com/en-us/documentation/articles/web-sites-publish-source-control/#Step4).
-As soon as you push a new commit to your repository, Azure Websites will
-automatically run `ember build` and deploy the contents of the created `dist`
-directory to your website's `wwwroot`.
-
-### Firebase
-
-To deploy your Ember CLI application to Firebase, you'll first need to enable
-hosting from your Firebase's Dashboard. Then, install the [Firebase
-Tools](https://github.com/firebase/firebase-tools):
-
-{% highlight bash %}
-npm install -g firebase-tools
-{% endhighlight %}
-
-You can then configure your application for deployment by running the following
-in your app's root directory and following the prompts:
-
-{% highlight bash %}
-firebase init
-{% endhighlight %}
-
-Finally, to deploy your application, run:
-
-{% highlight bash %}
-firebase deploy
-{% endhighlight %}
-
-For more configuration options, check out Firebase's [Hosting
-Guide](https://www.firebase.com/docs/hosting/guide/).
-
 ### History API and Root URL
 
 If you are deploying the app to somewhere other than the `rootURL` (`/`),
