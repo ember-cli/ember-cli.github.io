@@ -268,31 +268,42 @@ can be accessed through the `_super` property.
 {% highlight javascript %}
 // index.js
 module.exports = {
-  locals: function(options) {
+  locals(options) {
     // Return custom template variables here.
     return {};
   },
 
-  normalizeEntityName: function(entityName) {
+  normalizeEntityName(entityName) {
     // Normalize and validate entity name here.
     return entityName;
   },
 
-  fileMapTokens: function(options) {
-    // Return custom tokens to be replaced in your files
+  fileMapTokens(options) {
+    // Return custom tokens to be replaced in your files.
     return {
-      __token__: function(options){
-        // logic to determine value goes here
+      __token__(options) {
+        // Logic to determine value goes here.
         return 'value';
       }
     }
   },
+  
+  filesPath(options) {
+    // Override the default files directory.
+    // Useful for switching between file sets conditionally.
+    return 'my-files';
+  },
 
-  beforeInstall: function(options) {},
-  afterInstall: function(options) {},
-  beforeUninstall: function(options) {},
-  afterUninstall: function(options) {}
+  files() {
+    // Override the list of files provided by the blueprint.
+    // Useful if you want to exclude certain files conditionally.
+    return ['my-file.js'];
+  },
 
+  beforeInstall(options) {},
+  afterInstall(options) {},
+  beforeUninstall(options) {},
+  afterUninstall(options) {},
 };
 {% endhighlight %}
 
@@ -304,6 +315,8 @@ blueprint authors:
 - `locals`
 - `normalizeEntityName`
 - `fileMapTokens`
+- `filesPath`
+- `files`
 - `beforeInstall`
 - `afterInstall`
 - `beforeUninstall`
@@ -368,6 +381,16 @@ to override any of the default tokens.
 
 Tokens are used in the files directory (see `files`), and get replaced with
 values when the `mapFile` method is called.
+
+### filesPath
+
+Override the default files directory.
+Useful for switching between file sets conditionally.
+
+### files
+
+Override the list of files provided by the blueprint.
+Useful if you want to exclude certain files conditionally.
 
 ### beforeInstall & beforeUninstall
 
