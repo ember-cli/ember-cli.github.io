@@ -228,14 +228,16 @@ the right URL if you've entered the wrong one:
 
 {% highlight javascript %}
 // index.js
-app.get('/my-app', function(req, res, next) {
+module.exports = function(app) {
+  app.get('/my-app', function(req, res, next) {
 
-  if (req.path != '/my-app/') {
-    res.redirect('/my-app/');
-  } else {
-    next();
-  }
+    if (req.path != '/my-app/') {
+      res.redirect('/my-app/');
+    } else {
+      next();
+    }
 
+  });
 });
 {% endhighlight %}
 
