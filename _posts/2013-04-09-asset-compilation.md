@@ -151,11 +151,11 @@ In `ember-cli-build.js` add the following:
 {% highlight bash %}
 app.import('bower_components/bootstrap/dist/css/bootstrap.css');
 {% endhighlight %}
-it's going to tell [Broccoli](https://github.com/joliss/broccoli) that we want
+it's going to tell [Broccoli](https://github.com/broccolijs/broccoli) that we want
 this file to be concatenated with our `vendor.css` file.
 
 To use a CSS preprocessor, you'll need to install the appropriate
-[Broccoli](https://github.com/joliss/broccoli) plugin. When using a
+[Broccoli](https://github.com/broccolijs/broccoli) plugin. When using a
 preprocessor, Broccoli is configured to look for an `app.less`, `app.scss`, `app.sass`,
 or `app.styl` manifest file in `app/styles`. This manifest should import any
 additional stylesheets.
