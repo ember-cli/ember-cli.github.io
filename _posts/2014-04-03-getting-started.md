@@ -55,7 +55,7 @@ This will give you access to the `bower` command-line runner.
 #### Watchman
 
 On OSX and UNIX-like operating systems, we recommend installing
-[Watchman](https://facebook.github.io/watchman/) version 3.x, which provides
+[Watchman](https://facebook.github.io/watchman/) version 4.x, which provides
 Ember CLI a more effective way for watching project changes.
 
 File-watching on OSX is error-prone and Node's built-in `NodeWatcher` has
