@@ -438,8 +438,9 @@ var app = new EmberApp({
 });
 {% endhighlight %}
 
-You may edit any of these output paths, but make sure to update your
-`app.outputPaths.app.html`, default it is `index.html`, and `tests/index.html`.
+You may edit any of these output paths, but make sure to update the paths specified in your
+`app.outputPaths.app.html` default it is `index.html`, and `tests/index.html`. If this is not done,
+your app will not be served with correct asset names.
 
 {% highlight javascript %}
 // ember-cli-build.js
