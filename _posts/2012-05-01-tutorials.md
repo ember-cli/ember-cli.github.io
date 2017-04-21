@@ -17,7 +17,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 - [Creating an Integration Test with Ember.js (Video)](https://www.youtube.com/watch?v=2O24ltr0pPU&feature=youtu.be&list=PLxP_o-ABjKLFuDpuJ2Tw_3__OzxE7kFnh)
 
 ### Addons
-- [Introducing Ember CLI Addons](http://reefpoints.dockyard.com/2014/06/24/introducing_ember_cli_addons.html)
+- [Introducing Ember CLI Addons](https://dockyard.com/blog/2014/06/24/introducing_ember_cli_addons)
 - [Building Ember CLI Addons Simply](http://hashrocket.com/blog/posts/building-ember-addons)
 - [Updating EmberCLI addons to the latest ember-cli (Video)](https://www.youtube.com/watch?v=XOMGGJ_d4wI)
 
