@@ -7,8 +7,12 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 ---
 
 You can easily deploy your Ember CLI application to a number of places using
-[ember-cli-deploy](http://ember-cli-deploy.com/). Or you can follow some of the
-recipes below.
+[ember-cli-deploy](http://ember-cli-deploy.com/). 
+
+Additional Examples:
+
+* https://www.heroku.com/emberjs
+
 
 ### History API and Root URL
 
