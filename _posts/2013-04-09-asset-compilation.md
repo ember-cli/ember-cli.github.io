@@ -55,11 +55,6 @@ module.exports = function(defaults) {
 };
 {% endhighlight %}
 
-This options are just forwarded to Babel. Ember-cli uses Babel 5.X at the moment and you can check
-its documentation for a comprehensive list of [all available transformations](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/transformers/index.md) and [options](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/options.md).
-
-Work is being done for upgrading to Babel 6. You can [track the progress and help](https://github.com/ember-cli/ember-cli/issues/5015).
-
 ### Minifying
 
 The compiled css-files are minified by `broccoli-clean-css` or `broccoli-csso`,
