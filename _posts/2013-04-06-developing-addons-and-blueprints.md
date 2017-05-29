@@ -306,7 +306,7 @@ module.exports = {
 {% endhighlight %}
 
 ### Working with Dependencies
-You can pull in addons, npm packages, and bower packages, in your blueprint, by using various hooks provided to you. 
+You can pull in addons, npm packages, and bower packages, in your blueprint, by using various hooks provided to you.
 They are as follows:
 
 - `addAddon(s)ToProject` Adds an addon to the project's package.json and runs its defaultBlueprint if it provides one.
@@ -512,7 +512,7 @@ test('is a button tag', function(assert) {
 // more tests follow...
 {% endhighlight %}
 
-For how to run and configure tests, see the [Ember CLI Testing](#testing) section.
+For how to run and configure tests, see the [Ember CLI Testing](/user-guide/#testing) section.
 
 ### Generating files in the dummy app
 You can generate most of ember-cli's built-in blueprints into your
