@@ -8,12 +8,18 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### NPM and Bower Configuration
 
-Ember CLI uses [NPM](https://www.npmjs.com) and [Bower](http://bower.io/) for 
-dependency management. Both configuration files (`package.json` for NPM and
-`bower.json` for Bower) are located at the root of your Ember CLI project, and
-together they list all the dependencies for your project. Changes to your
-dependencies should be managed through these files, rather than manually
-installing packages individually.
+Ember CLI supports [NPM](https://www.npmjs.com) and [Bower](http://bower.io/)
+for dependency management.
+
+A newly generated Ember CLI project only has NPM dependencies, so you will
+notice a `package.json` file at the root of your project, but not a `bower.json`.
+To use Bower packages, you will have to first run `bower init` to create a
+`bower.json` file also at the root of the project.
+
+NPM's `package.json` together with Bower's `bower.json` allow you to declare
+the dependencies of your project.
+Changes to your dependencies should be managed through these files, rather
+than manually installing packages individually.
 
 Executing `npm install` will install all of the dependencies listed in
 `package.json` in one step. Similarly, executing `bower install` will install
