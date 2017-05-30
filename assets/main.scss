@@ -10,6 +10,7 @@ $lgtred: #f2d1cb;
 $red: #f23818;
 $drkred: #d84a32;
 $offwhite: #fdfaf9;
+$linkred: #a62c00;
 
 $exo1: 'exolight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $exo2: 'exomedium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -301,7 +302,7 @@ body {
       line-height: 1.4em;
 
       a {
-        color: desaturate($red,30%);
+        color: $linkred;
       }
 
       code {
