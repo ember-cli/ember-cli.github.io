@@ -252,6 +252,7 @@ module.exports = app.toTree();
 
 ### Addon Components
 
+To create a new component: `ember g component x-button`
 The actual code for the addon goes in `addon/components/x-button.js`
 
 {% highlight javascript %}
