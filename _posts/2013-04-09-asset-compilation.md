@@ -265,23 +265,8 @@ ember install ember-cli-coffeescript
 
 The modified `package.json` should be checked into source control. CoffeeScript
 can be used in your app's source and in tests, just use the `.coffee` extension
-on any file.
-
-The ES6 module transpiler does not directly support CoffeeScript, but using them
-together is simple. Use the `` ` `` character to escape out to JavaScript from
-your `.coffee` files, and use the ES6 syntax there:
-
-{% highlight coffeescript %}
-# app/models/post.coffee
-`import Ember from 'ember'`
-`import User from 'appkit/models/user'`
-
-Post = Ember.Object.extend
-  init: (userId) ->
-    @set 'user', User.findById(userId)
-
-`export default Post`
-{% endhighlight %}
+on any file. We recommend using version >= 1.16.0 of ember-cli-coffeescript to avoid the need
+to escape `import` and `export` statements.
 
 Note that earlier versions of the transpiler had explicit support for
 CoffeeScript, but that support has been removed.
