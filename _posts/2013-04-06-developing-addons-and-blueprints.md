@@ -273,11 +273,11 @@ export default Ember.Component.extend({
   
   setupXbutton() {
     // ...
-  }),
+  },
 
   teardownXbutton() {
     this.get('x-button').destroy();
-  })
+  }
 });
 {% endhighlight %}
 
