@@ -652,7 +652,9 @@ For live reload when developing an addon use the `isDevelopingAddon` hook:
 
 {% highlight javascript %}
 // addon index.js
-isDevelopingAddon: () => true
+isDevelopingAddon() {
+  return true;
+}
 {% endhighlight %}
 
 While testing an addon using npm link, you need an entry in `package.json` with
