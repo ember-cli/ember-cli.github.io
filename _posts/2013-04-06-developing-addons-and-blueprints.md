@@ -178,7 +178,7 @@ allowing you to perform setup logic or modify the app or addon:
 // index.js
 module.exports = {
   name: 'ember-cli-x-button',
-  included: function(app, parentAddon) {
+  included(app, parentAddon) {
     this._super.included.apply(this, arguments);
     var target = (parentAddon || app);
     // Now you can modify the app / parentAddon. For example, if you wanted
@@ -260,14 +260,24 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   tagName: 'button',
-
-  setupXbutton: Ember.on('didInsertElement', function() {
+  
+  didInsertElement() {
+    this._super(...arguments);
+    this.setupXbutton();
+  },
+  
+  willDestroyElement() {
+    this._super(...arguments);
+    this.teardownXbutton();
+  },
+  
+  setupXbutton() {
     // ...
-  }),
+  },
 
-  teardownXbutton: Ember.on('willDestroyElement', function() {
+  teardownXbutton() {
     this.get('x-button').destroy();
-  }),
+  }
 });
 {% endhighlight %}
 
@@ -298,9 +308,9 @@ This follows the usual Ember blueprints naming conventions.
 {% highlight javascript %}
 // blueprints/ember-cli-x-button/index.js
 module.exports = {
-  normalizeEntityName: function() {}, // no-op since we're just adding dependencies
+  normalizeEntityName() {}, // no-op since we're just adding dependencies
 
-  afterInstall: function() {
+  afterInstall() {
     return this.addBowerPackageToProject('x-button'); // is a promise
   }
 };
@@ -318,9 +328,9 @@ Each of these returns a promise, so it is all thenable. The following is an exam
 {% highlight javascript %}
 // blueprints/ember-cli-x-button/index.js
 module.exports = {
-  normalizeEntityName: function() {}, // no-op since we're just adding dependencies
+  normalizeEntityName() {}, // no-op since we're just adding dependencies
 
-  afterInstall: function() {
+  afterInstall() {
     // Add addons to package.json and run defaultBlueprint
     return this.addAddonsToProject({
       // a packages array defines the addons to install
@@ -358,7 +368,7 @@ makes the dependency available for inclusion.
 module.exports = {
   name: 'ember-cli-x-button',
 
-  included: function(app) {
+  included(app) {
     this._super.included.apply(this, arguments);
 
     app.import(app.bowerDirectory + '/x-button/dist/js/x-button.js');
@@ -396,7 +406,7 @@ time. Addons can access the `contentFor` hook to insert their own content.
 module.exports = {
   name: 'ember-cli-display-environment',
 
-  contentFor: function(type, config) {
+  contentFor(type, config) {
     if (type === 'environment') {
       return '<h1>' + config.environment + '</h1>';
     }
@@ -422,7 +432,7 @@ commands.
 module.exports = {
   name: 'ember-cli-command-line-output',
 
-  included: function(app) {
+  included(app) {
     this._super.included.apply(this, arguments);
     this.ui.writeLine('Including external files!');
   }
@@ -496,10 +506,10 @@ import Ember from 'ember';
 var App;
 
 moduleForComponent('x-button', 'XButtonComponent', {
-  beforeEach: function() {
+  beforeEach() {
     App = startApp();
   },
-  afterEach: function() {
+  afterEach() {
     Ember.run(App, 'destroy');
   }
 });
@@ -642,7 +652,7 @@ For live reload when developing an addon use the `isDevelopingAddon` hook:
 
 {% highlight javascript %}
 // addon index.js
-isDevelopingAddon: function() {
+isDevelopingAddon() {
   return true;
 }
 {% endhighlight %}
@@ -750,11 +760,11 @@ add babel options to the `included` hook of the in-repo-addon `index.js`:
 module.exports = {
   name: 'in-repo-addon-name',
 
-  isDevelopingAddon: function() {
+  isDevelopingAddon() {
     return true;
   },
 
-  included: function(app, parentAddon) {
+  included(app, parentAddon) {
     var target = (parentAddon || app);
     target.options = target.options || {};
     target.options.babel = target.options.babel || { includePolyfill: true };
