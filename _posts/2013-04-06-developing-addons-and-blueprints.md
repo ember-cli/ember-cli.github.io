@@ -762,7 +762,7 @@ module.exports = {
 
   isDevelopingAddon() {
     return true;
-  }
+  },
 
   included(app, parentAddon) {
     var target = (parentAddon || app);
