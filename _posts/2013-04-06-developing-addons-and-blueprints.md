@@ -760,7 +760,9 @@ add babel options to the `included` hook of the in-repo-addon `index.js`:
 module.exports = {
   name: 'in-repo-addon-name',
 
-  isDevelopingAddon: () => true
+  isDevelopingAddon() {
+    return true;
+  }
 
   included(app, parentAddon) {
     var target = (parentAddon || app);
