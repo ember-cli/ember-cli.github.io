@@ -10,7 +10,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 #### Node
 
-First, install the latest version of Node.
+First, install the latest LTS (long-term support) version of Node.
 
 Node is available for a variety of platforms at
 [nodejs.org](http://nodejs.org/). It is important that you _not_ install Node
