@@ -241,4 +241,4 @@ module.exports = function(app) {
 });
 {% endhighlight %}
 
-Just place it within the `index.js` file of your app's `/server` directory (so that it gets applied when the ember-cli development server is being started). The snippet simply tests if the URL that is beeing accessed begins with `/my-app/`. And if it doesn't, you'll get redirected. Otherwise, the redirection will be skipped.
+Just place it within the `index.js` file of your app's `/server` directory (so that it gets applied when the ember-cli development server is being started). The snippet simply tests if the URL that is being accessed begins with `/my-app/`. And if it doesn't, you'll get redirected. Otherwise, the redirection will be skipped.
