@@ -62,7 +62,7 @@ import DS from "ember-data";
 export default DS.RESTAdapter.extend({});
 {% endhighlight %}
 
-And it's serializer can be placed in `/app/serializers/type.js`:
+And its serializer can be placed in `/app/serializers/type.js`:
 
 {% highlight javascript %}
 // serializers/post.js
