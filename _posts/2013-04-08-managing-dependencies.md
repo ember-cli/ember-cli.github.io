@@ -25,9 +25,9 @@ Executing `npm install` will install all of the dependencies listed in
 `package.json` in one step. Similarly, executing `bower install` will install
 all of the dependencies listed in `bower.json` in one step.
 
-Ember CLI is configured to have git ignore your `bower_components` and 
-`node_modules` directories by default. Using the Bower and NPM configuration 
-files allows collaborators to fork your repo and get their dependencies installed 
+Ember CLI is configured to have git ignore your `bower_components` and
+`node_modules` directories by default. Using the Bower and NPM configuration
+files allows collaborators to fork your repo and get their dependencies installed
 locally by executing `npm install` and `bower install` themselves.
 
 Ember CLI watches `bower.json` for changes. Thus it reloads your app if you
@@ -80,9 +80,9 @@ import Ember from 'ember';
 var day = moment('Dec 25, 1995');
 {% endhighlight %}
 
-_Note: Don't forget to make JSHint happy by adding a `/* global MY_GLOBAL */`
-to your module, or by defining it within the `predefs` section of your
-`.jshintrc` file._
+_Note: Don't forget to make ESLint happy by adding a `/* global MY_GLOBAL */`
+to your module, or by defining it within the `globals` section of your
+`.eslintrc.js` file._
 
 Alternatively, you could generate an ES6 shim to make the library accessible
 via `import`.

@@ -47,7 +47,7 @@ You can define your own blueprints using `ember generate blueprint <name>`:
 ember generate blueprint foo
 
 installing
-  create blueprints/.jshintrc
+  create blueprints/.eslintrc.js
   create blueprints/foo/files/.gitkeep
   create blueprints/foo/index.js
 {% endhighlight %}
@@ -287,7 +287,7 @@ module.exports = {
       }
     }
   },
-  
+
   filesPath(options) {
     // Override the default files directory.
     // Useful for switching between file sets conditionally.
