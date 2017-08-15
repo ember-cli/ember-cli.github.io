@@ -81,7 +81,7 @@ var day = moment('Dec 25, 1995');
 {% endhighlight %}
 
 _Note: Don't forget to make ESLint happy by adding a `/* global MY_GLOBAL */`
-to your module, or by defining it within the `predefs` section of your
+to your module, or by defining it within the `globals` section of your
 `.eslintrc.js` file._
 
 Alternatively, you could generate an ES6 shim to make the library accessible
