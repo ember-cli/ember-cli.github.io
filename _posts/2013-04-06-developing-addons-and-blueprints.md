@@ -65,7 +65,7 @@ version x.y.zz
 installing
   create .bowerrc
   create .editorconfig
-  create tests/dummy/.jshintrc
+  create tests/dummy/.eslintrc.js
   ...
   create index.js
 
@@ -260,17 +260,17 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   tagName: 'button',
-  
+
   didInsertElement() {
     this._super(...arguments);
     this.setupXbutton();
   },
-  
+
   willDestroyElement() {
     this._super(...arguments);
     this.teardownXbutton();
   },
-  
+
   setupXbutton() {
     // ...
   },

@@ -148,6 +148,6 @@ export default Ember.TextField.extend({
 ###	Using global variables or external scripts
 
 If you want to use external libraries that write to a global namespace (e.g.
-[moment.js](http://momentjs.com/)), you need to add those to the `predef`
-section of your project's `.jshintrc` file and set its value to true. If you
-use the lib in tests, you need to add it to your `tests/.jshintrc` file, too.
+[moment.js](http://momentjs.com/)), you need to add those to the `globals`
+section of your project's `.eslintrc.js` file and set its value to true. If you
+use the lib in tests, you need to add it to your `tests/.eslintrc.js` file, too.
