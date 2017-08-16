@@ -77,7 +77,7 @@ import Ember from 'ember';
 // No import for moment, it's a global called `moment`
 
 // ...
-var day = moment('Dec 25, 1995');
+let day = moment('Dec 25, 1995');
 {% endhighlight %}
 
 _Note: Don't forget to make ESLint happy by adding a `/* global MY_GLOBAL */`
@@ -105,7 +105,7 @@ Finally, use the package by adding the appropriate `import` statement:
 import moment from 'moment';
 
 // ...
-var day = moment('Dec 25, 1995');
+let day = moment('Dec 25, 1995');
 {% endhighlight %}
 
 ##### Standard Named AMD Asset
@@ -354,30 +354,31 @@ npm install broccoli-funnel --save-dev
 Add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:
 
 {% highlight javascript %}
-var Funnel = require('broccoli-funnel');
+const Funnel = require('broccoli-funnel');
 {% endhighlight %}
 
 Within `ember-cli-build.js`, we merge assets from a bower dependency with the main app tree:
 
 {% highlight javascript %}
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
+
 module.exports = function(defaults) {
+  let app = new EmberApp(defaults, { });
 
-   ...
+  // Copy only the relevant files. For example the WOFF-files and stylesheets for a webfont:
 
-   // Copy only the relevant files. For example the WOFF-files and stylesheets for a webfont:
+  let extraAssets = new Funnel('bower_components/a-lovely-webfont', {
+     srcDir: '/',
+     include: ['**/*.woff', '**/stylesheet.css'],
+     destDir: '/assets/fonts'
+  });
 
-   var extraAssets = new Funnel('bower_components/a-lovely-webfont', {
-      srcDir: '/',
-      include: ['**/*.woff', '**/stylesheet.css'],
-      destDir: '/assets/fonts'
-   });
+  // Providing additional trees to the `toTree` method will result in those
+  // trees being merged in the final output.
 
-   // Providing additional trees to the `toTree` method will result in those
-   // trees being merged in the final output.
-
-   return app.toTree(extraAssets);
-
-}
+  return app.toTree(extraAssets);
+};
 {% endhighlight %}
 
 In the above example the assets from the fictive bower dependency called `a-lovely-webfont` can now
@@ -392,18 +393,21 @@ to exclude all `.gitkeep` files from the final output:
 
 {% highlight javascript %}
 // Again, add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:
-var Funnel = require('broccoli-funnel');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
 
-// Normal ember-cli-build contents
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, { });
 
-// Filter toTree()'s output
-var filteredAssets = new Funnel(app.toTree(), {
-  // Exclude gitkeeps from output
-  exclude: ['**/.gitkeep']
-});
+  // Filter toTree()'s output
+  let filteredAssets = new Funnel(app.toTree(), {
+    // Exclude gitkeeps from output
+    exclude: ['**/.gitkeep']
+  });
 
-// Export filtered tree
-module.exports = filteredAssets;
+  // Export filtered tree
+  return filteredAssets;
+};
 {% endhighlight %}
 
 _Note: [broccoli-static-compiler](https://github.com/joliss/broccoli-static-compiler) is deprecated. Use [broccoli-funnel](https://github.com/broccolijs/broccoli-funnel) instead._

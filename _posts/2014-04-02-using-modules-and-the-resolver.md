@@ -18,10 +18,8 @@ In the past, Ember's Default Resolver worked by putting everything into a
 global namespace, so you will come across the following pattern:
 
 {% highlight javascript %}
-import Route from '@ember/routing/route';
-
-App.IndexRoute = Route.extend({
-  model() {
+App.IndexRoute = Ember.Route.extend({
+  model: function() {
     return ['red', 'yellow', 'blue'];
   }
 });
@@ -92,7 +90,7 @@ Directory           | Purpose
 `app/adapters/`     | Adapters with the convention `adapter-name.js`.
 `app/components/`   | Components with the convention `component-name.js`. Components must have a dash in their name. So `blog-post` is an acceptable name, but `post` is not.
 `app/helpers/`      | Helpers with the convention `helper-name.js`. Helpers must have a dash in their name. Remember that you must register your helpers by exporting `makeBoundHelper` or calling `registerBoundHelper` explicitly.
-`app/initializers/` | Initializers with the convention `initializer-name.js`. Initializers are loaded automatically.
+`app/instance-initializers/` | Initializers with the convention `initializer-name.js`. Initializers are loaded automatically.
 `app/mixins/`       | Mixins with the convention `mixin-name.js`.
 `app/models/`       | Models with the convention `model-name.js`.
 `app/routes/`       | Routes with the convention `route-name.js`. Child routes are defined in sub-directories, `parent/child.js`. To provide a custom implementation for generated routes (equivalent to `App.Route` when using globals), use `app/routes/basic.js`.

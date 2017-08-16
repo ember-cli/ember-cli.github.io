@@ -67,19 +67,21 @@ import { helper } from '@ember/component/helper';
 export default helper(function(){});
 {% endhighlight %}
 
-##### Initializers
+##### Instance Initializers
 
 {% highlight javascript %}
-// app/initializers/observation.js
+// app/instance-initializers/observation.js
+export function initialize(appInstance) {
+
+};
+
 export default {
   name: 'observation',
-  initialize() {
-    // code
-  }
+  initialize: initialize
 };
 {% endhighlight %}
 
-Note: `initializers` are loaded automatically.
+Note: `instance-initializers` are loaded automatically.
 
 ##### Mixins
 
@@ -183,7 +185,7 @@ import DS from "ember-data";
 
 const { Model } = DS;
 
-export default Model.extend();
+export default Model.extend({});
 {% endhighlight %}
 
 ##### Dasherized file and directory names are required
@@ -192,7 +194,7 @@ export default Model.extend();
 // controllers/sign-up.js
 import Controller from "@ember/controller";
 
-export default Controller.extend();
+export default Controller.extend({});
 {% endhighlight %}
 
 ##### Nested directories
@@ -203,7 +205,7 @@ If you prefer to nest your files to better manage your application, you can easi
 // controllers/posts/new.js results in a controller named "controllers.posts/new"
 import Controller from "@ember/controller";
 
-export default Controller.extend();
+export default Controller.extend({});
 {% endhighlight %}
 
 You cannot use paths containing slashes in your templates because Handlebars will translate

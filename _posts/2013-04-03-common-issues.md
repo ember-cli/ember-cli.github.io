@@ -49,14 +49,14 @@ See [The Windows Section](#windows) for more details.
 
 When running tests on Windows via PhantomJS the following error can occur:
 
-```
+{% highlight bash %}
 events.js:72
 throw er; // Unhandled 'error' event
 ^
 Error: spawn ENOENT
 at errnoException (child_process.js:988:11)
 at Process.ChildProcess._handle.onexit (child_process.js:779:34)
-```
+{% endhighlight %}
 
 In order to fix this ensure the following is added to your `PATH`:
 
