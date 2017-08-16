@@ -33,10 +33,10 @@ disabling ES6/2015 features you'd do:
 
 {% highlight js %}
 // ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
+  let app = new EmberApp(defaults, {
     babel: {
       blacklist: [
         'es6.arrowFunctions',
@@ -76,10 +76,10 @@ you may supply a boolean value for `minifyJS:enabled`.
 For example, to disable minifying of CSS and JS, add in `ember-cli-build.js`:
 {% highlight js %}
 // ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
+  let app = new EmberApp(defaults, {
     minifyJS: {
       enabled: false
     },
@@ -100,10 +100,10 @@ To exclude assets from `dist/assets` from being minificated, one can pass option
 
 {% highlight js %}
 // ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
+  let app = new EmberApp(defaults, {
     minifyJS: {
       options: {
         exclude: ["**/vendor.js"]
@@ -127,14 +127,20 @@ are disabled in production by default. Pass `sourcemaps: {enabled: true}` to you
 
 Default ember-cli-build.js:
 
-{% highlight bash %}
-import EmberApp from 'ember-cli/lib/broccoli/ember-app';
-var app = new EmberApp({
-  sourcemaps: {
-    enabled: EmberApp.env() !== 'production',
-    extensions: ['js']
-  }
-});
+{% highlight js %}
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    sourcemaps: {
+      enabled: EmberApp.env() !== 'production',
+      extensions: ['js']
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 ### Stylesheets
@@ -148,7 +154,7 @@ bower install bootstrap --save
 {% endhighlight %}
 
 In `ember-cli-build.js` add the following:
-{% highlight bash %}
+{% highlight js %}
 app.import('bower_components/bootstrap/dist/css/bootstrap.css');
 {% endhighlight %}
 it's going to tell [Broccoli](https://github.com/broccolijs/broccoli) that we want
@@ -227,11 +233,18 @@ You can configure your project to use .sass in your `ember-cli-build.js`:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp(defaults, {
-  sassOptions: {
-    extension: 'sass'
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    sassOptions: {
+      extension: 'sass'
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 #### Compass
@@ -331,12 +344,19 @@ directory as well as add a cloudfront domain to each fingerprinted asset.
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  fingerprint: {
-    exclude: ['fonts/169929'],
-    prepend: 'https://subdomain.cloudfront.net/'
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    fingerprint: {
+      exclude: ['fonts/169929'],
+      prepend: 'https://subdomain.cloudfront.net/'
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 The end result will turn
@@ -357,11 +377,18 @@ You can disable fingerprinting in your `ember-cli-build.js`:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  fingerprint: {
-    enabled: false
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    fingerprint: {
+      enabled: false
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 Or remove the entry from your `EmberApp` and  `broccoli-asset-rev`
@@ -384,9 +411,16 @@ instead, you may use the `storeConfigInMeta` flag in `ember-cli-build.js`.
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  storeConfigInMeta: false
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    storeConfigInMeta: false
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 #### Configuring output paths
@@ -406,21 +440,28 @@ To change these paths, specify the `outputPaths` config option in `ember-cli-bui
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  outputPaths: {
-    app: {
-      html: 'index.html',
-      css: {
-        'app': '/assets/application-name.css'
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    outputPaths: {
+      app: {
+        html: 'index.html',
+        css: {
+          'app': '/assets/application-name.css'
+        },
+        js: '/assets/application-name.js'
       },
-      js: '/assets/application-name.js'
-    },
-    vendor: {
-      css: '/assets/vendor.css',
-      js: '/assets/vendor.js'
+      vendor: {
+        css: '/assets/vendor.css',
+        js: '/assets/vendor.js'
+      }
     }
-  }
-});
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 You may edit any of these output paths, but make sure to update the paths specified in your
@@ -429,13 +470,20 @@ your app will not be served with correct asset names.
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  outputPaths: {
-    app: {
-      js: '/assets/main.js'
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    outputPaths: {
+      app: {
+        js: '/assets/main.js'
+      }
     }
-  }
-});
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 The `outputPaths.app.css` option uses a key value relationship. The *key* is
@@ -448,16 +496,23 @@ is compiled. If you need to process multiple files, you must add another key:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  outputPaths: {
-    app: {
-      css: {
-        'app': '/assets/application-name.css',
-        'themes/alpha': '/assets/themes/alpha.css'
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    outputPaths: {
+      app: {
+        css: {
+          'app': '/assets/application-name.css',
+          'themes/alpha': '/assets/themes/alpha.css'
+        }
       }
     }
-  }
-});
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 #### Integration
@@ -468,9 +523,16 @@ you access the route, you have to disable `autoRun`:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var app = new EmberApp({
-  autoRun: false
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  let app = new EmberApp({
+    autoRun: false
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 To manually run Ember:

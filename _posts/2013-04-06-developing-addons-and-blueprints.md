@@ -259,9 +259,10 @@ To create a new component: `ember g component x-button`
 The actual code for the addon goes in `addon/components/x-button.js`
 
 {% highlight javascript %}
-import Ember from 'ember';
+import Component from '@ember/component';
+import { get } from '@ember/object';
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: 'button',
 
   didInsertElement() {
@@ -279,7 +280,7 @@ export default Ember.Component.extend({
   },
 
   teardownXbutton() {
-    this.get('x-button').destroy();
+    get(this, 'x-button').destroy();
   }
 });
 {% endhighlight %}
@@ -504,7 +505,7 @@ placed in `tests/unit/components`.
 
 import { test, moduleForComponent } from 'ember-qunit';
 import startApp from '../../helpers/start-app';
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 
 var App;
 
@@ -513,7 +514,7 @@ moduleForComponent('x-button', 'XButtonComponent', {
     App = startApp();
   },
   afterEach() {
-    Ember.run(App, 'destroy');
+    run(App, 'destroy');
   }
 });
 

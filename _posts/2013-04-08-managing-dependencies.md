@@ -179,26 +179,38 @@ Handlebars even in the production environment.  You would simply provide the
 path to the `EmberApp` constructor:
 
 {% highlight javascript %}
-var app = new EmberApp({
-  vendorFiles: {
-    'handlebars.js': {
-      production: 'bower_components/handlebars/handlebars.js'
-    }
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    vendorFiles: {
+      'handlebars.js': {
+        production: 'bower_components/handlebars/handlebars.js'
+      }
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 Alternatively, if you want to exclude the built-in asset from being
 automatically included in `vendor.js`, you can set its value to `false`:
 
 {% highlight javascript %}
-var app = new EmberApp({
-  vendorFiles: {
-    'handlebars.js': false
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    vendorFiles: {
+      'handlebars.js': false
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 _Note: The built-in assets are required dependencies needed by the environment
@@ -214,14 +226,20 @@ your Ember application by using the addons option of the EmberApp constructor. A
 app:
 
 {% highlight javascript %}
-var app = new EmberApp({
-  addons: {
-    blacklist: [
-      'fastboot-app-server'
-    ]
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    addons: {
+      blacklist: [
+        'fastboot-app-server'
+      ]
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 ##### Test Assets
@@ -232,17 +250,19 @@ ember-cli-build.js:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
-    isProduction = EmberApp.env() === 'production';
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const isProduction = EmberApp.env() === 'production';
 
-var app = new EmberApp();
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, { });
 
-if ( !isProduction ) {
-    app.import( app.bowerDirectory + '/sinonjs/sinon.js', { type: 'test' } );
-    app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
-}
+  if ( !isProduction ) {
+      app.import( app.bowerDirectory + '/sinonjs/sinon.js', { type: 'test' } );
+      app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
+  }
 
-module.exports = app.toTree();
+  return app.toTree();
+};
 {% endhighlight %}
 
 **Notes:**

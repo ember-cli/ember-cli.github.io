@@ -29,18 +29,22 @@ For example, we can create a `todo` model like so:
 // models/todo.js
 import DS from "ember-data";
 
-export default DS.Model.extend({
-  title: DS.attr('string'),
-  isCompleted: DS.attr('boolean'),
-  quickNotes: DS.hasMany('quick-note')
+const { Model, attr, hasMany } = DS;
+
+export default Model.extend({
+  title: attr('string'),
+  isCompleted: attr('boolean'),
+  quickNotes: hasMany('quick-note')
 });
 
 // models/quick-note.js
 import DS from "ember-data";
 
-export default DS.Model.extend({
-  name: DS.attr('string'),
-  todo: DS.belongsTo('todo')
+const { Model, attr, belongsTo } = DS;
+
+export default Model.extend({
+  name: attr('string'),
+  todo: belongsTo('todo')
 });
 
 {% endhighlight %}
@@ -59,7 +63,9 @@ Adapters can be placed at `/app/adapters/type.js`:
 // adapters/post.js
 import DS from "ember-data";
 
-export default DS.RESTAdapter.extend({});
+const { RESTAdapter } = DS;
+
+export default RESTAdapter.extend({});
 {% endhighlight %}
 
 And its serializer can be placed in `/app/serializers/type.js`:
@@ -68,7 +74,9 @@ And its serializer can be placed in `/app/serializers/type.js`:
 // serializers/post.js
 import DS from "ember-data";
 
-export default DS.RESTSerializer.extend({});
+const { RESTSerializer } = DS;
+
+export default RESTSerializer.extend({});
 {% endhighlight %}
 
 Application-level (default) adapters and serializers should be named
@@ -111,7 +119,9 @@ adapter, either for a single model or your entire application:
 // adapters/application.js
 import DS from "ember-data";
 
-export default DS.FixtureAdapter.extend({});
+const { FixtureAdapter } = DS;
+
+export default FixtureAdapter.extend({});
 {% endhighlight %}
 
 Then add fixture data to your model class:
@@ -120,9 +130,11 @@ Then add fixture data to your model class:
 // models/author.js
 import DS from "ember-data";
 
-var Author = DS.Model.extend({
-  firstName: DS.attr('string'),
-  lastName: DS.attr('string')
+const { Model, attr } = DS;
+
+var Author = Model.extend({
+  firstName: attr('string'),
+  lastName: attr('string')
 });
 
 Author.reopenClass({

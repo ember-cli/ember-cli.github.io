@@ -18,8 +18,10 @@ In the past, Ember's Default Resolver worked by putting everything into a
 global namespace, so you will come across the following pattern:
 
 {% highlight javascript %}
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
+import Route from '@ember/routing/route';
+
+App.IndexRoute = Route.extend({
+  model() {
     return ['red', 'yellow', 'blue'];
   }
 });
@@ -37,10 +39,10 @@ the index route, it will find this module and use the object that it exports.
 
 {% highlight javascript %}
 // app/routes/index.js
-import Ember from "ember";
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
-  model: function() {
+export default Route.extend({
+  model() {
     return ['red', 'yellow', 'blue'];
   }
 });
@@ -111,9 +113,9 @@ located under `app/helpers`.
 
 {% highlight javascript %}
 // app/helpers/upper-case.js
-import Ember from "ember";
+import { helper } from '@ember/component/helper';
 
-export default Ember.Helper.helper(function([value]) {
+export default helper(function([value]) {
   return value.toUpperCase();
 });
 {% endhighlight %}
@@ -138,9 +140,9 @@ Do this:
 
 {% highlight javascript %}
 // Given... app/components/my-text-field.js
-import Ember from "ember";
+import TextField from '@ember/component/text-field';
 
-export default Ember.TextField.extend({
+export default TextField.extend({
   // some custom behaviour...
 });
 {% endhighlight %}
