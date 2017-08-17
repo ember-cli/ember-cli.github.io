@@ -50,7 +50,7 @@ export default Route.extend({
 You can also require modules directly with the following syntax:
 
 {% highlight javascript %}
-import FooMixin from "./mixins/foo";
+import FooMixin from './mixins/foo';
 {% endhighlight %}
 
 You can reference a module by using either a relative or absolute path.
@@ -58,7 +58,7 @@ If you would like to reference a module using absolute begin
 the path with the app name defined in `package.json`:
 
 {% highlight javascript %}
-import FooMixin from "appname/mixins/foo";
+import FooMixin from 'my-app/mixins/foo';
 {% endhighlight %}
 
 
@@ -72,8 +72,8 @@ when doing so manually; see how the module `mixins/foo` is assigned to variable
 To use `Ember` or `DS` (for Ember Data) in your modules you must import them:
 
 {% highlight javascript %}
-import Ember from "ember";
-import DS from "ember-data";
+import Ember from 'ember';
+import DS from 'ember-data';
 {% endhighlight %}
 
 

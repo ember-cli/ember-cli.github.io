@@ -27,7 +27,7 @@ For example, we can create a `todo` model like so:
 
 {% highlight javascript %}
 // models/todo.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { Model, attr, hasMany } = DS;
 
@@ -38,7 +38,7 @@ export default Model.extend({
 });
 
 // models/quick-note.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { Model, attr, belongsTo } = DS;
 
@@ -61,7 +61,7 @@ Adapters can be placed at `/app/adapters/type.js`:
 
 {% highlight javascript %}
 // adapters/post.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { RESTAdapter } = DS;
 
@@ -72,7 +72,7 @@ And its serializer can be placed in `/app/serializers/type.js`:
 
 {% highlight javascript %}
 // serializers/post.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { RESTSerializer } = DS;
 
@@ -117,7 +117,7 @@ adapter, either for a single model or your entire application:
 
 {% highlight javascript %}
 // adapters/application.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { FixtureAdapter } = DS;
 
@@ -128,7 +128,7 @@ Then add fixture data to your model class:
 
 {% highlight javascript %}
 // models/author.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { Model, attr } = DS;
 

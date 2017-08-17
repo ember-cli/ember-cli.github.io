@@ -30,7 +30,7 @@ naming conventions.
 
 {% highlight javascript %}
 // app/adapters/application.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { RESTAdapter } = DS;
 
@@ -50,7 +50,7 @@ export default TextField.extend({});
 
 {% highlight javascript %}
 // app/controllers/stop-watch.js
-import Controller from "@ember/controller";
+import Controller from '@ember/controller';
 
 export default Controller.extend({});
 {% endhighlight %}
@@ -96,7 +96,7 @@ export default Mixin.create({});
 
 {% highlight javascript %}
 // app/models/observation.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { Model } = DS;
 
@@ -118,7 +118,7 @@ Nested routes as such: `app/routes/timer/index.js` or `app/routes/timer/record.j
 
 {% highlight javascript %}
 // app/serializers/observation.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { RESTSerializer } = DS;
 
@@ -129,7 +129,7 @@ export default RESTSerializer.extend({});
 
 {% highlight javascript %}
 // app/transforms/time.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { Transform } = DS;
 
@@ -152,7 +152,7 @@ export default function myAjax() {};
 
 {% highlight javascript %}
 // app/views/stop-watch.js
-import Ember from "ember";
+import Ember from 'ember';
 
 export default Ember.View.extend({});
 {% endhighlight %}
@@ -181,7 +181,7 @@ yourself. But there are a couple of things you should know.
 
 {% highlight javascript %}
 // models/user.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
 const { Model } = DS;
 
@@ -192,7 +192,7 @@ export default Model.extend({});
 
 {% highlight javascript %}
 // controllers/sign-up.js
-import Controller from "@ember/controller";
+import Controller from '@ember/controller';
 
 export default Controller.extend({});
 {% endhighlight %}
@@ -203,7 +203,7 @@ If you prefer to nest your files to better manage your application, you can easi
 
 {% highlight javascript %}
 // controllers/posts/new.js results in a controller named "controllers.posts/new"
-import Controller from "@ember/controller";
+import Controller from '@ember/controller';
 
 export default Controller.extend({});
 {% endhighlight %}
@@ -213,7 +213,7 @@ them back to dots. Simply create an alias like this:
 
 {% highlight javascript %}
 // controllers/posts.js
-import Controller from "@ember/controller";
+import Controller from '@ember/controller';
 import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
