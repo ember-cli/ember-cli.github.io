@@ -132,7 +132,7 @@ import DS from 'ember-data';
 
 const { Model, attr } = DS;
 
-var Author = Model.extend({
+let Author = Model.extend({
   firstName: attr('string'),
   lastName: attr('string')
 });

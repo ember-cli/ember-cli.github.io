@@ -183,7 +183,7 @@ module.exports = {
   name: 'ember-cli-x-button',
   included(app, parentAddon) {
     this._super.included.apply(this, arguments);
-    var target = (parentAddon || app);
+    let target = (parentAddon || app);
     // Now you can modify the app / parentAddon. For example, if you wanted
     // to include a custom preprocessor, you could add it to the target's
     // registry:
@@ -241,9 +241,9 @@ in the dummy app:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
-var app = new EmberAddon({
+let app = new EmberAddon({
   lessOptions: {
     paths: ['tests/dummy/app/styles/'],
     outputFile: 'dummy.css'
@@ -507,7 +507,7 @@ import { test, moduleForComponent } from 'ember-qunit';
 import startApp from '../../helpers/start-app';
 import { run } from '@ember/runloop';
 
-var App;
+let App;
 
 moduleForComponent('x-button', 'XButtonComponent', {
   beforeEach() {
@@ -769,7 +769,7 @@ module.exports = {
   },
 
   included(app, parentAddon) {
-    var target = (parentAddon || app);
+    let target = (parentAddon || app);
     target.options = target.options || {};
     target.options.babel = target.options.babel || { includePolyfill: true };
     return this._super.included.apply(this, arguments);

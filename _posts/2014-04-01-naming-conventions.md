@@ -253,7 +253,7 @@ Rather than hold your resource directories on the root of your app you can defin
 {% highlight javascript %}
 // config/environment.js
 module.exports = function(environment) {
-  var ENV = {
+  let ENV = {
     modulePrefix: 'my-new-app',
     // namespaced directory where resolver will look for your resource files
     podModulePrefix: 'my-new-app/pods',
