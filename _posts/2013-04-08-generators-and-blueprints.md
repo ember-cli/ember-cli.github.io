@@ -94,6 +94,7 @@ The built-in blueprints that support pods structure are:
  - route
  - resource
  - serializer
+ - service
  - template
  - transform
  - view
