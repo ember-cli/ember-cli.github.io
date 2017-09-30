@@ -177,6 +177,27 @@ To use plain CSS with `app.css`:
   statements](https://developer.mozilla.org/en-US/docs/Web/CSS/@import) (e.g.
   `@import 'typography.css';`) must be valid CSS, meaning `@import` statements
   *must* precede all other rules and so be placed at the *top* of `app.css`.
+
+To process your imports and replace them with the contents of their files,
+add in `ember-cli-build.js`:
+{% highlight js %}
+// ember-cli-build.js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    minifyCSS: {
+      options: { processImport: true }
+    }
+  });
+
+  //...
+  return app.toTree();
+};
+{% endhighlight %}
+
+Which will cause the following to happen:
+
 * In the production build, the `@import` statements are replaced with the
   contents of their files and the final minified, concatenated single CSS file
   is built to `dist/assets/yourappname-FINGERPRINT_GOES_HERE.css`.
