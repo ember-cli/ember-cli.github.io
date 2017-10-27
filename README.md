@@ -24,7 +24,7 @@ Jekyll on your OS.
 Alternatively, use bash via Windows Subsystem for Linux (WSL):
 
 - Install/setup [WSL][wsl-install]
-- Install ruby, perhaps use [rbenv] or [inxuxbrew.sh]
+- Install ruby, perhaps use [rbenv] or [linuxbrew.sh]
 
 [wsl-install]: https://msdn.microsoft.com/en-us/commandline/wsl/install-win10
 [rbenv]: https://github.com/rbenv/rbenv#installation
