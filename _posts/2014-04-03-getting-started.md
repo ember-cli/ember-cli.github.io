@@ -15,11 +15,15 @@ First, install the latest LTS (long-term support) version of Node.
 Node is available for a variety of platforms at
 [nodejs.org](http://nodejs.org/). It is important that you _not_ install Node
 with `sudo` in order to avoid permission problems with some ember-cli commands.
-On Unix, [nvm](https://github.com/creationix/nvm) provides a convenient way to
-do this. On OS X, you can also [use
+On Unix, [nvm] provides a convenient way to do this. On OS X, you can also [use
   Homebrew](https://changelog.com/posts/install-node-js-with-homebrew-on-os-x).
   On Windows, [chocolatey](https://chocolatey.org/packages/nodejs) is an
-  option.
+  option, or with Windows Subsystem for Linux ([WSL]) you can use [nvm]
+  or [linuxbrew.sh].
+
+[nvm]: https://github.com/creationix/nvm
+[WSL]: https://msdn.microsoft.com/en-us/commandline/wsl/install-win10
+[linuxbrew.sh]: http://linuxbrew.sh
 
 After the installation is complete, verify that Node is set up correctly by
 typing the below commands on the command line. Both should output a version
