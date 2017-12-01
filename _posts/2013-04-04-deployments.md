@@ -30,7 +30,7 @@ if (environment === 'production') {
 {% endhighlight %}
 
 This will also be used as a prefix for assets, eg `/path/to/ember/app/assets/vendor.js`. However when
-building for production the value of `prepend` for `fingerprint` will be used used instead. So for
+building for production the value of `prepend` for `fingerprint` will be used instead. So for
 
 {% highlight bash %}
 ember build --prod
