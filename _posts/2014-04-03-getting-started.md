@@ -44,18 +44,6 @@ npm install -g ember-cli
 
 This will give you access to the `ember` command-line runner.
 
-#### Bower
-
-You'll need to globally install [Bower](http://bower.io), a package manager
-that keeps your front-end dependencies (including jQuery, Ember, and QUnit)
-up-to-date:
-
-{% highlight bash %}
-npm install -g bower
-{% endhighlight %}
-
-This will give you access to the `bower` command-line runner.
-
 #### Watchman
 
 On OSX and UNIX-like operating systems, we recommend installing
