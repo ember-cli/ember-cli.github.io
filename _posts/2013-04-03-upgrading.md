@@ -8,21 +8,21 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Upgrading an Ember CLI App
 
-You may upgrade Ember CLI separately from Ember.js and Ember Data!
-
-To upgrade your projects using yarn run:
+To upgrade an Ember CLI app, first delete temporary folders by running `rm -rf node_modules dist tmp`.
+Then, if you are using yarn, run:
 
 ```bash
 yarn upgrade ember-cli
 ```
 
-To upgrade your projects using npm run:
+If you are using npm, run:
 
 ```bash
 npm install --save-dev ember-cli
 ```
 
-After running the upgrade command run ember init inside of the project directory to apply the blueprint changes. You can preview those changes for applications and addons.
+After upgrading your project's dependencies, run `ember init` to apply the blueprint changes.
+Please follow the prompts, and review all changes. The most common source of upgrade pain is missing changes in this step, you can press d to see a diff when reviewing.
 
 Steps to upgrade to the latest version of Ember CLI are also included with the
 [release notes for each release](https://github.com/ember-cli/ember-cli/releases).
