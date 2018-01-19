@@ -30,6 +30,13 @@ if (ENV.environment === 'development') {
 }
 {% endhighlight %}
 
+You can also import the ENV object in `./ember-cli-build.js` in the event you need environment variables in the build script.
+
+{% highlight javascript %}
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const ENV = require('./config/environment')(EmberApp.env());
+{% endhighlight %}
+
 Ember-CLI assigns `ENV.EmberENV` to `window.EmberENV`, which Ember reads on application initialization.
 
 Additionally, Ember-CLI contains a number of environment-dependent helpers for assets:
