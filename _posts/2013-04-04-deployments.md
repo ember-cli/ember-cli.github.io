@@ -100,6 +100,9 @@ ember build --environment="production"
         # include information on SSL keys, cert, protocols and ciphers
         # SSLLabs.com is a great resource for this, along with testing
         # your SSL configuration: https://www.ssllabs.com/projects/documentation/
+        
+        # Strict Transport Security
+        add_header Strict-Transport-Security max-age=2592000;
 
         # proxy buffers
         proxy_buffers 16 64k;
@@ -118,7 +121,5 @@ ember build --environment="production"
         listen      80;
         server_name <your-server-name>;
 
-        # Strict Transport Security
-        add_header Strict-Transport-Security max-age=2592000;
         rewrite ^/.*$ https://$host$request_uri? permanent;
     }
