@@ -22,7 +22,7 @@ npm install --save-dev ember-cli
 ```
 
 After upgrading your project's dependencies, run `ember init` to apply the blueprint changes.
-Please follow the prompts, and review all changes. The most common source of upgrade pain is missing changes in this step, you can press d to see a diff when reviewing.
+Please follow the prompts, and review all changes. The most common source of upgrade pain is missing changes in this step, you can press `d` to see a diff when reviewing.
 
 Steps to upgrade to the latest version of Ember CLI are also included with the
 [release notes for each release](https://github.com/ember-cli/ember-cli/releases).
