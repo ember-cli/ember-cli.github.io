@@ -182,7 +182,7 @@ ember server
  `vendor/`           | Your external dependencies not installed with `Bower` or `npm`.
  `.eslintrc.js`         | [ESLint](http://eslint.org/docs/user-guide/configuring) configuration.
  `.gitignore`        | Git configuration for ignored files.
- `ember-cli-build.js` | Contains the build specification for [Broccoli](https://github.com/joliss/broccoli).
+ `ember-cli-build.js` | Contains the build specification for [Broccoli](https://github.com/broccolijs/broccoli).
  `bower.json`        | Bower configuration and dependency list. See [Managing Dependencies](#managing-dependencies).
  `package.json`      | npm configuration and dependency list. Mainly used to list the dependencies needed for asset compilation.
 
