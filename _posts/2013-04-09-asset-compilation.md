@@ -21,31 +21,48 @@ sure to check out all the options and usage notes.
 
 ### JS Transpiling
 
-Ember-cli automatically transpiles future javascript (ES6/ES2015, ES2016 and beyond) into standard ES5
-javascript that runs on every browser using [Babel JS](https://babeljs.io) with the [ember-cli-babel](https://github.com/babel/ember-cli-babel) addon.
+Ember CLI automatically transpiles future JavaScript (ES6/ES2015, ES2016 and beyond) into standard ES5
+JavaScript that runs on every browser using [Babel JS](https://babeljs.io) with the [Ember CLI Babel](https://github.com/babel/ember-cli-babel) addon.
 
-The default configuration handles most project's needs, but you can provide options to the transpile
-to disable specific transformations if by example your app only targets ES6 capable browsers, or
-on the contrary enable transpilation of some experimental features that not enabled by default just yet.
+Internally, Ember CLI Babel uses `babel-preset-env`, which figures out which parts of your code 
+need to be transpiled to ES5 by **analyzing your project's browser support targets**. A `target` is a special keyword
+that maps to a [browserlist](https://github.com/ai/browserslist) support rule. These are defined in your
+`config/targets.js` file, which [Ember CLI generates](https://github.com/ember-cli/ember-cli/blob/master/blueprints/app/files/config/targets.js) like so:
 
-You can configure how babel works using the `babel` option in  `ember-cli-build.js`. By example for
-disabling ES6/2015 features you'd do:
+{% highlight js %}
+/* eslint-env node */
+module.exports = {
+  browsers: [
+    'ie 9',
+    'last 1 Chrome versions',
+    'last 1 Firefox versions',
+    'last 1 Safari versions'
+  ]
+};
+{% endhighlight %}
+
+(If these values look familiar, they're the same exact values used by the popular [Autoprefixer](https://github.com/postcss/autoprefixer) project.)
+
+If you need more fine-grained customization over the way that `babel-preset-env` transforms your code,
+simply set any of the options found [here](https://github.com/babel/babel-preset-env#options) on your application's `babel` hash in `ember-cli-build.js`. 
+
+For example, if you wanted to explicitly exclude generator function transpilation from your
+output, your configuration would look like this:
 
 {% highlight js %}
 // ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+/* eslint-env node */
+'use strict';
+
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
-    babel: {
-      blacklist: [
-        'es6.arrowFunctions',
-        'es6.blockScoping',
-        'es6.classes',
-        'es6.destructuring',
-        'es6.parameters',
-        'es6.properties.computed',
-        // ...more options
+  let app = new EmberApp(defaults, {
+      babel: {
+      // don't transpile generator functions
+      exclude: [
+        'transform-regenerator',
       ]
     }
   });
@@ -55,10 +72,7 @@ module.exports = function(defaults) {
 };
 {% endhighlight %}
 
-This options are just forwarded to Babel. Ember-cli uses Babel 5.X at the moment and you can check
-its documentation for a comprehensive list of [all available transformations](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/transformers/index.md) and [options](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/options.md).
-
-Work is being done for upgrading to Babel 6. You can [track the progress and help](https://github.com/ember-cli/ember-cli/issues/5015).
+As of Version 2.13, Ember CLI uses Babel 6.X for transpilation. Ember CLI versions prior to 2.13 use Babel Babel 5.X, and you can check its documentation for a comprehensive list of [all available transformations](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/transformers/index.md) and [options](https://github.com/babel/babel.github.io/blob/5.0.0/docs/usage/options.md).
 
 ### Minifying
 
