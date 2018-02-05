@@ -7,11 +7,11 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 ---
 
 ### Getting Started
-- [Discover Ember (online course)](https://www.ludu.co/course/ember)
-- [ember-cli-101 (book)](http://leanpub.com/ember-cli-101)
-- [Rails + Ember.js (with the Ember CLI)](https://www.devmynd.com/blog/2014-7-rails-ember-js-with-the-ember-cli-redux)
-- [Rock and Roll with EmberJS (book)](http://balinterdi.com/rock-and-roll-with-emberjs/)
-- [Ember.js tutorial](http://yoember.com) (Free, with the latest Ember 2 and Ember CLI)
+- [Official _Ember Guides_ 'Quick Start'](https://guides.emberjs.com/v2.14.0/getting-started/quick-start/)
+- [Official _Ember Guides_ Tutorial](https://guides.emberjs.com/v2.14.0/tutorial/ember-cli/)
+
+### Tooling
+- [Installing Node.js/NPM Without Sudo](http://www.wenincode.com/installing-node-jsnpm-without-sudo)
 
 ### Testing
 - [Creating an Integration Test with Ember.js (Video)](https://www.youtube.com/watch?v=2O24ltr0pPU&feature=youtu.be&list=PLxP_o-ABjKLFuDpuJ2Tw_3__OzxE7kFnh)
@@ -23,9 +23,6 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Deploying
 - [Lightning Fast Deployments With Rails (in the Wild).](http://blog.abuiles.com/blog/2014/07/08/lightning-fast-deployments-with-rails)
-
-### Tooling
-- [Installing Node.js/NPM Without Sudo](http://www.wenincode.com/installing-node-jsnpm-without-sudo)
 
 ### Example Apps
 - [ember-cli/ember-cli-todos](https://github.com/ember-cli/ember-cli-todos)

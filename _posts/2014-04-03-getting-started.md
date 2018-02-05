@@ -15,11 +15,15 @@ First, install the latest LTS (long-term support) version of Node.
 Node is available for a variety of platforms at
 [nodejs.org](http://nodejs.org/). It is important that you _not_ install Node
 with `sudo` in order to avoid permission problems with some ember-cli commands.
-On Unix, [nvm](https://github.com/creationix/nvm) provides a convenient way to
-do this. On OS X, you can also [use
+On Unix, [nvm] provides a convenient way to do this. On OS X, you can also [use
   Homebrew](https://changelog.com/posts/install-node-js-with-homebrew-on-os-x).
   On Windows, [chocolatey](https://chocolatey.org/packages/nodejs) is an
-  option.
+  option, or with Windows Subsystem for Linux ([WSL]) you can use [nvm]
+  or [linuxbrew.sh].
+
+[nvm]: https://github.com/creationix/nvm
+[WSL]: https://msdn.microsoft.com/en-us/commandline/wsl/install-win10
+[linuxbrew.sh]: http://linuxbrew.sh
 
 After the installation is complete, verify that Node is set up correctly by
 typing the below commands on the command line. Both should output a version
@@ -39,18 +43,6 @@ npm install -g ember-cli
 {% endhighlight %}
 
 This will give you access to the `ember` command-line runner.
-
-#### Bower
-
-You'll need to globally install [Bower](http://bower.io), a package manager
-that keeps your front-end dependencies (including jQuery, Ember, and QUnit)
-up-to-date:
-
-{% highlight bash %}
-npm install -g bower
-{% endhighlight %}
-
-This will give you access to the `bower` command-line runner.
 
 #### Watchman
 
@@ -190,7 +182,7 @@ ember server
  `vendor/`           | Your external dependencies not installed with `Bower` or `npm`.
  `.eslintrc.js`         | [ESLint](http://eslint.org/docs/user-guide/configuring) configuration.
  `.gitignore`        | Git configuration for ignored files.
- `ember-cli-build.js` | Contains the build specification for [Broccoli](https://github.com/joliss/broccoli).
+ `ember-cli-build.js` | Contains the build specification for [Broccoli](https://github.com/broccolijs/broccoli).
  `bower.json`        | Bower configuration and dependency list. See [Managing Dependencies](#managing-dependencies).
  `package.json`      | npm configuration and dependency list. Mainly used to list the dependencies needed for asset compilation.
 
@@ -230,15 +222,15 @@ the right URL if you've entered the wrong one:
 // index.js
 module.exports = function(app) {
   app.get('/my-app', function(req, res, next) {
-
-    if (req.path != '/my-app/') {
-      res.redirect('/my-app/');
+    let subpath = '/my-app/';
+    if (req.path !== subpath) {
+      res.redirect(subpath);
     } else {
       next();
     }
 
   });
-});
+};
 {% endhighlight %}
 
 Just place it within the `index.js` file of your app's `/server` directory (so that it gets applied when the ember-cli development server is being started). The snippet simply tests if the URL that is being accessed begins with `/my-app/`. And if it doesn't, you'll get redirected. Otherwise, the redirection will be skipped.

@@ -135,7 +135,7 @@ body {
       display: block;
       margin: 0 auto;
       padding: .75em 0;
-      color: #ffcec9;
+      color: #ffe8e5;
       font-size: 1em;
       text-align: center;
       background: darken(#CF483B, 5%);
@@ -174,7 +174,7 @@ body {
     padding: .6em 1.45em;
     float: none;
     background: $lgtred;
-    color: darken(desaturate($red, 35%), 10%);
+    color: #a43c29;
     font-family: $exo2;
     font-size: 1.1em;
     letter-spacing: .04em;
@@ -230,7 +230,7 @@ body {
       margin-top: 65px;
       padding-bottom: 10px;
       border-bottom: 1px solid lighten(desaturate($drkred,20%),40%);
-      color: lighten(desaturate($drkred,20%),5%);
+      color: #bd5843;
       font-family: $exo1;
       font-size: 1.65em;
       letter-spacing: .06em;
@@ -286,7 +286,7 @@ body {
     li {
 
       a {
-        color: desaturate($red,30%);
+        color: #cb4c35;
       }
 
       code {
@@ -355,7 +355,7 @@ body {
 
   p {
     width: 100%;
-    color: desaturate($red,30%);
+    color: #b03000;
     text-align: center;
     text-shadow: 0 1px lighten($lgtred,10%);
 

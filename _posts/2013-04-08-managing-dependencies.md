@@ -6,10 +6,12 @@ category: user-guide
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-08-managing-dependencies.md"
 ---
 
-### NPM and Bower Configuration
+### NPM/Yarn and Bower Configuration
 
-Ember CLI supports [NPM](https://www.npmjs.com) and [Bower](http://bower.io/)
-for dependency management.
+Ember CLI supports [NPM](https://www.npmjs.com), [yarn](https://yarnpkg.com/)
+and optionally [Bower](http://bower.io/) for dependency management. It will
+detect whether you are using npm or yarn by the presence of a `yarn.lock` file
+in your project.
 
 A newly generated Ember CLI project only has NPM dependencies, so you will
 notice a `package.json` file at the root of your project, but not a `bower.json`.

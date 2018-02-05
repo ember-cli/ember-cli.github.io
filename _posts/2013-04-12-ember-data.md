@@ -82,16 +82,10 @@ export default RESTSerializer.extend({});
 Application-level (default) adapters and serializers should be named
 `adapters/application.js` and `serializers/application.js`, respectively.
 
-### Mocks and fixtures
-
-If you're used to using fixtures to get test data into your app during
-development, you won't be able to create fixture data like you're
-used to doing (i.e. [as specified in the guides](http://emberjs.com/guides/models/the-fixture-adapter/)).
-This is because the models in your Ember CLI app (like all other
-objects) aren't attached to the global namespace.
+### Mocks
 
 Ember CLI comes with an **http-mock** generator which is preferred to
-fixtures for development and testing. Mocks have several advantages
+fixtures for development. Mocks have several advantages
 over fixtures, a primary one being that they interact with your
 application's adapters. Since you'll eventually be hooking your app
 up to a live API, it's wise to be testing your adapters from the onset.
