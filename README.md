@@ -37,7 +37,7 @@ $ bundle exec jekyll serve -w
 
 You can now view the result at [http://localhost:4000](http://localhost:4000).
 
-## Windows Users, read on
+#### Windows Users, read on
 
 If you want to help with the development of this site and you're using Windows,
 please read [this guide](http://jekyll-windows.juthilo.com) about how to run
