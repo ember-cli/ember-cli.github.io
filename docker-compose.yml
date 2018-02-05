@@ -1,0 +1,11 @@
+version: '3'
+services:
+  guides:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    command: bundle exec jekyll serve -w
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/src
