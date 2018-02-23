@@ -30,7 +30,7 @@ if (ENV.environment === 'development') {
 }
 {% endhighlight %}
 
-You can also import the ENV object in `./ember-cli-build.js` in the event you need environment variables in the build script.
+You can also import the ENV object in `./ember-cli-build.js` in case you need environment variables in the build script.
 
 {% highlight javascript %}
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
