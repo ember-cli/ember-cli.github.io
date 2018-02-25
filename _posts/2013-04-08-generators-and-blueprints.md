@@ -9,15 +9,14 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Blueprints
 
-Ember CLI ships with "Blueprints", snippet generators for many of the entities
-- models, controllers, components, and so on - that you'll need in your app.
-Blueprints allow us to share common Ember patterns in the community and you can
-even define your own.
+Ember CLI ships with support for blueprints. Blueprints are snippet generators
+for many of the entities—components, routes, and so on—that you will need in
+your app. Blueprints allow us to share common Ember patterns in the community
+and you can even define your own.
 
-To see a list of all available blueprints, with a short description of what
-they do, run `ember generate --help` or `ember g --help`, for short, at any
-time. For a longer, more detailed description of each blueprint, look in the
-appendix to this guide.
+To see a list of all available blueprints with a short description of what
+they do, run `ember generate --help` or `ember help generate`. For a longer, 
+more detailed description of each blueprint, look in the appendix to this guide.
 
 ### Generating Blueprints
 
@@ -58,7 +57,7 @@ just by generating one with the same name.
 
 ### Pods
 
-You can generate certain built-in blueprints with a pods structure by passing the `--pod` option.
+You can generate certain blueprints with a pods structure by passing the `--pod` option.
 
 {% highlight bash %}
 ember generate route foo --pod
@@ -85,30 +84,16 @@ installing
   create tests/unit/pods/foo/route-test.js
 {% endhighlight %}
 
-The built-in blueprints that support pods structure are:
-
- - adapter
- - component
- - controller
- - model
- - route
- - resource
- - serializer
- - service
- - template
- - transform
- - view
+To see which blueprints support the `--pod` option, you can use the help
+command. For example, `ember help generate component` will give you the
+list of options of the component blueprint, one of them being `--pod`.
 
 Blueprints that don't support pods structure will simply ignore the `--pod`
 option and use the default structure.
 
 If you would like to use the pods structure as the default for your project,
-you can set `usePods` in your `.ember-cli` config file to `true` (setting was
-previously named `usePodsByDefault`). To generate or destroy a blueprint in the
-classic
-type structure while `usePods` is `true`, use the `--classic` flag.
+you can set `usePods` in `.ember-cli`: 
 
-With the `usePods` set to `true`.
 {% highlight javascript %}
 // .ember-cli
 {
@@ -116,7 +101,11 @@ With the `usePods` set to `true`.
 }
 {% endhighlight %}
 
-The following would occur when generating a route:
+To generate or destroy a blueprint in the classic while `usePods` is
+activated, you can use the `--classic` flag.
+
+With `usePods` turned on, the following would occur when generating a route
+without additional options:
 
 {% highlight bash %}
 ember generate route taco
@@ -126,7 +115,11 @@ installing
   create app/taco/template.hbs
 installing
   create tests/unit/taco/route-test.js
+{% endhighlight %}
 
+And with the `--classic` option:
+
+{% highlight bash %}
 ember generate route taco --classic
 
 installing
