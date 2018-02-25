@@ -90,22 +90,6 @@ Lastly, when Watchman is not installed, a notice is displayed when invoking vari
 Could not find watchman, falling back to NodeWatcher for file system events
 {% endhighlight %}
 
-#### PhantomJS
-
-With Ember CLI, you can use the automated test runner of your choice, however
-most testing services will recommend or require
-[PhantomJS](http://phantomjs.org/), which you can install via
-[npm](https://www.npmjs.com/package/phantomjs) or the [PhantomJS
-website](http://phantomjs.org).  Note, PhantomJS is the default test runner for
-[Testem](https://github.com/airportyh/testem) and
-[Karma](http://karma-runner.github.io/0.12/index.html).
-
-If you want to use PhantomJS to run your integration tests, it must be globally installed:
-
-{% highlight bash %}
-npm install -g phantomjs-prebuilt
-{% endhighlight %}
-
 #### Create a new project
 
 Run the `new` command along with the desired app name to create a new project:
@@ -144,14 +128,20 @@ migrator keeps your code style and keeps git history available via `git log
 #### Cloning an existing project
 
 If you are checking out an existing Ember CLI-based project, you will need to
-install `npm` and `bower` dependencies before running the server:
+install `npm` dependencies:
 
 {% highlight bash %}
 git clone git@github.com:me/my-app.git
 cd my-app
 npm install
 bower install
-ember server
+{% endhighlight %}
+
+You might have to additionally install `bower` dependencies if the project
+includes a `bower.json` file:
+
+{% highlight bash %}
+bower install
 {% endhighlight %}
 
 ### Using Ember CLI
@@ -177,13 +167,11 @@ ember server
  `public/`           | This directory will be copied verbatim into the root of your built application. Use this for assets that don't have a build step, such as images or fonts.
  `tests/`            | Includes your app's unit and integration tests, as well as various helpers to load and run the tests.
  `tmp/`              | Temporary application build-step and debug output.
- `bower_components/` | `Bower` dependencies (both default and user-installed).
  `node_modules/`     | `npm` dependencies (both default and user-installed).
  `vendor/`           | Your external dependencies not installed with `Bower` or `npm`.
  `.eslintrc.js`         | [ESLint](http://eslint.org/docs/user-guide/configuring) configuration.
  `.gitignore`        | Git configuration for ignored files.
  `ember-cli-build.js` | Contains the build specification for [Broccoli](https://github.com/broccolijs/broccoli).
- `bower.json`        | Bower configuration and dependency list. See [Managing Dependencies](#managing-dependencies).
  `package.json`      | npm configuration and dependency list. Mainly used to list the dependencies needed for asset compilation.
 
 ### Layout within `app` directory
@@ -197,7 +185,6 @@ ember server
  `app/templates/` | Your HTMLBars templates. These are compiled to `/dist/assets/<app-name>.js`. The templates are named the same as their filename, minus the extension (i.e. `templates/foo/bar.hbs` -> `foo/bar`).
  `app/controllers/`, `app/models/`, etc. | Modules resolved by the Ember CLI resolver. See [Using Modules &amp; the Resolver](#using-modules).
 
-[PhantomJS]: http://phantomjs.org
 [Homebrew]: http://brew.sh
 
 #### `app/index.html`
@@ -206,9 +193,10 @@ The `app/index.html` file lays the foundation for your application. This is wher
 
 ### Addons
 
-Addons are registered in npm with a keyword of `ember-addon`. See a full list
-of existing addons registered in NPM
-[here](https://www.npmjs.org/browse/keyword/ember-addon).
+Addons are registered in npm with a keyword of `ember-addon`. You can see a
+list of existing addons [directly on npm](https://www.npmjs.org/browse/keyword/ember-addon),
+on [emberaddons.com](https://www.emberaddons.com/), or a curated and
+categorized listing at [Ember Observer](https://emberobserver.com/).
 
 ### Developing on a subpath
 
