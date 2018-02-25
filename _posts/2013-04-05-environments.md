@@ -6,8 +6,8 @@ category: user-guide
 github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/2013-04-05-environments.md"
 ---
 
-Ember-CLI ships with support for managing your application's environment.
-Ember-CLI will build an environment config file at `config/environment`. Here,
+Ember CLI ships with support for managing your application's environment.
+Ember CLI will build an environment config file at `config/environment`. Here,
 you can define an ENV object for each environment (development, test and
 production). For now, this is limited to the three environments mentioned.
 
@@ -37,9 +37,9 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const ENV = require('./config/environment')(EmberApp.env());
 {% endhighlight %}
 
-Ember-CLI assigns `ENV.EmberENV` to `window.EmberENV`, which Ember reads on application initialization.
+Ember CLI assigns `ENV.EmberENV` to `window.EmberENV`, which Ember reads on application initialization.
 
-Additionally, Ember-CLI contains a number of environment-dependent helpers for assets:
+Additionally, Ember CLI contains a number of environment-dependent helpers for assets:
 
 - [Env specific assets](#environment-specific-assets)
 - [Env specific asset fingerprinting](#fingerprinting-and-cdn-urls)
