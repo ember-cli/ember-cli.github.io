@@ -8,7 +8,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 Addons make it possible to easily share common code between
 applications. However, if an addon only covers a very project specific
-use-case, [an In-Repo-Addon](#detailed-list-of-blueprints-and-their-use) could
+use-case, [an In-Repo-Addon](#in-repo-addons) could
 be considered instead.
 
 This guide will walk through the development cycle of a fictional
