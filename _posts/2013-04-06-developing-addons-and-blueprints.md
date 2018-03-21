@@ -715,7 +715,7 @@ addon, take a look at:
 [Creating a DatePicker Ember CLI addon](http://edgycircle.com/blog/2014-creating-a-datepicker-ember-addon)
 
 ### In-Repo-Addons
-Addons sepecific to your project can be created inside your repo and are
+Addons specific to your project can be created inside your repo and are
 generated in the projects `lib` directory in a folder with the name of
 the in-repo-addon, e.g. `/lib/in-repo-addon-name` and follow the same
 file structure as a normal *addon*.
