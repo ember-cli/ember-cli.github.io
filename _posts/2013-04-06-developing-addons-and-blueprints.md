@@ -8,7 +8,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 Addons make it possible to easily share common code between
 applications. However, if an addon only covers a very project specific
-use-case, [an In-Repo-Addon](#detailed-list-of-blueprints-and-their-use) could
+use-case, [an In-Repo-Addon](#in-repo-addons) could
 be considered instead.
 
 This guide will walk through the development cycle of a fictional
@@ -715,7 +715,7 @@ addon, take a look at:
 [Creating a DatePicker Ember CLI addon](http://edgycircle.com/blog/2014-creating-a-datepicker-ember-addon)
 
 ### In-Repo-Addons
-Addons sepecific to your project can be created inside your repo and are
+Addons specific to your project can be created inside your repo and are
 generated in the projects `lib` directory in a folder with the name of
 the in-repo-addon, e.g. `/lib/in-repo-addon-name` and follow the same
 file structure as a normal *addon*.
