@@ -79,7 +79,7 @@ import Ember from 'ember';
 // No import for moment, it's a global called `moment`
 
 // ...
-var day = moment('Dec 25, 1995');
+let day = moment('Dec 25, 1995');
 {% endhighlight %}
 
 _Note: Don't forget to make ESLint happy by adding a `/* global MY_GLOBAL */`
@@ -107,7 +107,7 @@ Finally, use the package by adding the appropriate `import` statement:
 import moment from 'moment';
 
 // ...
-var day = moment('Dec 25, 1995');
+let day = moment('Dec 25, 1995');
 {% endhighlight %}
 
 ##### Standard Named AMD Asset
@@ -181,26 +181,38 @@ Handlebars even in the production environment.  You would simply provide the
 path to the `EmberApp` constructor:
 
 {% highlight javascript %}
-var app = new EmberApp({
-  vendorFiles: {
-    'handlebars.js': {
-      production: 'bower_components/handlebars/handlebars.js'
-    }
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    vendorFiles: {
+      'handlebars.js': {
+        production: 'bower_components/handlebars/handlebars.js'
+      }
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 Alternatively, if you want to exclude the built-in asset from being
 automatically included in `vendor.js`, you can set its value to `false`:
 
 {% highlight javascript %}
-var app = new EmberApp({
-  vendorFiles: {
-    'handlebars.js': false
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    vendorFiles: {
+      'handlebars.js': false
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 _Note: The built-in assets are required dependencies needed by the environment
@@ -216,14 +228,20 @@ your Ember application by using the addons option of the EmberApp constructor. A
 app:
 
 {% highlight javascript %}
-var app = new EmberApp({
-  addons: {
-    blacklist: [
-      'fastboot-app-server'
-    ]
-  }
-});
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    addons: {
+      blacklist: [
+        'fastboot-app-server'
+      ]
+    }
+  });
+
+  //...
+  return app.toTree();
+};
 {% endhighlight %}
 
 ##### Test Assets
@@ -234,17 +252,19 @@ ember-cli-build.js:
 
 {% highlight javascript %}
 // ember-cli-build.js
-var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
-    isProduction = EmberApp.env() === 'production';
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const isProduction = EmberApp.env() === 'production';
 
-var app = new EmberApp();
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, { });
 
-if ( !isProduction ) {
-    app.import( app.bowerDirectory + '/sinonjs/sinon.js', { type: 'test' } );
-    app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
-}
+  if ( !isProduction ) {
+      app.import( app.bowerDirectory + '/sinonjs/sinon.js', { type: 'test' } );
+      app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
+  }
 
-module.exports = app.toTree();
+  return app.toTree();
+};
 {% endhighlight %}
 
 **Notes:**
@@ -336,30 +356,31 @@ npm install broccoli-funnel --save-dev
 Add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:
 
 {% highlight javascript %}
-var Funnel = require('broccoli-funnel');
+const Funnel = require('broccoli-funnel');
 {% endhighlight %}
 
 Within `ember-cli-build.js`, we merge assets from a bower dependency with the main app tree:
 
 {% highlight javascript %}
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
+
 module.exports = function(defaults) {
+  let app = new EmberApp(defaults, { });
 
-   ...
+  // Copy only the relevant files. For example the WOFF-files and stylesheets for a webfont:
 
-   // Copy only the relevant files. For example the WOFF-files and stylesheets for a webfont:
+  let extraAssets = new Funnel('bower_components/a-lovely-webfont', {
+     srcDir: '/',
+     include: ['**/*.woff', '**/stylesheet.css'],
+     destDir: '/assets/fonts'
+  });
 
-   var extraAssets = new Funnel('bower_components/a-lovely-webfont', {
-      srcDir: '/',
-      include: ['**/*.woff', '**/stylesheet.css'],
-      destDir: '/assets/fonts'
-   });
+  // Providing additional trees to the `toTree` method will result in those
+  // trees being merged in the final output.
 
-   // Providing additional trees to the `toTree` method will result in those
-   // trees being merged in the final output.
-
-   return app.toTree(extraAssets);
-
-}
+  return app.toTree(extraAssets);
+};
 {% endhighlight %}
 
 In the above example the assets from the fictive bower dependency called `a-lovely-webfont` can now
@@ -374,18 +395,21 @@ to exclude all `.gitkeep` files from the final output:
 
 {% highlight javascript %}
 // Again, add this import to the top of `ember-cli-build.js`, just below the `EmberApp` require:
-var Funnel = require('broccoli-funnel');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
 
-// Normal ember-cli-build contents
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, { });
 
-// Filter toTree()'s output
-var filteredAssets = new Funnel(app.toTree(), {
-  // Exclude gitkeeps from output
-  exclude: ['**/.gitkeep']
-});
+  // Filter toTree()'s output
+  let filteredAssets = new Funnel(app.toTree(), {
+    // Exclude gitkeeps from output
+    exclude: ['**/.gitkeep']
+  });
 
-// Export filtered tree
-module.exports = filteredAssets;
+  // Export filtered tree
+  return filteredAssets;
+};
 {% endhighlight %}
 
 _Note: [broccoli-static-compiler](https://github.com/joliss/broccoli-static-compiler) is deprecated. Use [broccoli-funnel](https://github.com/broccolijs/broccoli-funnel) instead._

@@ -37,10 +37,10 @@ the index route, it will find this module and use the object that it exports.
 
 {% highlight javascript %}
 // app/routes/index.js
-import Ember from "ember";
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
-  model: function() {
+export default Route.extend({
+  model() {
     return ['red', 'yellow', 'blue'];
   }
 });
@@ -50,7 +50,7 @@ export default Ember.Route.extend({
 You can also require modules directly with the following syntax:
 
 {% highlight javascript %}
-import FooMixin from "./mixins/foo";
+import FooMixin from './mixins/foo';
 {% endhighlight %}
 
 You can reference a module by using either a relative or absolute path.
@@ -58,7 +58,7 @@ If you would like to reference a module using absolute begin
 the path with the app name defined in `package.json`:
 
 {% highlight javascript %}
-import FooMixin from "appname/mixins/foo";
+import FooMixin from 'my-app/mixins/foo';
 {% endhighlight %}
 
 
@@ -72,8 +72,8 @@ when doing so manually; see how the module `mixins/foo` is assigned to variable
 To use `Ember` or `DS` (for Ember Data) in your modules you must import them:
 
 {% highlight javascript %}
-import Ember from "ember";
-import DS from "ember-data";
+import Ember from 'ember';
+import DS from 'ember-data';
 {% endhighlight %}
 
 
@@ -90,7 +90,7 @@ Directory           | Purpose
 `app/adapters/`     | Adapters with the convention `adapter-name.js`.
 `app/components/`   | Components with the convention `component-name.js`. Components must have a dash in their name. So `blog-post` is an acceptable name, but `post` is not.
 `app/helpers/`      | Helpers with the convention `helper-name.js`. Helpers must have a dash in their name. Remember that you must register your helpers by exporting `makeBoundHelper` or calling `registerBoundHelper` explicitly.
-`app/initializers/` | Initializers with the convention `initializer-name.js`. Initializers are loaded automatically.
+`app/instance-initializers/` | Initializers with the convention `initializer-name.js`. Initializers are loaded automatically.
 `app/mixins/`       | Mixins with the convention `mixin-name.js`.
 `app/models/`       | Models with the convention `model-name.js`.
 `app/routes/`       | Routes with the convention `route-name.js`. Child routes are defined in sub-directories, `parent/child.js`. To provide a custom implementation for generated routes (equivalent to `App.Route` when using globals), use `app/routes/basic.js`.
@@ -111,9 +111,9 @@ located under `app/helpers`.
 
 {% highlight javascript %}
 // app/helpers/upper-case.js
-import Ember from "ember";
+import { helper } from '@ember/component/helper';
 
-export default Ember.Helper.helper(function([value]) {
+export default helper(function([value]) {
   return value.toUpperCase();
 });
 {% endhighlight %}
@@ -138,9 +138,9 @@ Do this:
 
 {% highlight javascript %}
 // Given... app/components/my-text-field.js
-import Ember from "ember";
+import TextField from '@ember/component/text-field';
 
-export default Ember.TextField.extend({
+export default TextField.extend({
   // some custom behaviour...
 });
 {% endhighlight %}

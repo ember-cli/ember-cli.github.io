@@ -27,20 +27,24 @@ For example, we can create a `todo` model like so:
 
 {% highlight javascript %}
 // models/todo.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.Model.extend({
-  title: DS.attr('string'),
-  isCompleted: DS.attr('boolean'),
-  quickNotes: DS.hasMany('quick-note')
+const { Model, attr, hasMany } = DS;
+
+export default Model.extend({
+  title: attr('string'),
+  isCompleted: attr('boolean'),
+  quickNotes: hasMany('quick-note')
 });
 
 // models/quick-note.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.Model.extend({
-  name: DS.attr('string'),
-  todo: DS.belongsTo('todo')
+const { Model, attr, belongsTo } = DS;
+
+export default Model.extend({
+  name: attr('string'),
+  todo: belongsTo('todo')
 });
 
 {% endhighlight %}
@@ -57,18 +61,22 @@ Adapters can be placed at `/app/adapters/type.js`:
 
 {% highlight javascript %}
 // adapters/post.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.RESTAdapter.extend({});
+const { RESTAdapter } = DS;
+
+export default RESTAdapter.extend({});
 {% endhighlight %}
 
 And its serializer can be placed in `/app/serializers/type.js`:
 
 {% highlight javascript %}
 // serializers/post.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.RESTSerializer.extend({});
+const { RESTSerializer } = DS;
+
+export default RESTSerializer.extend({});
 {% endhighlight %}
 
 Application-level (default) adapters and serializers should be named
@@ -96,3 +104,41 @@ from your Ember app.
 
 > Note: Mocks are just for development. The entire `/server`
 directory will be ignored during `ember build` and `ember test`.
+
+If you decide to use fixtures instead of mocks, you'll need to use
+`reopenClass` within your model class definitions. First, create a fixture
+adapter, either for a single model or your entire application:
+
+{% highlight javascript %}
+// adapters/application.js
+import DS from 'ember-data';
+
+const { FixtureAdapter } = DS;
+
+export default FixtureAdapter.extend({});
+{% endhighlight %}
+
+Then add fixture data to your model class:
+
+{% highlight javascript %}
+// models/author.js
+import DS from 'ember-data';
+
+const { Model, attr } = DS;
+
+let Author = Model.extend({
+  firstName: attr('string'),
+  lastName: attr('string')
+});
+
+Author.reopenClass({
+  FIXTURES: [
+    {id: 1, firstName: 'Bugs', lastName: 'Bunny'},
+    {id: 2, firstName: 'Wile E.', lastName: 'Coyote'}
+  ]
+});
+
+export default Author;
+{% endhighlight %}
+
+Your Ember app's API requests will now use your fixture data.

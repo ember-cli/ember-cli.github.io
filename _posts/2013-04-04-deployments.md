@@ -7,7 +7,7 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 ---
 
 You can easily deploy your Ember CLI application to a number of places using
-[ember-cli-deploy](http://ember-cli-deploy.com/). 
+[ember-cli-deploy](http://ember-cli-deploy.com/).
 
 Additional Examples:
 
@@ -40,13 +40,18 @@ with
 
 {% highlight javascript %}
 // ember-cli-build.js
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
+  let app = new EmberApp(defaults, {
     // Add options here
     fingerprint: {
       prepend: 'https://cdn.example.com/'
     }
   });
+
+  return app.toTree();
+};
 {% endhighlight %}
 
 the asset URLs will not use `rootURL` and will instead be:

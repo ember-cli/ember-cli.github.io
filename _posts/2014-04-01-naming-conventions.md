@@ -30,28 +30,29 @@ naming conventions.
 
 {% highlight javascript %}
 // app/adapters/application.js
-import Ember from "ember";
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.RESTAdapter.extend({});
+const { RESTAdapter } = DS;
+
+export default RESTAdapter.extend({});
 {% endhighlight %}
 
 ##### Components
 
 {% highlight javascript %}
 // app/components/time-input.js
-import Ember from "ember";
+import TextField from '@ember/component/text-field';
 
-export default Ember.TextField.extend({});
+export default TextField.extend({});
 {% endhighlight %}
 
 ##### Controllers
 
 {% highlight javascript %}
 // app/controllers/stop-watch.js
-import Ember from "ember";
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({});
+export default Controller.extend({});
 {% endhighlight %}
 
 And if it's a nested controller, we can declare nested/child controllers
@@ -61,50 +62,54 @@ like such: `app/controllers/posts/index.js`.
 
 {% highlight javascript %}
 // app/helpers/format-time.js
-import Ember from "ember";
+import { helper } from '@ember/component/helper';
 
-export default Ember.Helper.helper(function(){});
+export default helper(function(){});
 {% endhighlight %}
 
-##### Initializers
+##### Instance Initializers
 
 {% highlight javascript %}
-// app/initializers/observation.js
+// app/instance-initializers/observation.js
+export function initialize(appInstance) {
+
+};
+
 export default {
   name: 'observation',
-  initialize: function() {
-    // code
-  }
+  initialize: initialize
 };
 {% endhighlight %}
 
-Note: `initializers` are loaded automatically.
+Note: `instance-initializers` are loaded automatically.
 
 ##### Mixins
 
 {% highlight javascript %}
 // app/mixins/evented.js
-import Ember from "ember";
+import Mixin from '@ember/object/mixin';
 
-export default Ember.Mixin.create({});
+export default Mixin.create({});
 {% endhighlight %}
 
 ##### Models
 
 {% highlight javascript %}
 // app/models/observation.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.Model.extend({});
+const { Model } = DS;
+
+export default Model.extend({});
 {% endhighlight %}
 
 ##### Routes
 
 {% highlight javascript %}
 // app/routes/timer.js
-import Ember from "ember";
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({});
+export default Route.extend({});
 {% endhighlight %}
 
 Nested routes as such: `app/routes/timer/index.js` or `app/routes/timer/record.js`.
@@ -113,18 +118,22 @@ Nested routes as such: `app/routes/timer/index.js` or `app/routes/timer/record.j
 
 {% highlight javascript %}
 // app/serializers/observation.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.RESTSerializer.extend({});
+const { RESTSerializer } = DS;
+
+export default RESTSerializer.extend({});
 {% endhighlight %}
 
 ##### Transforms
 
 {% highlight javascript %}
 // app/transforms/time.js
-import DS from "ember-data";
+import DS from 'ember-data';
 
-export default DS.Transform.extend({});
+const { Transform } = DS;
+
+export default Transform.extend({});
 {% endhighlight %}
 
 ##### Utilities
@@ -143,7 +152,7 @@ export default function myAjax() {};
 
 {% highlight javascript %}
 // app/views/stop-watch.js
-import Ember from "ember";
+import Ember from 'ember';
 
 export default Ember.View.extend({});
 {% endhighlight %}
@@ -157,9 +166,9 @@ And views, which can be referenced in sub-directories, but have no inheritance.
 
 {% highlight javascript %}
 // app/views/inputs/time-input.js
-import Ember from "ember";
+import TextField from '@ember/component/text-field';
 
-export default Ember.TextField.extend({});
+export default TextField.extend({});
 {% endhighlight %}
 
 ### Filenames
@@ -172,16 +181,20 @@ yourself. But there are a couple of things you should know.
 
 {% highlight javascript %}
 // models/user.js
-import Ember from "ember";
-export default Ember.Model.extend();
+import DS from 'ember-data';
+
+const { Model } = DS;
+
+export default Model.extend({});
 {% endhighlight %}
 
 ##### Dasherized file and directory names are required
 
 {% highlight javascript %}
 // controllers/sign-up.js
-import Ember from "ember";
-export default Ember.Controller.extend();
+import Controller from '@ember/controller';
+
+export default Controller.extend({});
 {% endhighlight %}
 
 ##### Nested directories
@@ -190,8 +203,9 @@ If you prefer to nest your files to better manage your application, you can easi
 
 {% highlight javascript %}
 // controllers/posts/new.js results in a controller named "controllers.posts/new"
-import Ember from "ember";
-export default Ember.Controller.extend();
+import Controller from '@ember/controller';
+
+export default Controller.extend({});
 {% endhighlight %}
 
 You cannot use paths containing slashes in your templates because Handlebars will translate
@@ -199,10 +213,12 @@ them back to dots. Simply create an alias like this:
 
 {% highlight javascript %}
 // controllers/posts.js
-import Ember from "ember";
-export default Ember.Controller.extend({
+import Controller from '@ember/controller';
+import { alias } from '@ember/object/computed';
+
+export default Controller.extend({
   needs: ['posts/details'],
-  postsDetails: Ember.computed.alias('controllers.posts/details')
+  postsDetails: alias('controllers.posts/details')
 });
 {% endhighlight %}
 
@@ -237,12 +253,12 @@ Rather than hold your resource directories on the root of your app you can defin
 {% highlight javascript %}
 // config/environment.js
 module.exports = function(environment) {
-  var ENV = {
+  let ENV = {
     modulePrefix: 'my-new-app',
     // namespaced directory where resolver will look for your resource files
     podModulePrefix: 'my-new-app/pods',
     environment: environment,
-    baseURL: '/',
+    rootURL: '/',
     locationType: 'auto'
     //...
   };
