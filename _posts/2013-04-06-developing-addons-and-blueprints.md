@@ -644,9 +644,7 @@ available by name.
 Then run `npm link <addon-name>` in any hosting application project
 root to make a link to your addon in your `node_modules` directory, and
 add the addon to the `package.json`. Any change in your addon will now
-directly take effect in any project that links to it this way (see
-[npm-tricks](http://www.devthought.com/2012/02/17/npm-tricks) for more
-details).
+directly take effect in any project that links to it this way.
 
 Remember that `npm link` will not run the default blueprint in the same way that
 `install` will, so you will have to do that manually via `ember g`.
