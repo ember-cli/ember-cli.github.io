@@ -87,7 +87,7 @@ second issue was a bit more subtle: The npm installer had a set of steps it
 executed for each package and it would immediately start executing them as soon
 as it decided to act on a package resulting in hard-to-debug race conditions.
 
-`npm@3` is a nearly complete rewrite of `npm`, fixing both issues. Windows users of
-Ember Cli might want to make the switch to `npm@3` to benefit from its
+`npm` 3 is a nearly complete rewrite of `npm`, fixing both issues. Windows users of
+Ember Cli might want to make the switch to `npm` 3 to benefit from its
 flat module installation (solving most issues involving long path names) as well
 as its multi-stage installer.
