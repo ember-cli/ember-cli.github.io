@@ -735,6 +735,11 @@ ember generate in-repo-addon in-repo-addon-name
 
 (Replace `in-repo-addon-name` with the name of your addon.)
 
+Use the addon as you would a normal addon. If you need to import a specific file, import it as if it were in the host application:
+{% highlight javascript %}
+import inRepoAddonUtility from '../utils/in-repo-addon-utility';
+{% endhighlight %}
+
 ### Using a stylesheet with an in-repo-addon
 For your in-repo-addon stylesheet, name the file `addon.css` and place
 it in the styles directory, e.g `/lib/in-repo-addon-name/addon/styles/addon.css`
