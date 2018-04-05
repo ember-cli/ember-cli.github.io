@@ -736,6 +736,7 @@ ember generate in-repo-addon in-repo-addon-name
 (Replace `in-repo-addon-name` with the name of your addon.)
 
 Use the addon as you would a normal addon. If you need to import a specific file, import it as if it were in the host application:
+
 {% highlight javascript %}
 import inRepoAddonUtility from '../utils/in-repo-addon-utility';
 {% endhighlight %}
