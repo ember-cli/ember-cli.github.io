@@ -88,7 +88,7 @@ The addon project created follows these structure conventions:
 - `public/` - static files which will be available in the application as `/your-addon/*`
 - `test-support/` - merged with the application's `tests/` under the
   application's namespace.
-- `addon-test-support/` - merged with the application's `tests/` uder the
+- `addon-test-support/` - merged with the application's `tests/` under the
   addon's namespace at `${addon-name}/test-support/`.
 - `tests/` - test infrastructure including a "dummy" app and acceptance test helpers.
 - `vendor/` - vendor specific files, such as stylesheets, fonts, external libs etc.
