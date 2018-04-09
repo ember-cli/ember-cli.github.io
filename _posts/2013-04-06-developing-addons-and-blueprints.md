@@ -690,7 +690,7 @@ When using the `git+https` format, the `ember install` command will ask you for
 the account password.
 
 ### Install and use addon
-In order to use the addon from you hosting application:
+In order to use the addon from your hosting application:
 
 To install your addon from the [npmjs.org](https://www.npmjs.org/) repository:
 
