@@ -8,21 +8,23 @@ github: "https://github.com/ember-cli/ember-cli.github.io/blob/master/_posts/201
 
 ### Upgrading an Ember CLI App
 
-To upgrade an Ember CLI app, first delete temporary folders by running `rm -rf node_modules dist tmp`.
-Then, if you are using yarn, run:
+To upgrade an Ember CLI app use `ember-cli-update`, install instructions can be found [here](https://github.com/ember-cli/ember-cli-update#installation).
 
-```bash
-yarn upgrade ember-cli
-```
+When it's done, if you installed `ember-cli-update` globally, run the following command inside your project directory,
 
-If you are using npm, run:
+ember-cli-update
 
-```bash
-npm install --save-dev ember-cli
-```
+or if you installed as an Ember CLI command, run
 
-After upgrading your project's dependencies, run `ember init` to apply the blueprint changes.
-Please follow the prompts, and review all changes. The most common source of upgrade pain is missing changes in this step, you can press `d` to see a diff when reviewing.
+ember update
+
+This will update your app or addon to the latest Ember CLI version. It does this by fetching the latest version and comparing it to your project's Ember CLI version. It then applies a diff of the changes from the latest version to your project. It will only modify the files if there are changes between your project's version and the latest version, and it will only change the section necessary, not the entire file.
+
+This is different from the existing ember init command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
+
+You will probably encounter merge conflicts, in which the default behavior is to let you resolve conflicts on your own. You can supply the --resolve-conflicts option to run your system's git merge tool if any conflicts are found.
+
+There's some others `ember-cli-update`'s options documented [here](https://github.com/ember-cli/ember-cli-update#options).
 
 Steps to upgrade to the latest version of Ember CLI are also included with the
 [release notes for each release](https://github.com/ember-cli/ember-cli/releases).
