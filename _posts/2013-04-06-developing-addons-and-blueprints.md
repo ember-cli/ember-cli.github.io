@@ -54,6 +54,11 @@ Ember CLI has an *addon* command with some options:
 
 Note: An addon can NOT be created inside an existing application.
 
+Note: `<addon-name>` may not be a `@foo/bar` [npm scope](https://docs.npmjs.com/getting-started/scoped-packages#how-to-work-with-scoped-packages). If you want, this:
+
+1. Pick an alternative directory name such as `foo__bar`.
+2. After running the command you’ll need to change the name field to add the scope in the `package.json` and `index.js` files.
+
 ### Create addon
 To create a basic addon: `ember addon <addon-name>`
 
