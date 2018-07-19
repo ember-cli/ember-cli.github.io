@@ -675,7 +675,7 @@ npm publish
 
 ### Using a private repository
 You can upload your addon code to a private git repository and call `ember install`
-with a valid [git URL](https://www.npmjs.org/doc/files/package.json.html#git-urls-as-dependencies)
+with a valid [git URL](https://docs.npmjs.com/files/package.json#urls-as-dependencies)
 as the version.
 
 If you are using [bitbucket.org](https://bitbucket.org) the [URL formats can be
