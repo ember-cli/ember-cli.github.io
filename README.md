@@ -1,4 +1,10 @@
-## EmberCLI's official website <a href="https://ember-community-slackin.herokuapp.com" target="_blank"><img src="https://ember-community-slackin.herokuapp.com/badge.svg"></a>
+## EmberCLI's official website
+
+### Visit the new Ember CLI Guides!
+
+This project is deprecated in favor of [cli-guides](https://github.com/ember-learn/cli-guides), which is an Ember app that hosts most of the content found here in the past. You can see the new site at [cli.emberjs.com](https://cli.emberjs.com).
+
+In the upcoming months, this site will remain up while the redirects and content migrations are being finished.
 
 ### Running with Docker (recommended)
 

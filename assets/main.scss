@@ -368,6 +368,14 @@ body {
 
 }
 
+.deprecation-banner.row {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  background-color: #ffefcc;
+  padding: 20px;
+}
+
 .highlight .lineno {
   display: none;
 }
