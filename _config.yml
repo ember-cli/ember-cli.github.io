@@ -12,3 +12,6 @@ sass:
 gems:
   - jekyll-feed
   - github-pages
+
+include:
+  - _redirects
