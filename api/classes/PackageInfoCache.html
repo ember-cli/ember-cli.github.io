@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -104,8 +107,6 @@
                       <li><a href="#method__readPackage">_readPackage</a></li>
                       <li><a href="#method__resolveDependencies">_resolveDependencies</a></li>
                       <li><a href="#method__showObjErrors">_showObjErrors</a></li>
-                      <li><a href="#method_getRealDirectoryPath">getRealDirectoryPath</a></li>
-                      <li><a href="#method_getRealFilePath">getRealFilePath</a></li>
                   </ul>
               </div>
             </div>
@@ -113,14 +114,14 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l103"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:103</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l23"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:23</code></a></span>
     <h1 class="class-name">PackageInfoCache</h1>
 </div>
 
@@ -353,36 +354,6 @@ The entries are stored in a map keyed by real directory path.</p>
             </div>
           </td>
         </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
-              <a href="#method_getRealDirectoryPath">getRealDirectoryPath</a>(directoryPath): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
-            </div>
-            <div class="short-description">
-              <p>Resolve the real path for a directory, return null if does not exist or is not a directory, return the real path otherwise.</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
-              <a href="#method_getRealFilePath">getRealFilePath</a>(filePath): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
-            </div>
-            <div class="short-description">
-              <p>Resolve the real path for a file, return null if does not exist or is not a file or FIFO, return the real path otherwise.</p>
-            </div>
-          </td>
-        </tr>
       </tbody>
     </table>
 
@@ -402,7 +373,7 @@ The entries are stored in a map keyed by real directory path.</p>
     <h2 id="public-methods">Public Methods</h2>
 <div class="method item public">
     <div id="method_contains" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l398"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:398</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l319"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:319</code></a></span>
         <h3 class="">
             public
             
@@ -459,7 +430,7 @@ The entries are stored in a map keyed by real directory path.</p>
 </div>
 <div class="method item public">
     <div id="method_getEntry" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l386"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:386</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l307"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:307</code></a></span>
         <h3 class="">
             public
             
@@ -516,7 +487,7 @@ The entries are stored in a map keyed by real directory path.</p>
 </div>
 <div class="method item public">
     <div id="method_hasErrors" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l129"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:129</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l48"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:48</code></a></span>
         <h3 class="">
             public
             
@@ -544,7 +515,7 @@ The entries are stored in a map keyed by real directory path.</p>
 </div>
 <div class="method item public">
     <div id="method_loadAddon" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l309"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:309</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l228"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:228</code></a></span>
         <h3 class="">
             public
             
@@ -610,7 +581,7 @@ No copy is made.</p>
 </div>
 <div class="method item public">
     <div id="method_loadProject" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l230"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:230</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l146"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:146</code></a></span>
         <h3 class="">
             public
             
@@ -677,7 +648,7 @@ No copy is made.</p>
 </div>
 <div class="method item public">
     <div id="method_reloadProjects" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l284"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:284</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l203"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:203</code></a></span>
         <h3 class="">
             public
             
@@ -719,7 +690,7 @@ for all the known Projects.</li>
 </div>
 <div class="method item public">
     <div id="method_showErrors" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l146"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:146</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l65"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:65</code></a></span>
         <h3 class="">
             public
             
@@ -745,7 +716,7 @@ out to the ui-console.</p>
         <h2 id="private-methods">Private Methods</h2>
 <div class="method item private">
     <div id="method__addEntry" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l376"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:376</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l297"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:297</code></a></span>
         <h3 class="">
             private
             
@@ -765,7 +736,7 @@ out to the ui-console.</p>
 </div>
 <div class="method item private">
     <div id="method__clear" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l116"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:116</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l36"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:36</code></a></span>
         <h3 class="">
             private
             
@@ -785,7 +756,7 @@ out to the ui-console.</p>
 </div>
 <div class="method item private">
     <div id="method__readModulesList" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l658"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:658</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l583"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:583</code></a></span>
         <h3 class="">
             private
             
@@ -841,7 +812,7 @@ new cache entry or entries.</p>
 </div>
 <div class="method item private">
     <div id="method__readPackage" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l474"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:474</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l393"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:393</code></a></span>
         <h3 class="">
             private
             
@@ -927,7 +898,7 @@ package, whose dependencies we must all consider for discovery.</p>
 </div>
 <div class="method item private">
     <div id="method__resolveDependencies" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l341"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:341</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l260"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:260</code></a></span>
         <h3 class="">
             private
             
@@ -953,7 +924,7 @@ has been processed here, then ignore it in any later processing.</p>
 </div>
 <div class="method item private">
     <div id="method__showObjErrors" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l161"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:161</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l80"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:80</code></a></span>
         <h3 class="">
             private
             
@@ -974,122 +945,6 @@ both is just confusing to users.</p>
 </div>
 
 
-
-
-</div>
-<div class="method item private">
-    <div id="method_getRealDirectoryPath" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l60"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:60</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            getRealDirectoryPath(directoryPath): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>Resolve the real path for a directory, return null if does not
-exist or is not a directory, return the real path otherwise.</p>
-</div>
-
-      <div class="params">
-        <h4>Parameters:</h4>
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Attribute</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>directoryPath</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>the path to the directory of interest</p>
-</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-      <div class="return">
-        <h4>Return:</h4>
-        <div>
-          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-          <span class="return-description"><p>real path or null</p>
-</span>
-        </div>
-      </div>
-
-
-</div>
-<div class="method item private">
-    <div id="method_getRealFilePath" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_index.js.html#l19"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;index.js:19</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            getRealFilePath(filePath): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>Resolve the real path for a file, return null if does not
-exist or is not a file or FIFO, return the real path otherwise.</p>
-</div>
-
-      <div class="params">
-        <h4>Parameters:</h4>
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Attribute</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>filePath</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>the path to the file of interest</p>
-</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-      <div class="return">
-        <h4>Return:</h4>
-        <div>
-          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-          <span class="return-description"><p>real path or null</p>
-</span>
-        </div>
-      </div>
 
 
 </div>

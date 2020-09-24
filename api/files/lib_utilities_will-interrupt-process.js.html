@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -94,14 +97,12 @@ const EventEmitter = require(&#x27;events&#x27;);
 
 const handlers = [];
 
-let _process,
-    windowsCtrlCTrap,
-    originalIsRaw;
+let _process, _processCapturedLocation, windowsCtrlCTrap, originalIsRaw;
 
 module.exports = {
   capture(outerProcess) {
     if (_process) {
-      throw new Error(&#x27;process already captured&#x27;);
+      throw new Error(&#x60;process already captured at: \n\n${_processCapturedLocation.stack}&#x60;);
     }
 
     if (outerProcess instanceof EventEmitter === false) {
@@ -109,6 +110,7 @@ module.exports = {
     }
 
     _process = outerProcess;
+    _processCapturedLocation = new Error();
 
     // ember-cli and user apps have many dependencies, many of which require
     // process.addListener(&#x27;exit&#x27;, ....) for cleanup, by default this limit for
@@ -142,6 +144,7 @@ module.exports = {
     }
 
     _process = null;
+    _processCapturedLocation = null;
   },
 
   /**
@@ -160,7 +163,9 @@ module.exports = {
     }
 
     let index = handlers.indexOf(cb);
-    if (index &gt; -1) { return; }
+    if (index &gt; -1) {
+      return;
+    }
 
     if (handlers.length === 0) {
       setupSignalsTrap();
@@ -182,7 +187,9 @@ module.exports = {
    */
   removeHandler(cb) {
     let index = handlers.indexOf(cb);
-    if (index &lt; 0) { return; }
+    if (index &lt; 0) {
+      return;
+    }
 
     handlers.splice(index, 1);
     captureExit.offExit(cb);
@@ -239,7 +246,7 @@ function trapWindowsSignals(_process) {
   // This is required to capture Ctrl + C on Windows
   stdin.setRawMode(true);
 
-  windowsCtrlCTrap = function(data) {
+  windowsCtrlCTrap = function (data) {
     if (data.length === 1 &amp;&amp; data[0] === 0x03) {
       _process.emit(&#x27;SIGINT&#x27;);
     }
@@ -256,7 +263,7 @@ function cleanupWindowsSignals(_process) {
 }
 
 function isWindowsTTY(_process) {
-  return (/^win/).test(_process.platform) &amp;&amp; _process.stdin &amp;&amp; _process.stdin.isTTY;
+  return /^win/.test(_process.platform) &amp;&amp; _process.stdin &amp;&amp; _process.stdin.isTTY;
 }
 
 function exit() {

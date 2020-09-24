@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -156,12 +159,10 @@
                       <li><a href="#method_concatFiles">concatFiles</a></li>
                       <li><a href="#method_discoverAddons">discoverAddons</a></li>
                       <li><a href="#method_eachAddonInvoke">eachAddonInvoke</a></li>
-                      <li><a href="#method_isModuleUnification">isModuleUnification</a></li>
                       <li><a href="#method_jshintAddonTree">jshintAddonTree</a></li>
                       <li><a href="#method_preprocessJs">preprocessJs</a></li>
                       <li><a href="#method_processedAddonJsFiles">processedAddonJsFiles</a></li>
                       <li><a href="#method_shouldCompileTemplates">shouldCompileTemplates</a></li>
-                      <li><a href="#method_treeForSrc">treeForSrc</a></li>
                       <li><a href="#method_treeGenerator">treeGenerator</a></li>
                   </ul>
               </div>
@@ -170,14 +171,14 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l135"><code>lib&#x2F;models&#x2F;addon.js:135</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l137"><code>lib&#x2F;models&#x2F;addon.js:137</code></a></span>
     <h1 class="class-name">Addon</h1>
 </div>
 
@@ -537,7 +538,7 @@ it will <strong>not</strong> extend from this class.</p>
               <a href="#method_importTransforms">importTransforms</a>( ): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a>
             </div>
             <div class="short-description">
-              <p>Allows addons to define a custom transfrom function that other addons and app can use when using <code>app.import</code>.</p>
+              <p>Allows addons to define a custom transform function that other addons and app can use when using <code>app.import</code>.</p>
             </div>
           </td>
         </tr>
@@ -1024,7 +1025,7 @@ it will <strong>not</strong> extend from this class.</p>
             
           </td>
           <td>
-            <div class="method-name ">
+            <div class="method-name deprecated">
               <a href="#method_addonJsFiles">addonJsFiles</a>( ): Tree
             </div>
             <div class="short-description">
@@ -1130,21 +1131,6 @@ it will <strong>not</strong> extend from this class.</p>
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_isModuleUnification">isModuleUnification</a>( ): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
-            </div>
-            <div class="short-description">
-              <p>Returns whether this is using a module unification format.</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
               <a href="#method_jshintAddonTree">jshintAddonTree</a>( ): Tree
             </div>
             <div class="short-description">
@@ -1205,21 +1191,6 @@ it will <strong>not</strong> extend from this class.</p>
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_treeForSrc">treeForSrc</a>( ): 
-            </div>
-            <div class="short-description">
-              
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
               <a href="#method_treeGenerator">treeGenerator</a>( ): Tree
             </div>
             <div class="short-description">
@@ -1240,7 +1211,7 @@ it will <strong>not</strong> extend from this class.</p>
     <h2 id="public-constructors">Public Constructors</h2>
 <div class="method item">
     <div id="method_Addon" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l135"><code>lib&#x2F;models&#x2F;addon.js:135</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l137"><code>lib&#x2F;models&#x2F;addon.js:137</code></a></span>
         <h3 class="">
             public
             
@@ -1308,7 +1279,7 @@ it will <strong>not</strong> extend from this class.</p>
         <h2 id="public-properties">Public Properties</h2>
 <div class="property item public">
   <div id="props_addons" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l221"><code>lib&#x2F;models&#x2F;addon.js:221</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l223"><code>lib&#x2F;models&#x2F;addon.js:223</code></a></span>
     <h3 class="">
       public
       
@@ -1326,7 +1297,7 @@ it will <strong>not</strong> extend from this class.</p>
 </div>
 <div class="property item public">
   <div id="props_app" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l186"><code>lib&#x2F;models&#x2F;addon.js:186</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l188"><code>lib&#x2F;models&#x2F;addon.js:188</code></a></span>
     <h3 class="">
       public
       
@@ -1345,7 +1316,7 @@ but will be set before <code>setupPreprocessorRegistry()</code> and <code>includ
 </div>
 <div class="property item public">
   <div id="props_name" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l168"><code>lib&#x2F;models&#x2F;addon.js:168</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l170"><code>lib&#x2F;models&#x2F;addon.js:170</code></a></span>
     <h3 class="">
       public
       
@@ -1361,7 +1332,7 @@ but will be set before <code>setupPreprocessorRegistry()</code> and <code>includ
 </div>
 <div class="property item public">
   <div id="props_parent" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l208"><code>lib&#x2F;models&#x2F;addon.js:208</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l210"><code>lib&#x2F;models&#x2F;addon.js:210</code></a></span>
     <h3 class="">
       public
       
@@ -1380,7 +1351,7 @@ dependency of another addon, then <code>parent</code> will be a reference to tha
 </div>
 <div class="property item public">
   <div id="props_pkg" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l243"><code>lib&#x2F;models&#x2F;addon.js:243</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l245"><code>lib&#x2F;models&#x2F;addon.js:245</code></a></span>
     <h3 class="">
       public
       
@@ -1396,7 +1367,7 @@ dependency of another addon, then <code>parent</code> will be a reference to tha
 </div>
 <div class="property item public">
   <div id="props_project" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l199"><code>lib&#x2F;models&#x2F;addon.js:199</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l201"><code>lib&#x2F;models&#x2F;addon.js:201</code></a></span>
     <h3 class="">
       public
       
@@ -1412,7 +1383,7 @@ dependency of another addon, then <code>parent</code> will be a reference to tha
 </div>
 <div class="property item public">
   <div id="props_root" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l177"><code>lib&#x2F;models&#x2F;addon.js:177</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l179"><code>lib&#x2F;models&#x2F;addon.js:179</code></a></span>
     <h3 class="">
       public
       
@@ -1428,7 +1399,7 @@ dependency of another addon, then <code>parent</code> will be a reference to tha
 </div>
 <div class="property item public">
   <div id="props_ui" class="title">
-    <span class="source-link"><a href="../files/lib_models_addon.js.html#l233"><code>lib&#x2F;models&#x2F;addon.js:233</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_addon.js.html#l235"><code>lib&#x2F;models&#x2F;addon.js:235</code></a></span>
     <h3 class="">
       public
       
@@ -1451,7 +1422,7 @@ to log messages for the user and indicate progress on long-running operations.</
     <h2 id="public-methods">Public Methods</h2>
 <div class="method item public">
     <div id="method_blueprintsPath" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1409"><code>lib&#x2F;models&#x2F;addon.js:1409</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1347"><code>lib&#x2F;models&#x2F;addon.js:1347</code></a></span>
         <h3 class="">
             public
             
@@ -1484,7 +1455,7 @@ to log messages for the user and indicate progress on long-running operations.</
 </div>
 <div class="method item public">
     <div id="method_buildError" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1716"><code>lib&#x2F;models&#x2F;addon.js:1716</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1646"><code>lib&#x2F;models&#x2F;addon.js:1646</code></a></span>
         <h3 class="">
             public
             
@@ -1543,7 +1514,7 @@ for addons, or when the build fails</p>
 </div>
 <div class="method item public">
     <div id="method_cacheKeyForTree" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l690"><code>lib&#x2F;models&#x2F;addon.js:690</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l674"><code>lib&#x2F;models&#x2F;addon.js:674</code></a></span>
         <h3 class="">
             public
             
@@ -1605,7 +1576,7 @@ methods, which cause addons to opt-out of this caching.</p>
 </div>
 <div class="method item public">
     <div id="method_config" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1427"><code>lib&#x2F;models&#x2F;addon.js:1427</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1365"><code>lib&#x2F;models&#x2F;addon.js:1365</code></a></span>
         <h3 class="">
             public
             
@@ -1700,7 +1671,7 @@ methods, which cause addons to opt-out of this caching.</p>
 </div>
 <div class="method item public">
     <div id="method_contentFor" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1796"><code>lib&#x2F;models&#x2F;addon.js:1796</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1723"><code>lib&#x2F;models&#x2F;addon.js:1723</code></a></span>
         <h3 class="">
             public
             
@@ -1783,7 +1754,7 @@ methods, which cause addons to opt-out of this caching.</p>
 </div>
 <div class="method item public">
     <div id="method_dependencies" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1467"><code>lib&#x2F;models&#x2F;addon.js:1467</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1405"><code>lib&#x2F;models&#x2F;addon.js:1405</code></a></span>
         <h3 class="">
             public
             
@@ -1810,7 +1781,7 @@ methods, which cause addons to opt-out of this caching.</p>
 </div>
 <div class="method item public">
     <div id="method_findOwnAddonByName" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l366"><code>lib&#x2F;models&#x2F;addon.js:366</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l343"><code>lib&#x2F;models&#x2F;addon.js:343</code></a></span>
         <h3 class="">
             public
             
@@ -1841,7 +1812,7 @@ treeForAddon(tree) {
 </div>
 <div class="method item public">
     <div id="method_hintingEnabled" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l390"><code>lib&#x2F;models&#x2F;addon.js:390</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l367"><code>lib&#x2F;models&#x2F;addon.js:367</code></a></span>
         <h3 class="">
             public
             
@@ -1862,7 +1833,7 @@ hinting/linting libraries such as eslint or jshint</p>
 </div>
 <div class="method item public">
     <div id="method_import" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l788"><code>lib&#x2F;models&#x2F;addon.js:788</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l772"><code>lib&#x2F;models&#x2F;addon.js:772</code></a></span>
         <h3 class="">
             public
             
@@ -1964,7 +1935,7 @@ hinting/linting libraries such as eslint or jshint</p>
 </div>
 <div class="method item public">
     <div id="method_importTransforms" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1543"><code>lib&#x2F;models&#x2F;addon.js:1543</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1480"><code>lib&#x2F;models&#x2F;addon.js:1480</code></a></span>
         <h3 class="">
             public
             
@@ -1975,7 +1946,7 @@ hinting/linting libraries such as eslint or jshint</p>
 
 
 
-    <div class="method-description"><p>Allows addons to define a custom transfrom function that other addons and app can use when using <code>app.import</code>.</p>
+    <div class="method-description"><p>Allows addons to define a custom transform function that other addons and app can use when using <code>app.import</code>.</p>
 <p>This function is not implemented by default</p>
 <h4>Uses:</h4>
 <ul>
@@ -2022,7 +1993,7 @@ hinting/linting libraries such as eslint or jshint</p>
 </div>
 <div class="method item public">
     <div id="method_included" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l755"><code>lib&#x2F;models&#x2F;addon.js:755</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l739"><code>lib&#x2F;models&#x2F;addon.js:739</code></a></span>
         <h3 class="">
             public
             
@@ -2085,7 +2056,7 @@ would typically use this hook to perform additional imports</p>
 </div>
 <div class="method item public">
     <div id="method_includedCommands" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1518"><code>lib&#x2F;models&#x2F;addon.js:1518</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1456"><code>lib&#x2F;models&#x2F;addon.js:1456</code></a></span>
         <h3 class="">
             public
             
@@ -2127,7 +2098,7 @@ Expects you to return an object whose key is the name of the command and value i
 </div>
 <div class="method item public">
     <div id="method_init" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l252"><code>lib&#x2F;models&#x2F;addon.js:252</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l254"><code>lib&#x2F;models&#x2F;addon.js:254</code></a></span>
         <h3 class="">
             public
             
@@ -2197,7 +2168,7 @@ Expects you to return an object whose key is the name of the command and value i
 </div>
 <div class="method item public">
     <div id="method_isDevelopingAddon" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l419"><code>lib&#x2F;models&#x2F;addon.js:419</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l396"><code>lib&#x2F;models&#x2F;addon.js:396</code></a></span>
         <h3 class="">
             public
             
@@ -2228,7 +2199,7 @@ Expects you to return an object whose key is the name of the command and value i
 </div>
 <div class="method item public">
     <div id="method_isEnabled" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1477"><code>lib&#x2F;models&#x2F;addon.js:1477</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1415"><code>lib&#x2F;models&#x2F;addon.js:1415</code></a></span>
         <h3 class="">
             public
             
@@ -2255,7 +2226,7 @@ Expects you to return an object whose key is the name of the command and value i
 </div>
 <div class="method item public">
     <div id="method_lintTree" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1776"><code>lib&#x2F;models&#x2F;addon.js:1776</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1704"><code>lib&#x2F;models&#x2F;addon.js:1704</code></a></span>
         <h3 class="">
             public
             
@@ -2330,7 +2301,7 @@ linter output as test results.</p>
 </div>
 <div class="method item public">
     <div id="method_moduleName" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1394"><code>lib&#x2F;models&#x2F;addon.js:1394</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1332"><code>lib&#x2F;models&#x2F;addon.js:1332</code></a></span>
         <h3 class="">
             public
             
@@ -2358,7 +2329,7 @@ linter output as test results.</p>
 </div>
 <div class="method item public">
     <div id="method_outputReady" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1698"><code>lib&#x2F;models&#x2F;addon.js:1698</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1629"><code>lib&#x2F;models&#x2F;addon.js:1629</code></a></span>
         <h3 class="">
             public
             
@@ -2422,7 +2393,7 @@ This allows our ruby gem to block incoming requests until after the build happen
 </div>
 <div class="method item public">
     <div id="method_postBuild" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1681"><code>lib&#x2F;models&#x2F;addon.js:1681</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1613"><code>lib&#x2F;models&#x2F;addon.js:1613</code></a></span>
         <h3 class="">
             public
             
@@ -2480,7 +2451,7 @@ This allows our ruby gem to block incoming requests until after the build happen
 </div>
 <div class="method item public">
     <div id="method_postprocessTree" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1602"><code>lib&#x2F;models&#x2F;addon.js:1602</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1538"><code>lib&#x2F;models&#x2F;addon.js:1538</code></a></span>
         <h3 class="">
             public
             
@@ -2516,7 +2487,7 @@ This allows our ruby gem to block incoming requests until after the build happen
                   
                 </ul>
               </td>
-              <td><p>What kind of tree (eg. 'js', 'css', 'src', 'template')</p>
+              <td><p>What kind of tree (eg. 'js', 'css', 'template')</p>
 </td>
             </tr>
 
@@ -2556,7 +2527,7 @@ This allows our ruby gem to block incoming requests until after the build happen
 </div>
 <div class="method item public">
     <div id="method_preBuild" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1672"><code>lib&#x2F;models&#x2F;addon.js:1672</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1605"><code>lib&#x2F;models&#x2F;addon.js:1605</code></a></span>
         <h3 class="">
             public
             
@@ -2605,7 +2576,7 @@ This allows our ruby gem to block incoming requests until after the build happen
 </div>
 <div class="method item public">
     <div id="method_preprocessTree" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1587"><code>lib&#x2F;models&#x2F;addon.js:1587</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1524"><code>lib&#x2F;models&#x2F;addon.js:1524</code></a></span>
         <h3 class="">
             public
             
@@ -2645,7 +2616,7 @@ This allows our ruby gem to block incoming requests until after the build happen
                   
                 </ul>
               </td>
-              <td><p>What kind of tree (eg. 'js', 'css', 'src', 'template')</p>
+              <td><p>What kind of tree (eg. 'js', 'css', 'template')</p>
 </td>
             </tr>
 
@@ -2680,7 +2651,7 @@ This allows our ruby gem to block incoming requests until after the build happen
 </div>
 <div class="method item public">
     <div id="method_serverMiddleware" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1616"><code>lib&#x2F;models&#x2F;addon.js:1616</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1551"><code>lib&#x2F;models&#x2F;addon.js:1551</code></a></span>
         <h3 class="">
             public
             
@@ -2762,7 +2733,7 @@ need to configure your server.</p>
 </div>
 <div class="method item public">
     <div id="method_setupPreprocessorRegistry" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1733"><code>lib&#x2F;models&#x2F;addon.js:1733</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1662"><code>lib&#x2F;models&#x2F;addon.js:1662</code></a></span>
         <h3 class="">
             public
             
@@ -2857,7 +2828,7 @@ and <a href="https://github.com/kimroen/ember-cli-coffeescript">ember-cli-coffee
 </div>
 <div class="method item public">
     <div id="method_shouldIncludeChildAddon" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1486"><code>lib&#x2F;models&#x2F;addon.js:1486</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1424"><code>lib&#x2F;models&#x2F;addon.js:1424</code></a></span>
         <h3 class="">
             public
             
@@ -2929,7 +2900,7 @@ and <a href="https://github.com/kimroen/ember-cli-coffeescript">ember-cli-coffee
 </div>
 <div class="method item public">
     <div id="method_testemMiddleware" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1656"><code>lib&#x2F;models&#x2F;addon.js:1656</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1590"><code>lib&#x2F;models&#x2F;addon.js:1590</code></a></span>
         <h3 class="">
             public
             
@@ -2984,7 +2955,7 @@ and <a href="https://github.com/kimroen/ember-cli-coffeescript">ember-cli-coffee
 </div>
 <div class="method item public">
     <div id="method_treeFor" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l602"><code>lib&#x2F;models&#x2F;addon.js:602</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l586"><code>lib&#x2F;models&#x2F;addon.js:586</code></a></span>
         <h3 class="">
             public
             
@@ -3057,7 +3028,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForAddon" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l897"><code>lib&#x2F;models&#x2F;addon.js:897</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l828"><code>lib&#x2F;models&#x2F;addon.js:828</code></a></span>
         <h3 class="">
             public
             
@@ -3127,7 +3098,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForAddonTemplates" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l885"><code>lib&#x2F;models&#x2F;addon.js:885</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l816"><code>lib&#x2F;models&#x2F;addon.js:816</code></a></span>
         <h3 class="">
             public
             
@@ -3183,7 +3154,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForAddonTestSupport" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l996"><code>lib&#x2F;models&#x2F;addon.js:996</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l925"><code>lib&#x2F;models&#x2F;addon.js:925</code></a></span>
         <h3 class="">
             public
             
@@ -3238,7 +3209,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForApp" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l808"><code>lib&#x2F;models&#x2F;addon.js:808</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l792"><code>lib&#x2F;models&#x2F;addon.js:792</code></a></span>
         <h3 class="">
             public
             
@@ -3294,7 +3265,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForPublic" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l976"><code>lib&#x2F;models&#x2F;addon.js:976</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l905"><code>lib&#x2F;models&#x2F;addon.js:905</code></a></span>
         <h3 class="">
             public
             
@@ -3350,7 +3321,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForStyles" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l933"><code>lib&#x2F;models&#x2F;addon.js:933</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l862"><code>lib&#x2F;models&#x2F;addon.js:862</code></a></span>
         <h3 class="">
             public
             
@@ -3407,7 +3378,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForTemplates" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l840"><code>lib&#x2F;models&#x2F;addon.js:840</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l804"><code>lib&#x2F;models&#x2F;addon.js:804</code></a></span>
         <h3 class="">
             public
             
@@ -3463,7 +3434,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForTestSupport" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l964"><code>lib&#x2F;models&#x2F;addon.js:964</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l893"><code>lib&#x2F;models&#x2F;addon.js:893</code></a></span>
         <h3 class="">
             public
             
@@ -3519,7 +3490,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item public">
     <div id="method_treeForVendor" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l952"><code>lib&#x2F;models&#x2F;addon.js:952</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l881"><code>lib&#x2F;models&#x2F;addon.js:881</code></a></span>
         <h3 class="">
             public
             
@@ -3580,7 +3551,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
         <h2 id="private-methods">Private Methods</h2>
 <div class="method item private">
     <div id="method__eachProjectAddonInvoke" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l525"><code>lib&#x2F;models&#x2F;addon.js:525</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l506"><code>lib&#x2F;models&#x2F;addon.js:506</code></a></span>
         <h3 class="">
             private
             
@@ -3643,7 +3614,7 @@ method, you can also use a direct method called <code>treeFor[Type]</code> (eg. 
 </div>
 <div class="method item private">
     <div id="method__findHost" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l732"><code>lib&#x2F;models&#x2F;addon.js:732</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l716"><code>lib&#x2F;models&#x2F;addon.js:716</code></a></span>
         <h3 class="">
             private
             
@@ -3666,7 +3637,7 @@ to break at importing assets when they are used nested in other addons.</p>
 </div>
 <div class="method item private">
     <div id="method__shouldCompilePodTemplates" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1064"><code>lib&#x2F;models&#x2F;addon.js:1064</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l998"><code>lib&#x2F;models&#x2F;addon.js:998</code></a></span>
         <h3 class="">
             private
             
@@ -3696,7 +3667,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method__treeFor" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l668"><code>lib&#x2F;models&#x2F;addon.js:668</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l652"><code>lib&#x2F;models&#x2F;addon.js:652</code></a></span>
         <h3 class="">
             private
             
@@ -3750,7 +3721,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method__warn" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l590"><code>lib&#x2F;models&#x2F;addon.js:590</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l574"><code>lib&#x2F;models&#x2F;addon.js:574</code></a></span>
         <h3 class="">
             private
             
@@ -3769,8 +3740,8 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method_addonJsFiles" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1331"><code>lib&#x2F;models&#x2F;addon.js:1331</code></a></span>
-        <h3 class="">
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1269"><code>lib&#x2F;models&#x2F;addon.js:1269</code></a></span>
+        <h3 class="deprecated">
             private
             
             
@@ -3779,6 +3750,9 @@ exists in the pods format that need to be precompiled.</p>
     </div>
 
 
+      <div class="deprecation-message">
+          <p><strong>Deprecated:</strong> This method is deprecated.</p>
+      </div>
 
     <div class="method-description"><p>Returns a tree containing the addon's js files</p>
 </div>
@@ -3797,7 +3771,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method_compileAddon" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1214"><code>lib&#x2F;models&#x2F;addon.js:1214</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1149"><code>lib&#x2F;models&#x2F;addon.js:1149</code></a></span>
         <h3 class="">
             private
             
@@ -3854,7 +3828,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method_compileStyles" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1029"><code>lib&#x2F;models&#x2F;addon.js:1029</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l960"><code>lib&#x2F;models&#x2F;addon.js:960</code></a></span>
         <h3 class="">
             private
             
@@ -3911,7 +3885,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method_compileTemplates" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1180"><code>lib&#x2F;models&#x2F;addon.js:1180</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1116"><code>lib&#x2F;models&#x2F;addon.js:1116</code></a></span>
         <h3 class="">
             private
             
@@ -3968,7 +3942,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method_concatFiles" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l405"><code>lib&#x2F;models&#x2F;addon.js:405</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l382"><code>lib&#x2F;models&#x2F;addon.js:382</code></a></span>
         <h3 class="">
             private
             
@@ -4039,7 +4013,7 @@ exists in the pods format that need to be precompiled.</p>
 </div>
 <div class="method item private">
     <div id="method_discoverAddons" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l456"><code>lib&#x2F;models&#x2F;addon.js:456</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l434"><code>lib&#x2F;models&#x2F;addon.js:434</code></a></span>
         <h3 class="">
             private
             
@@ -4063,7 +4037,7 @@ and in-repo addons</p>
 </div>
 <div class="method item private">
     <div id="method_eachAddonInvoke" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l502"><code>lib&#x2F;models&#x2F;addon.js:502</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l481"><code>lib&#x2F;models&#x2F;addon.js:481</code></a></span>
         <h3 class="">
             private
             
@@ -4125,36 +4099,8 @@ and in-repo addons</p>
 
 </div>
 <div class="method item private">
-    <div id="method_isModuleUnification" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l356"><code>lib&#x2F;models&#x2F;addon.js:356</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            isModuleUnification( ): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>Returns whether this is using a module unification format.</p>
-</div>
-
-
-      <div class="return">
-        <h4>Return:</h4>
-        <div>
-          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-          <span class="return-description"><p>Whether this is using a module unification format.</p>
-</span>
-        </div>
-      </div>
-
-
-</div>
-<div class="method item private">
     <div id="method_jshintAddonTree" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1268"><code>lib&#x2F;models&#x2F;addon.js:1268</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1203"><code>lib&#x2F;models&#x2F;addon.js:1203</code></a></span>
         <h3 class="">
             private
             
@@ -4182,7 +4128,7 @@ and in-repo addons</p>
 </div>
 <div class="method item private">
     <div id="method_preprocessJs" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1350"><code>lib&#x2F;models&#x2F;addon.js:1350</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1286"><code>lib&#x2F;models&#x2F;addon.js:1286</code></a></span>
         <h3 class="">
             private
             
@@ -4210,7 +4156,7 @@ and in-repo addons</p>
 </div>
 <div class="method item private">
     <div id="method_processedAddonJsFiles" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1361"><code>lib&#x2F;models&#x2F;addon.js:1361</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1297"><code>lib&#x2F;models&#x2F;addon.js:1297</code></a></span>
         <h3 class="">
             private
             
@@ -4267,7 +4213,7 @@ and in-repo addons</p>
 </div>
 <div class="method item private">
     <div id="method_shouldCompileTemplates" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l1050"><code>lib&#x2F;models&#x2F;addon.js:1050</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l984"><code>lib&#x2F;models&#x2F;addon.js:984</code></a></span>
         <h3 class="">
             private
             
@@ -4296,34 +4242,8 @@ exists that need to be precompiled.</p>
 
 </div>
 <div class="method item private">
-    <div id="method_treeForSrc" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l852"><code>lib&#x2F;models&#x2F;addon.js:852</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            treeForSrc( ): 
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"></div>
-
-
-      <div class="return">
-        <h4>Return:</h4>
-        <div>
-          
-          <span class="return-description"></span>
-        </div>
-      </div>
-
-
-</div>
-<div class="method item private">
     <div id="method_treeGenerator" class="title">
-        <span class="source-link"><a href="../files/lib_models_addon.js.html#l556"><code>lib&#x2F;models&#x2F;addon.js:556</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_addon.js.html#l539"><code>lib&#x2F;models&#x2F;addon.js:539</code></a></span>
         <h3 class="">
             private
             

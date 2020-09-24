@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -78,21 +81,20 @@
 <pre class="code prettyprint linenums">
 &#x27;use strict&#x27;;
 
-const Promise = require(&#x27;rsvp&#x27;).Promise;
 const chalk = require(&#x27;chalk&#x27;);
 
 class WindowsSymlinkChecker {
   /**
    *
-   * On windows users will have a much better experience if symlinks are enabled
-   * an usable. This object when queried informs windows users, if they can
-   * improve there build performance, and how.
+   * On Windows, users will have a much better experience if symlinks are enabled
+   * and usable. When queried, this object informs Windows users regarding
+   * improving their build performance, and how.
    *
-   *  &gt; Windows vista: nothing we can really do, so we fall back to junctions for folders + copying of files
-   *  &lt;= Windows vista: symlinks are available but using them is somewhat tricky
-   *    * if the users is an admin, the process needed to have been started with elevated privs
+   *  &gt; Windows Vista: nothing we can really do, so we fall back to junctions for folders + copying of files
+   *  &lt;= Windows Vista: symlinks are available but using them is somewhat tricky
+   *    * if the user is an admin, the process needs to have been started with elevated privileges
    *    * if the user is not an admin, a specific setting needs to be enabled
-   *  &lt;= Windows 10 Insiders build 14972
+   *  &lt;= Windows 10
    *    * if developer mode is enabled, symlinks &quot;just work&quot;
    *    * https://blogs.windows.com/buildingapps/2016/12/02/symlinks-windows-10
    *
@@ -154,9 +156,8 @@ class WindowsSymlinkChecker {
     const exec = require(&#x27;child_process&#x27;).exec;
     const symlinkOrCopy = require(&#x27;symlink-or-copy&#x27;);
 
-    return new WindowsSymlinkChecker(ui, (/^win/).test(process.platform), symlinkOrCopy.canSymlink, exec);
+    return new WindowsSymlinkChecker(ui, /^win/.test(process.platform), symlinkOrCopy.canSymlink, exec);
   }
-
 
   /**
    * @public
@@ -164,7 +165,7 @@ class WindowsSymlinkChecker {
    * @return {Promise&lt;Object&gt;} Object describing whether we&#x27;re on windows and if admin rights exist
    */
   checkIfSymlinksNeedToBeEnabled() {
-    return new Promise(resolve =&gt; {
+    return new Promise((resolve) =&gt; {
       if (!this.isWindows) {
         resolve({
           windows: false,
@@ -195,13 +196,13 @@ class WindowsSymlinkChecker {
     let ui = this.ui;
     let exec = this.exec;
 
-    return new Promise(resolve =&gt; {
+    return new Promise((resolve) =&gt; {
       exec(&#x27;NET SESSION&#x27;, (error, stdout, stderr) =&gt; {
-        let elevated = (!stderr || stderr.length === 0);
+        let elevated = !stderr || stderr.length === 0;
 
         if (!elevated) {
           ui.writeLine(chalk.yellow(&#x27;\nRunning without permission to symlink will degrade build performance.&#x27;));
-          ui.writeLine(&#x27;See http://ember-cli.com/user-guide/#windows for details.\n&#x27;);
+          ui.writeLine(&#x27;See https://cli.emberjs.com/release/appendix/windows/ for details.\n&#x27;);
         }
 
         resolve({

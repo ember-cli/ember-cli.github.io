@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PackageCache - ember-cli</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  <img src="https://ember-cli.com/assets/images/ember-cli-logo-small-dark.png">
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/ember-cli.html">ember-cli</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/Addon.html">Addon</a></li>
+                            <li><a href="../classes/AmdTransformAddon.html">AmdTransformAddon</a></li>
+                            <li><a href="../classes/Blueprint.html">Blueprint</a></li>
+                            <li><a href="../classes/Builder.html">Builder</a></li>
+                            <li><a href="../classes/CLI.html">CLI</a></li>
+                            <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
+                            <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
+                            <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
+                            <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
+                            <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
+                            <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
+                            <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
+                            <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
+                            <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
+                            <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/ServeFilesAddon.html">ServeFilesAddon</a></li>
+                            <li><a href="../classes/TestsServerAddon.html">TestsServerAddon</a></li>
+                            <li><a href="../classes/WatcherAddon.html">WatcherAddon</a></li>
+                            <li><a href="../classes/WindowsSymlinkChecker.html">WindowsSymlinkChecker</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">PackageCache</h2>
+              </div>
+              <div class="bd">
+            
+            
+                  <div><a href="#constructor-summary">Constructor Summary</a></div>
+            
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-constructors">Public Constructors</a></div>
+                  <ul>
+                      <li><a href="#method_PackageCache">PackageCache</a></li>
+                  </ul>
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method___resetForTesting">__resetForTesting</a></li>
+                      <li><a href="#method___setupForTesting">__setupForTesting</a></li>
+                      <li><a href="#method__checkManifest">_checkManifest</a></li>
+                      <li><a href="#method__cleanDirs">_cleanDirs</a></li>
+                      <li><a href="#method__install">_install</a></li>
+                      <li><a href="#method__readManifest">_readManifest</a></li>
+                      <li><a href="#method__removeLinks">_removeLinks</a></li>
+                      <li><a href="#method__restoreLinks">_restoreLinks</a></li>
+                      <li><a href="#method__upgrade">_upgrade</a></li>
+                      <li><a href="#method__writeManifest">_writeManifest</a></li>
+                      <li><a href="#method_bower">bower</a></li>
+                      <li><a href="#method_create">create</a></li>
+                      <li><a href="#method_destroy">destroy</a></li>
+                      <li><a href="#method_destroy">destroy</a></li>
+                      <li><a href="#method_get">get</a></li>
+                      <li><a href="#method_npm">npm</a></li>
+                      <li><a href="#method_translate">translate</a></li>
+                      <li><a href="#method_update">update</a></li>
+                      <li><a href="#method_yarn">yarn</a></li>
+                  </ul>
+            
+            
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 3.21.2-release-97b3bd79fc
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l98"><code>tests&#x2F;helpers&#x2F;package-cache.js:98</code></a></span>
+    <h1 class="class-name">PackageCache</h1>
+</div>
+
+
+
+
+<div class="class-description"><p>The PackageCache wraps all package management functions. It also
+handles initial global state setup.</p>
+<p>Usage:</p>
+<pre class="code prettyprint"><code>let cache = new PackageCache();
+let dir = cache.create('your-cache', 'yarn', '{
+  "dependencies": {
+    "lodash": "*",
+    "ember-cli": "*"
+  }
+}');
+// =&gt; process.cwd()/tmp/your-cache-A3B4C6D
+</code></pre>
+<p>This will generate a persistent cache which contains the results
+of a clean installation of the <code>dependencies</code> as you specified in
+the manifest argument. It will save the results of these in a
+temporary folder, returned as <code>dir</code>. On a second invocation
+(in the same process, or in a subsequent run) PackageCache will first
+compare the manifest to the previously installed one, using the manifest
+as the cache key, and make a decision as to the fastest way to get
+the cache up-to-date. PackageCache guarantees that your cache will
+always be up-to-date.</p>
+<p>If done in the same process, this simply returns the existing cache
+directory with no change, making the following invocation simply a
+cache validation check:</p>
+<pre class="code prettyprint"><code>let dir2 = cache.create('your-cache', 'yarn', '{
+  "dependencies": {
+    "lodash": "*",
+    "ember-cli": "*"
+  }
+}');
+// =&gt; process.cwd()/tmp/your-cache-A3B4C6D
+</code></pre>
+<p>If you wish to modify a cache you can do so using the <code>update</code> API:</p>
+<pre class="code prettyprint"><code>let dir3 = cache.update('your-cache', 'yarn', '{
+  "dependencies": {
+    "": "*",
+    "lodash": "*",
+    "ember-cli": "*"
+  }
+}');
+// =&gt; process.cwd()/tmp/your-cache-A3B4C6D
+</code></pre>
+<p>Underneath the hood <code>create</code> and <code>update</code> are identical–which
+makes clear the simplicity of this tool. It will always do the
+right thing. You can think of the outcome of any <code>create</code> or
+<code>update</code> call as identical to <code>rm -rf node_modules &amp;&amp; npm install</code>
+except as performant as possible.</p>
+<p>If you need to make modifications to a cache but wish to retain
+the original you can invoke the <code>clone</code> command:</p>
+<pre class="code prettyprint"><code>let newDir = cache.clone('your-cache', 'modified-cache');
+let manifest = fs.readJsonSync(path.join(newDir, 'package.json'));
+manifest.dependencies['express'] = '*';
+cache.update('modified-cache', 'yarn', JSON.stringify(manifest));
+// =&gt; process.cwd()/tmp/modified-cache-F8D5C8B
+</code></pre>
+<p>This mental model makes it easy to prevent coding mistakes, state
+leakage across multiple test runs by making multiple caches cheap,
+and has tremendous performance benefits.</p>
+<p>You can even programatically update a cache:</p>
+<pre class="code prettyprint"><code>let CommandGenerator = require('./command-generator');
+let yarn = new CommandGenerator('yarn');
+
+let dir = cache.create('your-cache', 'yarn', '{ ... }');
+
+yarn.invoke('add', 'some-addon', { cwd: dir });
+</code></pre>
+<p>The programmatic approach enables the entire set of usecases that
+the underlying package manager supports while continuing to wrap it
+in a persistent cache. You should not directly modify any files in the
+cache other than the manifest unless you really know what you're doing as
+that can put the cache into a possibly invalid state.</p>
+<p>PackageCache also supports linking. If you pass an array of module names to
+in the fourth position it will ensure that those are linked, and remain
+linked for the lifetime of the cache. When you link a package it uses the
+current global link provided by the underlying package manager and invokes
+their built-in <code>link</code> command.</p>
+<pre class="code prettyprint"><code>let dir = cache.create('your-cache', 'yarn', '{ ... }', ['ember-cli']);
+// =&gt; <code>yarn link ember-cli</code> happens along the way.
+</code></pre>
+<p>Sometimes this global linking behavior is not what you want. Instead you wish
+to link in some other working directory. PackageCache makes a best effort
+attempt at supporting this workflow by allowing you to specify an object in
+the <code>links</code> argument array passed to <code>create</code>.</p>
+<p>let dir = cache.create('your-cache', 'yarn', '{ ... }', [
+{ name: 'ember-cli', path: '/the/absolute/path/to/the/package' },
+'other-package'
+]);</p>
+<p>This creates a symlink at the named package path to the specified directory.
+As package managers do different things for their own linking behavior this
+is "best effort" only. Be sure to review upstream behavior to identify if you
+rely on those features for your code to function:</p>
+<ul>
+<li><a href="https://github.com/bower/bower/blob/master/lib/commands/link.js">bower</a></li>
+<li><a href="https://github.com/npm/npm/blob/latest/lib/link.js">npm</a></li>
+<li><a href="https://github.com/yarnpkg/yarn/blob/master/src/cli/commands/link.js">yarn</a></li>
+</ul>
+<p>As the only caveat, PackageCache <em>is</em> persistent. The consuming
+code is responsible for ensuring that the cache size does not
+grow unbounded.</p>
+</div>
+
+
+
+
+  <h2 id="constructor-summary">Constructor Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Constructors</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_PackageCache">PackageCache</a>(rootPath)
+            </div>
+            <div class="short-description">
+              <p>The PackageCache wraps all package management functions. It also handles initial global state setup.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method___resetForTesting">__resetForTesting</a>( )
+            </div>
+            <div class="short-description">
+              <p>The <code>__resetForTesting</code> puts things back in module scope.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method___setupForTesting">__setupForTesting</a>( )
+            </div>
+            <div class="short-description">
+              <p>The <code>__setupForTesting</code> modifies things in module scope.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__checkManifest">_checkManifest</a>(label, type, manifest): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+            </div>
+            <div class="short-description">
+              <p>The <code>_checkManifest</code> method compares the desired manifest to that which exists in the cache.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__cleanDirs">_cleanDirs</a>( )
+            </div>
+            <div class="short-description">
+              <p>The <code>_cleanDirs</code> method deals with sync issues between the Configstore and what exists on disk. Non-existent directories are removed from <code>this.dirs</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__install">_install</a>(label, type)
+            </div>
+            <div class="short-description">
+              <p>The <code>_install</code> method installs the contents of the manifest into the specified package cache.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__readManifest">_readManifest</a>(label, type): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>The <code>_readManifest</code> method reads the on-disk manifest for the current cache and returns its value.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__removeLinks">_removeLinks</a>(label, type)
+            </div>
+            <div class="short-description">
+              <p>The <code>_removeLinks</code> method removes from the dependencies of the manifest the assets which will be linked in so that we don't duplicate install. It saves off the values in the internal <code>PackageCache</code> metadata for restoration after linking as those values may be necessary.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__restoreLinks">_restoreLinks</a>(label, type)
+            </div>
+            <div class="short-description">
+              <p>The <code>_restoreLinks</code> method restores the dependencies from the internal <code>PackageCache</code> metadata so that the manifest matches its original state after performing the links.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__upgrade">_upgrade</a>(label, type)
+            </div>
+            <div class="short-description">
+              <p>The <code>_upgrade</code> method guarantees that the contents of the manifest are allowed to drift in a SemVer compatible manner. It ensures that CI is always running against the latest versions of all dependencies.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__writeManifest">_writeManifest</a>(label, type, manifest)
+            </div>
+            <div class="short-description">
+              <p>The <code>_writeManifest</code> method generates the on-disk folder for the package cache and saves the manifest into it. If it is a yarn package cache it will remove the existing lock file.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_bower">bower</a>(subcommand, [arguments], [options={}])
+            </div>
+            <div class="short-description">
+              <p>The <code>bower</code> command helper.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_create">create</a>(label, type, manifest, links): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>The <code>create</code> method adds a new package cache entry.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_destroy">destroy</a>(label, type)
+            </div>
+            <div class="short-description">
+              <p>The <code>destroy</code> method removes all evidence of the package cache.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_destroy">destroy</a>(fromLabel, toLabel)
+            </div>
+            <div class="short-description">
+              <p>The <code>clone</code> method duplicates a cache. Some package managers can leverage a pre-existing state to speed up their installation.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_get">get</a>(label): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>The <code>get</code> method returns the directory for the cache.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_npm">npm</a>(subcommand, [arguments], [options={}])
+            </div>
+            <div class="short-description">
+              <p>The <code>npm</code> command helper.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_translate">translate</a>(type, lookup)
+            </div>
+            <div class="short-description">
+              <p>The <code>translate</code> command is used to turn a consistent argument into appropriate values based upon the context in which it is used. It's a convenience helper to avoid littering lookups throughout the code.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_update">update</a>(label, type, manifest, links): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>The <code>update</code> method aliases the <code>create</code> method.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_yarn">yarn</a>(subcommand, [arguments], [options={}])
+            </div>
+            <div class="short-description">
+              <p>The <code>yarn</code> command helper.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+  <div id="methods public">
+    <h2 id="public-constructors">Public Constructors</h2>
+<div class="method item">
+    <div id="method_PackageCache" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l98"><code>tests&#x2F;helpers&#x2F;package-cache.js:98</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            PackageCache(rootPath)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"></div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>rootPath</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>Root of the directory for <code>PackageCache</code>.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+  </div>
+
+
+
+
+
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method___resetForTesting" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l258"><code>tests&#x2F;helpers&#x2F;package-cache.js:258</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            __resetForTesting( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>__resetForTesting</code> puts things back in module scope.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method___setupForTesting" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l248"><code>tests&#x2F;helpers&#x2F;package-cache.js:248</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            __setupForTesting( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>__setupForTesting</code> modifies things in module scope.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method__checkManifest" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l471"><code>tests&#x2F;helpers&#x2F;package-cache.js:471</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _checkManifest(label, type, manifest): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_checkManifest</code> method compares the desired manifest to that which
+exists in the cache.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>manifest</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The contents of the manifest file to compare to cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+          <span class="return-description"><p><code>true</code> if identical.</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method__cleanDirs" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l267"><code>tests&#x2F;helpers&#x2F;package-cache.js:267</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _cleanDirs( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_cleanDirs</code> method deals with sync issues between the
+Configstore and what exists on disk. Non-existent directories
+are removed from <code>this.dirs</code>.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method__install" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l511"><code>tests&#x2F;helpers&#x2F;package-cache.js:511</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _install(label, type)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_install</code> method installs the contents of the manifest into the
+specified package cache.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method__readManifest" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l287"><code>tests&#x2F;helpers&#x2F;package-cache.js:287</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _readManifest(label, type): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_readManifest</code> method reads the on-disk manifest for the current
+cache and returns its value.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+          <span class="return-description"><p>The manifest file contents on disk.</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method__removeLinks" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l350"><code>tests&#x2F;helpers&#x2F;package-cache.js:350</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _removeLinks(label, type)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_removeLinks</code> method removes from the dependencies of the manifest the
+assets which will be linked in so that we don't duplicate install. It saves
+off the values in the internal <code>PackageCache</code> metadata for restoration after
+linking as those values may be necessary.</p>
+<p>It is also responsible for removing these links prior to making any changes
+to the specified cache.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method__restoreLinks" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l422"><code>tests&#x2F;helpers&#x2F;package-cache.js:422</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _restoreLinks(label, type)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_restoreLinks</code> method restores the dependencies from the internal
+<code>PackageCache</code> metadata so that the manifest matches its original state after
+performing the links.</p>
+<p>It is also responsible for restoring these links into the <code>PackageCache</code>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method__upgrade" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l528"><code>tests&#x2F;helpers&#x2F;package-cache.js:528</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _upgrade(label, type)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_upgrade</code> method guarantees that the contents of the manifest are
+allowed to drift in a SemVer compatible manner. It ensures that CI is
+always running against the latest versions of all dependencies.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method__writeManifest" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l317"><code>tests&#x2F;helpers&#x2F;package-cache.js:317</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _writeManifest(label, type, manifest)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>_writeManifest</code> method generates the on-disk folder for the package cache
+and saves the manifest into it. If it is a yarn package cache it will remove
+the existing lock file.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>manifest</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The contents of the manifest file to write to disk.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_bower" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l25"><code>tests&#x2F;helpers&#x2F;package-cache.js:25</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            bower(subcommand, [arguments], [options={}])
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>bower</code> command helper.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>subcommand</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The subcommand to be passed into bower.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>arguments</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  
+                  <li>multiple</li>
+                </ul>
+              </td>
+              <td><p>Arguments to be passed into the bower subcommand.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>options</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  <li>default: {}</li>
+                  
+                </ul>
+              </td>
+              <td><p>The options passed into child_process.spawnSync.
+(<a href="https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options">https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options</a>)</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_create" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l563"><code>tests&#x2F;helpers&#x2F;package-cache.js:563</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            create(label, type, manifest, links): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>create</code> method adds a new package cache entry.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>manifest</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The contents of the manifest file for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>links</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>Packages to omit for install and link.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+          <span class="return-description"><p>The directory on disk which contains the cache.</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_destroy" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l629"><code>tests&#x2F;helpers&#x2F;package-cache.js:629</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            destroy(label, type)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>destroy</code> method removes all evidence of the package cache.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_destroy" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l644"><code>tests&#x2F;helpers&#x2F;package-cache.js:644</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            destroy(fromLabel, toLabel)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>clone</code> method duplicates a cache. Some package managers can
+leverage a pre-existing state to speed up their installation.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>fromLabel</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache to clone.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>toLabel</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the new cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_get" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l618"><code>tests&#x2F;helpers&#x2F;package-cache.js:618</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            get(label): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>get</code> method returns the directory for the cache.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+          <span class="return-description"><p>The directory on disk which contains the cache.</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_npm" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l36"><code>tests&#x2F;helpers&#x2F;package-cache.js:36</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            npm(subcommand, [arguments], [options={}])
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>npm</code> command helper.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>subcommand</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The subcommand to be passed into npm.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>arguments</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  
+                  <li>multiple</li>
+                </ul>
+              </td>
+              <td><p>Arguments to be passed into the npm subcommand.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>options</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  <li>default: {}</li>
+                  
+                </ul>
+              </td>
+              <td><p>The options passed into child_process.spawnSync.
+(<a href="https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options">https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options</a>)</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_translate" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l85"><code>tests&#x2F;helpers&#x2F;package-cache.js:85</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            translate(type, lookup)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>translate</code> command is used to turn a consistent argument into
+appropriate values based upon the context in which it is used. It's
+a convenience helper to avoid littering lookups throughout the code.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>Either 'bower', 'npm', or 'yarn'.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>lookup</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>Either 'manifest', 'path', or 'upgrade'.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_update" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l604"><code>tests&#x2F;helpers&#x2F;package-cache.js:604</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            update(label, type, manifest, links): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>update</code> method aliases the <code>create</code> method.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>label</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The label for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>type</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The type of package cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>manifest</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The contents of the manifest file for the cache.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>links</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>Packages to elide for install and link.</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+          <span class="return-description"><p>The directory on disk which contains the cache.</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_yarn" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l47"><code>tests&#x2F;helpers&#x2F;package-cache.js:47</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            yarn(subcommand, [arguments], [options={}])
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <code>yarn</code> command helper.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>subcommand</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The subcommand to be passed into yarn.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>arguments</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  
+                  <li>multiple</li>
+                </ul>
+              </td>
+              <td><p>Arguments to be passed into the yarn subcommand.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>options</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  <li>default: {}</li>
+                  
+                </ul>
+              </td>
+              <td><p>The options passed into child_process.spawnSync.
+(<a href="https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options">https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options</a>)</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+  </div>
+
+
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

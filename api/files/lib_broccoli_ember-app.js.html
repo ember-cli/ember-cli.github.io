@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -76,7 +79,6 @@
 </div>
 
 <pre class="code prettyprint linenums">
-/* global require, module */
 &#x27;use strict&#x27;;
 
 /**
@@ -98,9 +100,7 @@ let preprocessTemplates = p.preprocessTemplates;
 
 const concat = require(&#x27;broccoli-concat&#x27;);
 const BroccoliDebug = require(&#x27;broccoli-debug&#x27;);
-const ModuleNormalizer = require(&#x27;broccoli-module-normalizer&#x27;);
 const AmdFunnel = require(&#x27;broccoli-amd-funnel&#x27;);
-const ConfigReplace = require(&#x27;broccoli-config-replace&#x27;);
 const mergeTrees = require(&#x27;./merge-trees&#x27;);
 const WatchedDir = require(&#x27;broccoli-source&#x27;).WatchedDir;
 const UnwatchedDir = require(&#x27;broccoli-source&#x27;).UnwatchedDir;
@@ -112,15 +112,12 @@ const omitBy = require(&#x27;ember-cli-lodash-subset&#x27;).omitBy;
 const isNull = require(&#x27;ember-cli-lodash-subset&#x27;).isNull;
 const Funnel = require(&#x27;broccoli-funnel&#x27;);
 const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:ember-app&#x27;);
-const emberAppUtils = require(&#x27;../utilities/ember-app-utils&#x27;);
 const addonProcessTree = require(&#x27;../utilities/addon-process-tree&#x27;);
 const lintAddonsByType = require(&#x27;../utilities/lint-addons-by-type&#x27;);
 const emberCLIBabelConfigKey = require(&#x27;../utilities/ember-cli-babel-config-key&#x27;);
 const { isExperimentEnabled } = require(&#x27;../experiments&#x27;);
 const semver = require(&#x27;semver&#x27;);
 const DefaultPackager = require(&#x27;./default-packager&#x27;);
-
-const configReplacePatterns = emberAppUtils.configReplacePatterns;
 
 let DEFAULT_CONFIG = {
   storeConfigInMeta: true,
@@ -152,8 +149,6 @@ let DEFAULT_CONFIG = {
   jshintrc: {},
   addons: {},
 };
-
-
 
 class EmberApp {
   /**
@@ -191,7 +186,7 @@ class EmberApp {
     this.name = options.name || this.project.name();
 
     this.env = EmberApp.env();
-    this.isProduction = (this.env === &#x27;production&#x27;);
+    this.isProduction = this.env === &#x27;production&#x27;;
 
     this.registry = options.registry || p.defaultRegistry(this);
 
@@ -201,7 +196,7 @@ class EmberApp {
     this._initOptions(options);
     this._initVendorFiles();
 
-    this._styleOutputFiles = { };
+    this._styleOutputFiles = {};
 
     // ensure addon.css always gets concated
     this._styleOutputFiles[this.options.outputPaths.vendor.css] = [];
@@ -218,7 +213,7 @@ class EmberApp {
 
     this.populateLegacyFiles();
     this.initializeAddons();
-    this.project.addons.forEach(addon =&gt; addon.app = this);
+    this.project.addons.forEach((addon) =&gt; (addon.app = this));
     p.setupRegistry(this);
     this._importAddonTransforms();
     this._notifyAddonIncluded();
@@ -245,7 +240,6 @@ class EmberApp {
       additionalAssetPaths: this.otherAssetPaths,
       vendorTestStaticStyles: this.vendorTestStaticStyles,
       legacyTestFilesToAppend: this.legacyTestFilesToAppend,
-      isModuleUnificationEnabled: isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;) &amp;&amp; !!this.trees.src,
       distPaths: {
         appJsFile: this.options.outputPaths.app.js,
         appCssFile: this.options.outputPaths.app.css,
@@ -272,10 +266,10 @@ class EmberApp {
     @param {Object} options
   */
   _initTestsAndHinting(options) {
-    let testsEnabledDefault = process.env.EMBER_CLI_TEST_COMMAND || !this.isProduction;
+    let testsEnabledDefault = process.env.EMBER_CLI_TEST_COMMAND === &#x27;true&#x27; || !this.isProduction;
 
-    this.tests = options.hasOwnProperty(&#x27;tests&#x27;) ? options.tests : testsEnabledDefault;
-    this.hinting = options.hasOwnProperty(&#x27;hinting&#x27;) ? options.hinting : testsEnabledDefault;
+    this.tests = &#x27;tests&#x27; in options ? options.tests : testsEnabledDefault;
+    this.hinting = &#x27;hinting&#x27; in options ? options.hinting : testsEnabledDefault;
   }
 
   /**
@@ -292,7 +286,10 @@ class EmberApp {
     this.project = options.project || Project.closestSync(process.cwd());
 
     if (options.configPath) {
-      this.project.configPath = function() { return app._resolveLocal(options.configPath); };
+      this.project.configPath = function () {
+        return app._resolveLocal(options.configPath);
+      };
+      this.project.configCache.clear();
     }
   }
 
@@ -334,7 +331,6 @@ class EmberApp {
     };
     let trees = (options &amp;&amp; options.trees) || {};
 
-    let srcTree = buildTreeFor(&#x27;src&#x27;, trees.src);
     let appTree = buildTreeFor(&#x27;app&#x27;, trees.app);
 
     let testsPath = typeof trees.tests === &#x27;string&#x27; ? resolvePathFor(&#x27;tests&#x27;, trees.tests) : null;
@@ -342,13 +338,7 @@ class EmberApp {
 
     // these are contained within app/ no need to watch again
     // (we should probably have the builder or the watcher dedup though)
-
-    if (isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;)) {
-      let srcStylesPath = &#x60;${resolvePathFor(&#x27;src&#x27;, trees.src)}/ui/styles&#x60;;
-      this._stylesPath = fs.existsSync(srcStylesPath) ? srcStylesPath : resolvePathFor(&#x27;app/styles&#x27;, trees.styles);
-    } else {
-      this._stylesPath = resolvePathFor(&#x27;app/styles&#x27;, trees.styles);
-    }
+    this._stylesPath = resolvePathFor(&#x27;app/styles&#x27;, trees.styles);
 
     let stylesTree = null;
     if (fs.existsSync(this._stylesPath)) {
@@ -371,7 +361,7 @@ class EmberApp {
     let publicTree = buildTreeFor(&#x27;public&#x27;, trees.public);
 
     let detectedDefaultOptions = {
-      babel: { },
+      babel: {},
       jshintrc: {
         app: this.project.root,
         tests: testsPath,
@@ -380,12 +370,14 @@ class EmberApp {
         enabled: this.isProduction,
         options: { processImport: false },
       },
+      // TODO: remove this with a deprecation (nothing in the default app/addon setup consumes it)
       minifyJS: {
         enabled: this.isProduction,
         options: {
           compress: {
             // this is adversely affects heuristics for IIFE eval
-            &#x27;negate_iife&#x27;: false,
+            // eslint-disable-next-line camelcase
+            negate_iife: false,
             // limit sequences because of memory issues during parsing
             sequences: 30,
           },
@@ -408,7 +400,6 @@ class EmberApp {
         extensions: [&#x27;js&#x27;],
       },
       trees: {
-        src: srcTree,
         app: appTree,
         tests: testsTree,
         styles: stylesTree,
@@ -445,9 +436,9 @@ class EmberApp {
 
     // Add testem.js to excludes for broccoli-asset-rev.
     // This will allow tests to run against the production builds.
-    if (this.options.fingerprint &amp;&amp; this.options.fingerprint.exclude) {
-      this.options.fingerprint.exclude.push(&#x27;testem&#x27;);
-    }
+    this.options.fingerprint = this.options.fingerprint || {};
+    this.options.fingerprint.exclude = this.options.fingerprint.exclude || [];
+    this.options.fingerprint.exclude.push(&#x27;testem&#x27;);
   }
 
   _emberCLIBabelConfigKey() {
@@ -510,25 +501,29 @@ class EmberApp {
       handlebarsVendorFiles = null;
     }
 
-    this.vendorFiles = omitBy(merge({
-      &#x27;handlebars.js&#x27;: handlebarsVendorFiles,
-      &#x27;ember.js&#x27;: {
-        development: developmentEmber,
-        production: productionEmber,
-      },
-      &#x27;ember-testing.js&#x27;: [
-        emberTesting,
-        { type: &#x27;test&#x27; },
-      ],
-      &#x27;app-shims.js&#x27;: emberShims,
-      &#x27;ember-resolver.js&#x27;: [
-        &#x60;${this.bowerDirectory}/ember-resolver/dist/modules/ember-resolver.js&#x60;, {
-          exports: {
-            &#x27;ember/resolver&#x27;: [&#x27;default&#x27;],
+    this.vendorFiles = omitBy(
+      merge(
+        {
+          &#x27;handlebars.js&#x27;: handlebarsVendorFiles,
+          &#x27;ember.js&#x27;: {
+            development: developmentEmber,
+            production: productionEmber,
           },
+          &#x27;ember-testing.js&#x27;: [emberTesting, { type: &#x27;test&#x27; }],
+          &#x27;app-shims.js&#x27;: emberShims,
+          &#x27;ember-resolver.js&#x27;: [
+            &#x60;${this.bowerDirectory}/ember-resolver/dist/modules/ember-resolver.js&#x60;,
+            {
+              exports: {
+                &#x27;ember/resolver&#x27;: [&#x27;default&#x27;],
+              },
+            },
+          ],
         },
-      ],
-    }, this.options.vendorFiles), isNull);
+        this.options.vendorFiles
+      ),
+      isNull
+    );
 
     this._addJqueryInLegacyEmber();
 
@@ -545,7 +540,9 @@ class EmberApp {
     // before checking &#x60;bower&#x60;.
     let emberCliShimsRequired = this._checkEmberCliBabel(this.project.addons);
     if (!emberShims &amp;&amp; !addonEmberCliShims &amp;&amp; !bowerEmberCliShims &amp;&amp; emberCliShimsRequired) {
-      this.project.ui.writeWarnLine(&#x27;You have not included &#x60;ember-cli-shims&#x60; in your project\&#x27;s &#x60;bower.json&#x60; or &#x60;package.json&#x60;. This only works if you provide an alternative yourself and unset &#x60;app.vendorFiles[\&#x27;app-shims.js\&#x27;]&#x60;.&#x27;);
+      this.project.ui.writeWarnLine(
+        &quot;You have not included &#x60;ember-cli-shims&#x60; in your project&#x27;s &#x60;bower.json&#x60; or &#x60;package.json&#x60;. This only works if you provide an alternative yourself and unset &#x60;app.vendorFiles[&#x27;app-shims.js&#x27;]&#x60;.&quot;
+      );
     }
 
     // If ember-testing.js is coming from Bower (not ember-source) and it does not
@@ -567,7 +564,11 @@ class EmberApp {
       if (optionFeatures &amp;&amp; !optionFeatures.isFeatureEnabled(&#x27;jquery-integration&#x27;)) {
         return;
       }
-      this.project.ui.writeDeprecateLine(&#x27;Ember will stop including jQuery by default in an upcoming version. If you wish keep using jQuery in your application explicitly add &#x60;@ember/jquery&#x60; to your package.json&#x27;);
+      this.project.ui.writeDeprecateLine(
+        &#x27;The integration of jQuery into Ember has been deprecated and will be removed with Ember 4.0. You can either&#x27; +
+          &#x27; opt-out of using jQuery, or install the &#x60;@ember/jquery&#x60; addon to provide the jQuery integration. Please&#x27; +
+          &#x27; consult the deprecation guide for further details: https://emberjs.com/deprecations/v3.x#toc_jquery-apis&#x27;
+      );
       jqueryPath = ember.paths.jquery;
     } else {
       jqueryPath = &#x60;${this.bowerDirectory}/jquery/dist/jquery.js&#x60;;
@@ -647,7 +648,7 @@ class EmberApp {
     result = result || false;
     roots = roots || {};
 
-    let babelInstance = addons.find(addon =&gt; addon.name === &#x27;ember-cli-babel&#x27;);
+    let babelInstance = addons.find((addon) =&gt; addon.name === &#x27;ember-cli-babel&#x27;);
     if (babelInstance) {
       let version = babelInstance.pkg.version;
       if (semver.lt(version, &#x27;6.6.0&#x27;)) {
@@ -655,11 +656,13 @@ class EmberApp {
       }
       if (semver.lt(version, &#x27;6.0.0&#x27;) &amp;&amp; !roots[babelInstance.root]) {
         roots[babelInstance.root] = true;
-        this.project.ui.writeDeprecateLine(&#x60;ember-cli-babel 5.x has been deprecated. Please upgrade to at least ember-cli-babel 6.6. Version ${version} located: ${babelInstance.root}&#x60;);
+        this.project.ui.writeDeprecateLine(
+          &#x60;ember-cli-babel 5.x has been deprecated. Please upgrade to at least ember-cli-babel 6.6. Version ${version} located: ${babelInstance.root}&#x60;
+        );
       }
     }
 
-    return addons.some(addon =&gt; this._checkEmberCliBabel(addon.addons, result, roots)) || result;
+    return addons.some((addon) =&gt; this._checkEmberCliBabel(addon.addons, result, roots)) || result;
   }
 
   /**
@@ -685,10 +688,10 @@ class EmberApp {
     @method _notifyAddonIncluded
   */
   _notifyAddonIncluded() {
-    let addonNames = this.project.addons.map(addon =&gt; addon.name);
+    let addonNames = this.project.addons.map((addon) =&gt; addon.name);
 
     if (this.options.addons.blacklist) {
-      this.options.addons.blacklist.forEach(addonName =&gt; {
+      this.options.addons.blacklist.forEach((addonName) =&gt; {
         if (addonNames.indexOf(addonName) === -1) {
           throw new Error(&#x60;Addon &quot;${addonName}&quot; defined in blacklist is not found&#x60;);
         }
@@ -696,7 +699,7 @@ class EmberApp {
     }
 
     if (this.options.addons.whitelist) {
-      this.options.addons.whitelist.forEach(addonName =&gt; {
+      this.options.addons.whitelist.forEach((addonName) =&gt; {
         if (addonNames.indexOf(addonName) === -1) {
           throw new Error(&#x60;Addon &quot;${addonName}&quot; defined in whitelist is not found&#x60;);
         }
@@ -705,11 +708,9 @@ class EmberApp {
 
     // the addons must be filtered before the &#x60;included&#x60; hook is called
     // in case an addon caches the project.addons list
-    this.project.addons = this.project.addons.filter(
-      addon =&gt; this.shouldIncludeAddon(addon)
-    );
+    this.project.addons = this.project.addons.filter((addon) =&gt; this.shouldIncludeAddon(addon));
 
-    this.project.addons.forEach(addon =&gt; {
+    this.project.addons.forEach((addon) =&gt; {
       if (addon.included) {
         addon.included(this);
       }
@@ -723,7 +724,7 @@ class EmberApp {
     @method _importAddonTransforms
   */
   _importAddonTransforms() {
-    this.project.addons.forEach(addon =&gt; {
+    this.project.addons.forEach((addon) =&gt; {
       if (this.shouldIncludeAddon(addon)) {
         if (addon.importTransforms) {
           let transforms = addon.importTransforms();
@@ -732,7 +733,7 @@ class EmberApp {
             throw new Error(&#x60;Addon &quot;${addon.name}&quot; did not return a transform map from importTransforms function&#x60;);
           }
 
-          Object.keys(transforms).forEach(transformName =&gt; {
+          Object.keys(transforms).forEach((transformName) =&gt; {
             let transformConfig = {
               files: [],
               options: {},
@@ -746,12 +747,16 @@ class EmberApp {
               transformConfig[&#x27;callback&#x27;] = transforms[transformName];
               transformConfig[&#x27;processOptions&#x27;] = (assetPath, entry, options) =&gt; options;
             } else {
-              throw new Error(&#x60;Addon &quot;${addon.name}&quot; did not return a callback function correctly for transform &quot;${transformName}&quot;.&#x60;);
+              throw new Error(
+                &#x60;Addon &quot;${addon.name}&quot; did not return a callback function correctly for transform &quot;${transformName}&quot;.&#x60;
+              );
             }
 
             if (this._customTransformsMap.has(transformName)) {
               // there is already a transform with a same name, therefore we warn the user
-              this.project.ui.writeWarnLine(&#x60;Addon &quot;${addon.name}&quot; is defining a transform name: ${transformName} that is already being defined. Using transform from addon: &quot;${addon.name}&quot;.&#x60;);
+              this.project.ui.writeWarnLine(
+                &#x60;Addon &quot;${addon.name}&quot; is defining a transform name: ${transformName} that is already being defined. Using transform from addon: &quot;${addon.name}&quot;.&#x60;
+              );
             }
 
             this._customTransformsMap.set(transformName, transformConfig);
@@ -797,16 +802,18 @@ class EmberApp {
     @return {Array}       List of trees
    */
   addonTreesFor(type) {
-    return this._addonTreesFor(type).map(addonBundle =&gt; addonBundle.tree);
+    return this._addonTreesFor(type).map((addonBundle) =&gt; addonBundle.tree);
   }
 
   _getDefaultPluginForType(type) {
     let plugins = this.registry.load(type);
-    let defaultsForType = plugins.filter(plugin =&gt; plugin.isDefaultForType);
+    let defaultsForType = plugins.filter((plugin) =&gt; plugin.isDefaultForType);
 
     if (defaultsForType.length &gt; 1) {
       throw new Error(
-        &#x60;There are multiple preprocessor plugins marked as default for &#x27;${type}&#x27;: ${defaultsForType.map(p =&gt; p.name).join(&#x27;, &#x27;)}&#x60;
+        &#x60;There are multiple preprocessor plugins marked as default for &#x27;${type}&#x27;: ${defaultsForType
+          .map((p) =&gt; p.name)
+          .join(&#x27;, &#x27;)}&#x60;
       );
     }
 
@@ -921,7 +928,6 @@ class EmberApp {
     return addonProcessTree(this.project, &#x27;postprocessTree&#x27;, type, tree);
   }
 
-
   /**
     Runs addon pre-processing on a given tree and returns the processed tree.
 
@@ -988,7 +994,9 @@ class EmberApp {
     for (name in this.vendorFiles) {
       let args = this.vendorFiles[name];
 
-      if (args === null) { continue; }
+      if (args === null) {
+        continue;
+      }
 
       this.import.apply(this, [].concat(args));
     }
@@ -1028,36 +1036,6 @@ class EmberApp {
     return this._cachedTemplateTree;
   }
 
-  /**
-    Returns the tree for /tests/index.html
-
-    @private
-    @method testIndex
-    @return {Tree} Tree for /tests/index.html
-   */
-  testIndex() {
-    let index = new Funnel(this.trees.tests, {
-      srcDir: &#x27;/&#x27;,
-      files: [&#x27;index.html&#x27;],
-      destDir: &#x27;/tests&#x27;,
-      annotation: &#x27;Funnel (test index)&#x27;,
-    });
-
-    let patterns = configReplacePatterns({
-      addons: this.project.addons,
-      autoRun: this.options.autoRun,
-      storeConfigInMeta: this.options.storeConfigInMeta,
-      isModuleUnification: isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;) &amp;&amp; !!this.trees.src,
-    });
-
-    return new ConfigReplace(index, this._defaultPackager.packageConfig(this.tests), {
-      configPath: path.join(this.name, &#x27;config&#x27;, &#x27;environments&#x27;, &#x27;test.json&#x27;),
-      files: [&#x27;tests/index.html&#x27;],
-      env: &#x27;test&#x27;,
-      patterns,
-    });
-  }
-
   /*
    * Gather application and add-ons javascript files and return them in a single
    * tree.
@@ -1090,12 +1068,9 @@ class EmberApp {
    * @private
    * @method getAppJavascript
    * @return {BroccoliTree}
-  */
+   */
   getAppJavascript(isPackageHookSupplied) {
-    let appTrees = [].concat(
-      this.addonTreesFor(&#x27;app&#x27;),
-      this.trees.app
-    ).filter(Boolean);
+    let appTrees = [].concat(this.addonTreesFor(&#x27;app&#x27;), this.trees.app).filter(Boolean);
 
     let mergedApp = mergeTrees(appTrees, {
       overwrite: true,
@@ -1116,24 +1091,6 @@ class EmberApp {
   }
 
   /*
-   * Returns a &#x60;src/&#x60; directory of the application or &#x60;null&#x60; if it is not
-   * present.
-   *
-   * @private
-   * @method getSrc
-   * @return {BroccoliTree}
-  */
-  getSrc() {
-    let rawSrcTree = this.trees.src;
-
-    if (!rawSrcTree) { return null; }
-
-    return new Funnel(rawSrcTree, {
-      destDir: &#x27;src&#x27;,
-    });
-  }
-
-  /*
    * Gather add-ons style (css/sass/less) files and return them in a single
    * tree.
    *
@@ -1150,7 +1107,7 @@ class EmberApp {
    * @private
    * @method getStyles
    * @return {BroccoliTree}
-  */
+   */
   getStyles() {
     let styles;
     if (this.trees.styles) {
@@ -1162,10 +1119,12 @@ class EmberApp {
     }
     let addons = this.addonTreesFor(&#x27;styles&#x27;);
 
-    return mergeTrees(addons.concat(styles), {
+    styles = mergeTrees(addons.concat(styles), {
       overwrite: true,
       annotation: &#x27;Styles&#x27;,
     });
+
+    return styles;
   }
 
   /*
@@ -1188,7 +1147,7 @@ class EmberApp {
    * @private
    * @method getAddonTemplates
    * @return {BroccoliTree}
-  */
+   */
   getAddonTemplates() {
     let addonTrees = this.addonTreesFor(&#x27;templates&#x27;);
     let mergedTemplates = mergeTrees(addonTrees, {
@@ -1211,52 +1170,28 @@ class EmberApp {
     @return {Array} An array of regular expressions.
   */
   _podTemplatePatterns() {
-    return this.registry.extensionsForType(&#x27;template&#x27;)
-      .map(extension =&gt; &#x60;**/*/template.${extension}&#x60;);
+    return this.registry.extensionsForType(&#x27;template&#x27;).map((extension) =&gt; &#x60;**/*/template.${extension}&#x60;);
   }
 
   _nodeModuleTrees() {
     if (!this._cachedNodeModuleTrees) {
-      this._cachedNodeModuleTrees = Array.from(this._nodeModules.values(), module =&gt; new Funnel(module.path, {
-        srcDir: &#x27;/&#x27;,
-        destDir: &#x60;node_modules/${module.name}/&#x60;,
-        annotation: &#x60;Funnel (node_modules/${module.name})&#x60;,
-      }));
+      this._cachedNodeModuleTrees = Array.from(
+        this._nodeModules.values(),
+        (module) =&gt;
+          new Funnel(module.path, {
+            srcDir: &#x27;/&#x27;,
+            destDir: &#x60;node_modules/${module.name}/&#x60;,
+            annotation: &#x60;Funnel (node_modules/${module.name})&#x60;,
+          })
+      );
     }
 
     return this._cachedNodeModuleTrees;
   }
 
-  _addonBundles(type, _options) {
+  _addonBundles(type) {
     if (!this._cachedAddonBundles[type]) {
-      let options = Object.assign(
-        {
-          moduleNormalizerDisabled: this.options.moduleNormalizerDisabled,
-        },
-        _options
-      );
-
       let addonBundles = this._addonTreesFor(type);
-
-      for (let addonBundle of addonBundles) {
-        let { name, root } = addonBundle;
-
-        if (isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;)) {
-          if (!options.moduleNormalizerDisabled) {
-            // move legacy /modules/addon to /addon
-            let hasAlreadyPrintedModuleDeprecation;
-            addonBundle.tree = new ModuleNormalizer(addonBundle.tree, {
-              callback: () =&gt; {
-                if (!hasAlreadyPrintedModuleDeprecation) {
-                  this.project.ui.writeDeprecateLine(&#x60;Addon &quot;${name}&quot; (found at &quot;${root}&quot;) is manually placing files in the legacy &quot;modules&quot; folder. Support for this will be removed in a future version.&#x60;);
-                  hasAlreadyPrintedModuleDeprecation = true;
-                }
-              },
-              annotation: &#x60;ModuleNormalizer (${type} ${name})&#x60;,
-            });
-          }
-        }
-      }
 
       this._cachedAddonBundles[type] = addonBundles;
     }
@@ -1267,14 +1202,17 @@ class EmberApp {
   /*
    * @private
    * @method @createAddonTree
-  */
+   */
   createAddonTree(type, outputDir, options) {
     let addonBundles = this._addonBundles(type, options);
 
-    let tree = mergeTrees(addonBundles.map(({ tree }) =&gt; tree), {
-      overwrite: true,
-      annotation: &#x60;TreeMerger (${type})&#x60;,
-    });
+    let tree = mergeTrees(
+      addonBundles.map(({ tree }) =&gt; tree),
+      {
+        overwrite: true,
+        annotation: &#x60;TreeMerger (${type})&#x60;,
+      }
+    );
 
     return new Funnel(tree, {
       destDir: outputDir,
@@ -1298,16 +1236,6 @@ class EmberApp {
     return this._cachedAddonTestSupportTree;
   }
 
-  addonSrcTree() {
-    if (!this._cachedAddonSrcTree) {
-      this._cachedAddonSrcTree = this.createAddonTree(&#x27;src&#x27;, &#x27;addon-tree-output&#x27;, {
-        moduleNormalizerDisabled: true,
-      });
-    }
-
-    return this._cachedAddonSrcTree;
-  }
-
   /*
    * Gather all dependencies external to &#x60;ember-cli&#x60;, namely:
    *
@@ -1328,22 +1256,23 @@ class EmberApp {
    * @private
    * @method getExternalTree
    * @return {BroccoliTree}
-  */
+   */
   getExternalTree() {
     if (!this._cachedExternalTree) {
       let vendorTrees = this.addonTreesFor(&#x27;vendor&#x27;);
 
       vendorTrees.push(this.trees.vendor);
 
-      let vendor = this._defaultPackager.packageVendor(mergeTrees(vendorTrees, {
-        overwrite: true,
-        annotation: &#x27;TreeMerger (vendor)&#x27;,
-      }));
+      let vendor = this._defaultPackager.packageVendor(
+        mergeTrees(vendorTrees, {
+          overwrite: true,
+          annotation: &#x27;TreeMerger (vendor)&#x27;,
+        })
+      );
 
       let addons = this.addonTree();
-      let addonsSrc = this.addonSrcTree();
 
-      let trees = [vendor].concat(addons, addonsSrc);
+      let trees = [vendor].concat(addons);
       if (this._bowerEnabled) {
         let bower = this._defaultPackager.packageBower(this.trees.bower, this.bowerDirectory);
 
@@ -1382,7 +1311,7 @@ class EmberApp {
    * @private
    * @method getTests
    * @return {BroccoliTree}
-  */
+   */
   getTests() {
     let addonTrees = this.addonTreesFor(&#x27;test-support&#x27;);
 
@@ -1435,7 +1364,7 @@ class EmberApp {
    * @private
    * @method getPublic
    * @return {BroccoliTree}
-  */
+   */
   getPublic() {
     let addonPublicTrees = this.addonTreesFor(&#x27;public&#x27;);
     addonPublicTrees = addonPublicTrees.concat(this.trees.public);
@@ -1470,16 +1399,6 @@ class EmberApp {
       });
 
       lintTrees.push(lintedApp);
-    }
-
-    if (isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;) &amp;&amp; this.trees.src) {
-      let lintedSrc = this.addonLintTree(&#x27;src&#x27;, this.trees.src);
-      lintedSrc = new Funnel(lintedSrc, {
-        destDir: &#x27;lint/src/&#x27;,
-        annotation: &#x27;Funnel (lint src)&#x27;,
-      });
-
-      lintTrees.push(lintedSrc);
     }
 
     let lintedTests = this.addonLintTree(&#x27;tests&#x27;, this.trees.tests);
@@ -1557,16 +1476,12 @@ class EmberApp {
     let extension = path.extname(assetPath);
 
     if (!extension) {
-      throw new Error(&#x27;You must pass a file to &#x60;app.import&#x60;. For directories specify them to the constructor under the &#x60;trees&#x60; option.&#x27;);
+      throw new Error(
+        &#x27;You must pass a file to &#x60;app.import&#x60;. For directories specify them to the constructor under the &#x60;trees&#x60; option.&#x27;
+      );
     }
 
-    this._import(
-      assetPath,
-      options,
-      directory,
-      subdirectory,
-      extension
-    );
+    this._import(assetPath, options, directory, subdirectory, extension);
   }
 
   /**
@@ -1587,25 +1502,25 @@ class EmberApp {
         if (!Array.isArray(options.using)) {
           throw new Error(&#x27;You must pass an array of transformations for &#x60;using&#x60; option&#x27;);
         }
-        options.using.forEach(entry =&gt; {
+        options.using.forEach((entry) =&gt; {
           if (!entry.transformation) {
-            throw new Error(&#x60;while importing ${assetPath}: each entry in the \&#x60;using\&#x60; list must have a \&#x60;transformation\&#x60; name&#x60;);
+            throw new Error(
+              &#x60;while importing ${assetPath}: each entry in the \&#x60;using\&#x60; list must have a \&#x60;transformation\&#x60; name&#x60;
+            );
           }
 
           let transformName = entry.transformation;
 
           if (!this._customTransformsMap.has(transformName)) {
             let availableTransformNames = Array.from(this._customTransformsMap.keys()).join(&#x27;,&#x27;);
-            throw new Error(&#x60;while import ${assetPath}: found an unknown transformation name ${transformName}. Available transformNames are: ${availableTransformNames}&#x60;);
+            throw new Error(
+              &#x60;while import ${assetPath}: found an unknown transformation name ${transformName}. Available transformNames are: ${availableTransformNames}&#x60;
+            );
           }
 
           // process options for the transform and update the options
           let customTransforms = this._customTransformsMap.get(transformName);
-          customTransforms.options = customTransforms.processOptions(
-            assetPath,
-            entry,
-            customTransforms.options
-          );
+          customTransforms.options = customTransforms.processOptions(assetPath, entry, customTransforms.options);
           customTransforms.files.push(assetPath);
         });
       }
@@ -1614,21 +1529,27 @@ class EmberApp {
         options.outputFile = options.outputFile || this.options.outputPaths.vendor.js;
         addOutputFile(&#x27;firstOneWins&#x27;, this._scriptOutputFiles, assetPath, options);
       } else if (options.type === &#x27;test&#x27;) {
-        if (!allowImport(&#x27;firstOneWins&#x27;, this.legacyTestFilesToAppend, assetPath, options)) { return; }
+        if (!allowImport(&#x27;firstOneWins&#x27;, this.legacyTestFilesToAppend, assetPath, options)) {
+          return;
+        }
         if (options.prepend) {
           this.legacyTestFilesToAppend.unshift(assetPath);
         } else {
           this.legacyTestFilesToAppend.push(assetPath);
         }
       } else {
-        throw new Error(&#x60;You must pass either \&#x60;vendor\&#x60; or \&#x60;test\&#x60; for options.type in your call to \&#x60;app.import\&#x60; for file: ${basename}&#x60;);
+        throw new Error(
+          &#x60;You must pass either \&#x60;vendor\&#x60; or \&#x60;test\&#x60; for options.type in your call to \&#x60;app.import\&#x60; for file: ${basename}&#x60;
+        );
       }
     } else if (extension === &#x27;.css&#x27;) {
       if (options.type === &#x27;vendor&#x27;) {
         options.outputFile = options.outputFile || this.options.outputPaths.vendor.css;
         addOutputFile(&#x27;lastOneWins&#x27;, this._styleOutputFiles, assetPath, options);
       } else {
-        if (!allowImport(&#x27;lastOneWins&#x27;, this.vendorTestStaticStyles, assetPath, options)) { return; }
+        if (!allowImport(&#x27;lastOneWins&#x27;, this.vendorTestStaticStyles, assetPath, options)) {
+          return;
+        }
         if (options.prepend) {
           this.vendorTestStaticStyles.unshift(assetPath);
         } else {
@@ -1673,11 +1594,17 @@ class EmberApp {
     assetPath = assetPath.split(&#x27;\\&#x27;).join(&#x27;/&#x27;);
 
     if (assetPath.split(&#x27;/&#x27;).length &lt; 2) {
-      console.log(chalk.red(&#x60;Using \&#x60;app.import\&#x60; with a file in the root of \&#x60;vendor/\&#x60; causes a significant performance penalty. Please move \&#x60;${assetPath}\&#x60; into a subdirectory.&#x60;));
+      console.log(
+        chalk.red(
+          &#x60;Using \&#x60;app.import\&#x60; with a file in the root of \&#x60;vendor/\&#x60; causes a significant performance penalty. Please move \&#x60;${assetPath}\&#x60; into a subdirectory.&#x60;
+        )
+      );
     }
 
     if (/[*,]/.test(assetPath)) {
-      throw new Error(&#x60;You must pass a file path (without glob pattern) to \&#x60;app.import\&#x60;.  path was: \&#x60;${assetPath}\&#x60;&#x60;);
+      throw new Error(
+        &#x60;You must pass a file path (without glob pattern) to \&#x60;app.import\&#x60;.  path was: \&#x60;${assetPath}\&#x60;&#x60;
+      );
     }
 
     return assetPath;
@@ -1697,7 +1624,6 @@ class EmberApp {
       this.getTests(),
       this.getExternalTree(),
       this.getPublic(),
-      this.getSrc(),
       this.getAppJavascript(this._isPackageHookSupplied),
     ].filter(Boolean);
   }
@@ -1714,7 +1640,7 @@ class EmberApp {
 
     let addonBundles = this._cachedAddonBundles[type];
 
-    let addonTrees = addonBundles.map(addonBundle =&gt; {
+    let addonTrees = addonBundles.map((addonBundle) =&gt; {
       let { name, tree, root } = addonBundle;
 
       let precompiledSource = tree;
@@ -1725,7 +1651,9 @@ class EmberApp {
         precompiledSource = new AmdFunnel(precompiledSource, {
           callback: () =&gt; {
             if (!hasAlreadyPrintedAmdDeprecation) {
-              this.project.ui.writeDeprecateLine(&#x60;Addon &quot;${name}&quot; (found at &quot;${root}&quot;) is manually generating AMD modules. Code should be ES6 modules only. Support for this will be removed in a future version.&#x60;);
+              this.project.ui.writeDeprecateLine(
+                &#x60;Addon &quot;${name}&quot; (found at &quot;${root}&quot;) is manually generating AMD modules. Code should be ES6 modules only. Support for this will be removed in a future version.&#x60;
+              );
               hasAlreadyPrintedAmdDeprecation = true;
             }
           },
@@ -1736,8 +1664,8 @@ class EmberApp {
       return [tree, precompiledSource];
     });
 
-    let precompiledSource = addonTrees.map(pair =&gt; pair[1]);
-    addonTrees = addonTrees.map(pair =&gt; pair[0]);
+    let precompiledSource = addonTrees.map((pair) =&gt; pair[1]);
+    addonTrees = addonTrees.map((pair) =&gt; pair[0]);
 
     precompiledSource = mergeTrees(precompiledSource, {
       overwrite: true,
@@ -1768,40 +1696,13 @@ class EmberApp {
   }
 
   _legacyPackage(fullTree) {
-    if (isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;)) {
-      fullTree = mergeTrees(
-        [
-          fullTree,
-          this._legacyAddonCompile(&#x27;addon&#x27;, &#x27;addon-tree-output&#x27;),
-          this._legacyAddonCompile(&#x27;addon-test-support&#x27;, &#x27;tests/addon-test-support&#x27;, {
-            skipTemplates: true,
-          }),
-          this._legacyAddonCompile(&#x27;src&#x27;, &#x27;addon-tree-output&#x27;, {
-            // moduleNormalizerDisabled: true,
-            amdFunnelDisabled: true,
-          }),
-        ],
-        {
-          overwrite: true,
-        }
-      );
-
-      fullTree = this._debugTree(fullTree, &#x27;postcompiledAddonTrees&#x27;);
-    }
-
     let javascriptTree = this._defaultPackager.packageJavascript(fullTree);
     let stylesTree = this._defaultPackager.packageStyles(fullTree);
     let appIndex = this._defaultPackager.processIndex(fullTree);
     let additionalAssets = this._defaultPackager.importAdditionalAssets(fullTree);
     let publicTree = this._defaultPackager.packagePublic(fullTree);
 
-    let sourceTrees = [
-      appIndex,
-      javascriptTree,
-      stylesTree,
-      additionalAssets,
-      publicTree,
-    ].filter(Boolean);
+    let sourceTrees = [appIndex, javascriptTree, stylesTree, additionalAssets, publicTree].filter(Boolean);
 
     if (this.tests &amp;&amp; this.trees.tests) {
       sourceTrees.push(this._defaultPackager.packageTests(fullTree));
@@ -1863,7 +1764,9 @@ function addOutputFile(strategy, container, assetPath, options) {
   if (!container[outputFile]) {
     container[outputFile] = [];
   }
-  if (!allowImport(strategy, container[outputFile], assetPath, options)) { return; }
+  if (!allowImport(strategy, container[outputFile], assetPath, options)) {
+    return;
+  }
 
   if (options.prepend) {
     container[outputFile].unshift(assetPath);
@@ -1878,7 +1781,9 @@ function _lastOneWins(fileList, assetPath, options) {
   let assetIndex = fileList.indexOf(assetPath);
 
   // Doesn&#x27;t exist in the current fileList. Safe to remove.
-  if (assetIndex === -1) { return true; }
+  if (assetIndex === -1) {
+    return true;
+  }
 
   logger.info(&#x60;Highlander Rule: duplicate \&#x60;app.import(${assetPath})\&#x60;. Only including the last by order.&#x60;);
 
@@ -1903,7 +1808,9 @@ function _firstOneWins(fileList, assetPath, options) {
   let assetIndex = fileList.indexOf(assetPath);
 
   // Doesn&#x27;t exist in the current fileList. Safe to remove.
-  if (assetIndex === -1) { return true; }
+  if (assetIndex === -1) {
+    return true;
+  }
 
   logger.info(&#x60;Highlander Rule: duplicate \&#x60;app.import(${assetPath})\&#x60;. Only including the first by order.&#x60;);
 

@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -91,7 +94,6 @@ const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:npm-task&#
 const Task = require(&#x27;../models/task&#x27;);
 
 class NpmTask extends Task {
-
   /**
    * @private
    * @class NpmTask
@@ -121,19 +123,38 @@ class NpmTask extends Task {
     return isYarnProject(this.project.root);
   }
 
-  checkYarn() {
-    return this.yarn([&#x27;--version&#x27;]).then(result =&gt; {
+  async checkYarn() {
+    try {
+      let result = await this.yarn([&#x27;--version&#x27;]);
       let version = result.stdout;
-      logger.info(&#x27;yarn --version: %s&#x27;, version);
 
-    }).catch(error =&gt; {
+      if (semver.gte(version, &#x27;2.0.0&#x27;)) {
+        logger.warn(&#x27;yarn --version: %s&#x27;, version);
+        this.ui.writeWarnLine(&#x60;Yarn v2 is not fully supported. Proceeding with yarn: ${version}&#x60;);
+      } else {
+        logger.info(&#x27;yarn --version: %s&#x27;, version);
+      }
+
+      this.useYarn = true;
+
+      return { yarnVersion: version };
+    } catch (error) {
       logger.error(&#x27;yarn --version failed: %s&#x27;, error);
+
+      if (error.code === &#x27;ENOENT&#x27;) {
+        throw new SilentError(
+          &#x27;Ember CLI is now using yarn, but was not able to find it.\n&#x27; +
+            &#x27;Please install yarn using the instructions at https://classic.yarnpkg.com/en/docs/install&#x27;
+        );
+      }
+
       throw error;
-    });
+    }
   }
 
-  checkNpmVersion() {
-    return this.npm([&#x27;--version&#x27;]).then(result =&gt; {
+  async checkNpmVersion() {
+    try {
+      let result = await this.npm([&#x27;--version&#x27;]);
       let version = result.stdout;
       logger.info(&#x27;npm --version: %s&#x27;, version);
 
@@ -143,25 +164,31 @@ class NpmTask extends Task {
 
         let below = semver.ltr(version, this.versionConstraints);
         if (below) {
-          throw new SilentError(&#x27;Ember CLI is now using the global npm, but your npm version is outdated.\n&#x27; +
-            &#x27;Please update your global npm version by running: npm install -g npm&#x27;);
+          throw new SilentError(
+            &#x27;Ember CLI is now using the global npm, but your npm version is outdated.\n&#x27; +
+              &#x27;Please update your global npm version by running: npm install -g npm&#x27;
+          );
         }
 
-        this.ui.writeWarnLine(&#x27;Ember CLI is using the global npm, but your npm version has not yet been &#x27; +
-          &#x27;verified to work with the current Ember CLI release.&#x27;);
+        this.ui.writeWarnLine(
+          &#x27;Ember CLI is using the global npm, but your npm version has not yet been &#x27; +
+            &#x27;verified to work with the current Ember CLI release.&#x27;
+        );
       }
 
       return { npmVersion: version };
-    }).catch(error =&gt; {
+    } catch (error) {
       logger.error(&#x27;npm --version failed: %s&#x27;, error);
 
       if (error.code === &#x27;ENOENT&#x27;) {
-        throw new SilentError(&#x27;Ember CLI is now using the global npm, but was not able to find it.\n&#x27; +
-          &#x27;Please install npm using the instructions at https://github.com/npm/npm&#x27;);
+        throw new SilentError(
+          &#x27;Ember CLI is now using the global npm, but was not able to find it.\n&#x27; +
+            &#x27;Please install npm using the instructions at https://github.com/npm/npm&#x27;
+        );
       }
 
       throw error;
-    });
+    }
   }
 
   /**
@@ -178,17 +205,10 @@ class NpmTask extends Task {
    * @method findPackageManager
    * @return {Promise}
    */
-  findPackageManager() {
+  async findPackageManager() {
     if (this.useYarn === true) {
       logger.info(&#x27;yarn requested -&gt; trying yarn&#x27;);
-
-      return this.checkYarn().catch(error =&gt; {
-        if (error.code === &#x27;ENOENT&#x27;) {
-          throw new SilentError(&#x27;Yarn could not be found.&#x27;);
-        }
-
-        throw error;
-      });
+      return this.checkYarn();
     }
 
     if (this.useYarn === false) {
@@ -202,54 +222,55 @@ class NpmTask extends Task {
     }
 
     logger.info(&#x27;yarn.lock found -&gt; trying yarn&#x27;);
-    return this.checkYarn()
-      .then(() =&gt; {
-        logger.info(&#x27;yarn found -&gt; using yarn&#x27;);
-        this.useYarn = true;
-      })
-      .catch(() =&gt; {
-        logger.info(&#x27;yarn not found -&gt; using npm&#x27;);
-        return this.checkNpmVersion();
-      });
+    try {
+      const yarnResult = await this.checkYarn();
+      logger.info(&#x27;yarn found -&gt; using yarn&#x27;);
+      return yarnResult;
+    } catch (_err) {
+      logger.info(&#x27;yarn not found -&gt; using npm&#x27;);
+      return this.checkNpmVersion();
+    }
   }
 
-  run(options) {
+  async run(options) {
     this.useYarn = options.useYarn;
 
-    return this.findPackageManager().then(result =&gt; {
-      let ui = this.ui;
-      let startMessage = this.formatStartMessage(options.packages);
-      let completeMessage = this.formatCompleteMessage(options.packages);
+    let result = await this.findPackageManager();
+    let ui = this.ui;
+    let startMessage = this.formatStartMessage(options.packages);
+    let completeMessage = this.formatCompleteMessage(options.packages);
 
-      ui.startProgress(chalk.green(startMessage));
+    const prependEmoji = require(&#x27;../../lib/utilities/prepend-emoji&#x27;);
 
-      let promise;
-      if (this.useYarn) {
-        let args = this.toYarnArgs(this.command, options);
-        promise = this.yarn(args);
-      } else {
-        let args = this.toNpmArgs(this.command, options);
-        promise = this.npm(args);
+    ui.writeLine(&#x27;&#x27;);
+    ui.writeLine(prependEmoji(&#x27;🚧&#x27;, &#x27;Installing packages... This might take a couple of minutes.&#x27;));
+    ui.startProgress(chalk.green(startMessage));
 
-        // as of 2018-10-09 npm 5 and 6 _break_ the heirarchy of &#x60;node_modules&#x60;
-        // after a &#x60;npm install foo&#x60; (deletes files/folders other than
-        // what was directly installed) in some circumstances, see:
-        //
-        // * https://github.com/npm/npm/issues/16853
-        // * https://github.com/npm/npm/issues/17379
-        //
-        // this ensures that we run a full &#x60;npm install&#x60; **after** any &#x60;npm
-        // install foo&#x60; runs to ensure that we have a fully functional
-        // node_modules heirarchy
-        if (result.npmVersion &amp;&amp; semver.gte(result.npmVersion, &#x27;5.0.0&#x27;)) {
-          promise = promise.then(() =&gt; this.npm([&#x27;install&#x27;]));
-        }
+    let promise;
+    if (this.useYarn) {
+      this.yarnVersion = result.yarnVersion;
+      let args = this.toYarnArgs(this.command, options);
+      promise = this.yarn(args);
+    } else {
+      let args = this.toNpmArgs(this.command, options);
+      promise = this.npm(args);
+
+      // as of 2018-10-09 npm 5 and 6 _break_ the hierarchy of &#x60;node_modules&#x60;
+      // after a &#x60;npm install foo&#x60; (deletes files/folders other than
+      // what was directly installed) in some circumstances, see:
+      //
+      // * https://github.com/npm/npm/issues/16853
+      // * https://github.com/npm/npm/issues/17379
+      //
+      // this ensures that we run a full &#x60;npm install&#x60; **after** any &#x60;npm
+      // install foo&#x60; runs to ensure that we have a fully functional
+      // node_modules hierarchy
+      if (result.npmVersion &amp;&amp; semver.lt(result.npmVersion, &#x27;5.7.1&#x27;)) {
+        promise = promise.then(() =&gt; this.npm([&#x27;install&#x27;]));
       }
+    }
 
-      return promise
-        .finally(() =&gt; ui.stopProgress())
-        .then(() =&gt; ui.writeLine(chalk.green(completeMessage)));
-    });
+    return promise.finally(() =&gt; ui.stopProgress()).then(() =&gt; ui.writeLine(chalk.green(completeMessage)));
   }
 
   toNpmArgs(command, options) {
@@ -307,7 +328,6 @@ class NpmTask extends Task {
       }
     } else if (command === &#x27;uninstall&#x27;) {
       args.push(&#x27;remove&#x27;);
-
     } else {
       throw new Error(&#x60;npm command &quot;${command}&quot; can not be translated to Yarn command&#x60;);
     }
@@ -320,7 +340,12 @@ class NpmTask extends Task {
       args = args.concat(options.packages);
     }
 
-    args.push(&#x27;--non-interactive&#x27;);
+    // Yarn v2 defaults to non-interactive
+    // with an optional -i flag
+
+    if (semver.lt(this.yarnVersion, &#x27;2.0.0&#x27;)) {
+      args.push(&#x27;--non-interactive&#x27;);
+    }
 
     return args;
   }

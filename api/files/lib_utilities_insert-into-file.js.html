@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -80,10 +83,6 @@
 
 const fs = require(&#x27;fs-extra&#x27;);
 const EOL = require(&#x27;os&#x27;).EOL;
-const RSVP = require(&#x27;rsvp&#x27;);
-
-const Promise = RSVP.Promise;
-const writeFile = RSVP.denodeify(fs.outputFile);
 
 /**
   Inserts the given content into a file. If the &#x60;contentsToInsert&#x60; string is already
@@ -129,7 +128,7 @@ const writeFile = RSVP.denodeify(fs.outputFile);
   @param {Object} providedOptions
   @return {Promise}
 */
-function insertIntoFile(fullPath, contentsToInsert, providedOptions) {
+async function insertIntoFile(fullPath, contentsToInsert, providedOptions) {
   let options = providedOptions || {};
 
   let returnValue = {
@@ -154,10 +153,16 @@ function insertIntoFile(fullPath, contentsToInsert, providedOptions) {
     let insert = !alreadyPresent;
     let insertBehavior = &#x27;end&#x27;;
 
-    if (options.before) { insertBehavior = &#x27;before&#x27;; }
-    if (options.after) { insertBehavior = &#x27;after&#x27;; }
+    if (options.before) {
+      insertBehavior = &#x27;before&#x27;;
+    }
+    if (options.after) {
+      insertBehavior = &#x27;after&#x27;;
+    }
 
-    if (options.force) { insert = true; }
+    if (options.force) {
+      insert = true;
+    }
 
     if (insert) {
       if (insertBehavior === &#x27;end&#x27;) {
@@ -174,11 +179,12 @@ function insertIntoFile(fullPath, contentsToInsert, providedOptions) {
 
         if (contentMarkerIndex !== -1) {
           let insertIndex = contentMarkerIndex;
-          if (insertBehavior === &#x27;after&#x27;) { insertIndex += contentMarker.length; }
+          if (insertBehavior === &#x27;after&#x27;) {
+            insertIndex += contentMarker.length;
+          }
 
-          contentsToWrite = contentsToWrite.slice(0, insertIndex) +
-            contentsToInsert + EOL +
-            contentsToWrite.slice(insertIndex);
+          contentsToWrite =
+            contentsToWrite.slice(0, insertIndex) + contentsToInsert + EOL + contentsToWrite.slice(insertIndex);
         }
       }
     }
@@ -189,8 +195,8 @@ function insertIntoFile(fullPath, contentsToInsert, providedOptions) {
     if (contentsToWrite !== originalContents) {
       returnValue.inserted = true;
 
-      return writeFile(fullPath, contentsToWrite)
-        .then(() =&gt; returnValue);
+      await fs.outputFile(fullPath, contentsToWrite);
+      return returnValue;
     }
   }
 

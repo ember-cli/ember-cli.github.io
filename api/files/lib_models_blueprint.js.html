@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -82,7 +85,6 @@
 @module ember-cli
 */
 const FileInfo = require(&#x27;./file-info&#x27;);
-const RSVP = require(&#x27;rsvp&#x27;);
 const chalk = require(&#x27;chalk&#x27;);
 const MarkdownColor = require(&#x27;../utilities/markdown-color&#x27;);
 const sequence = require(&#x27;../utilities/sequence&#x27;);
@@ -104,13 +106,7 @@ const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:blueprint&
 const normalizeEntityName = require(&#x27;ember-cli-normalize-entity-name&#x27;);
 const isAddon = require(&#x27;../utilities/is-addon&#x27;);
 
-const Promise = RSVP.Promise;
-const stat = RSVP.denodeify(fs.stat);
-const writeFile = RSVP.denodeify(fs.outputFile);
-
-const initialIgnoredFiles = [
-  &#x27;.DS_Store&#x27;,
-];
+const initialIgnoredFiles = [&#x27;.DS_Store&#x27;];
 
 /**
   A blueprint is a bundle of template files with optional install
@@ -247,7 +243,7 @@ const initialIgnoredFiles = [
   ### beforeInstall &amp; beforeUninstall
 
   Called before any of the template files are processed and receives
-  the the &#x60;options&#x60; and &#x60;locals&#x60; hashes as parameters. Typically used for
+  the &#x60;options&#x60; and &#x60;locals&#x60; hashes as parameters. Typically used for
   validating any additional command line options or for any asynchronous
   setup that is needed.   As an example, the &#x60;controller&#x60; blueprint validates
   its &#x60;--type&#x60; option in this hook.  If you need to run any asynchronous code,
@@ -278,13 +274,7 @@ let Blueprint = CoreObject.extend({
   availableOptions: [],
   anonymousOptions: [&#x27;name&#x27;],
 
-  _printableProperties: [
-    &#x27;name&#x27;,
-    &#x27;description&#x27;,
-    &#x27;availableOptions&#x27;,
-    &#x27;anonymousOptions&#x27;,
-    &#x27;overridden&#x27;,
-  ],
+  _printableProperties: [&#x27;name&#x27;, &#x27;description&#x27;, &#x27;availableOptions&#x27;, &#x27;anonymousOptions&#x27;, &#x27;overridden&#x27;],
 
   init(blueprintPath) {
     this._super();
@@ -318,7 +308,9 @@ let Blueprint = CoreObject.extend({
     @return {Array} Contents of the blueprint&#x27;s files directory
   */
   files() {
-    if (this._files) { return this._files; }
+    if (this._files) {
+      return this._files;
+    }
 
     let filesPath = this.filesPath(this.options);
     if (Blueprint._existsSync(filesPath)) {
@@ -379,9 +371,9 @@ let Blueprint = CoreObject.extend({
     @param {Object} info
     @return {Promise}
   */
-  _writeFile(info) {
+  async _writeFile(info) {
     if (!this.dryRun) {
-      return writeFile(info.outputPath, info.render());
+      return fs.outputFile(info.outputPath, await info.render());
     }
   },
 
@@ -448,9 +440,13 @@ let Blueprint = CoreObject.extend({
   */
   _checkForPod(verbose) {
     if (!this.hasPathToken &amp;&amp; this.pod &amp;&amp; verbose) {
-      this.ui.writeLine(chalk.yellow(&#x27;You specified the pod flag, but this&#x27; +
-        &#x27; blueprint does not support pod structure. It will be generated with&#x27; +
-        &#x27; the default structure.&#x27;));
+      this.ui.writeLine(
+        chalk.yellow(
+          &#x27;You specified the pod flag, but this&#x27; +
+            &#x27; blueprint does not support pod structure. It will be generated with&#x27; +
+            &#x27; the default structure.&#x27;
+        )
+      );
     }
   },
 
@@ -477,15 +473,19 @@ let Blueprint = CoreObject.extend({
       addon = findAddonByName(this.project, options.inRepoAddon);
 
       if (!addon) {
-        throw new SilentError(&#x60;You specified the &#x27;in-repo-addon&#x27; flag, but the &#x60; +
-          &#x60;in-repo-addon &#x27;${options.inRepoAddon}&#x27; does not exist. Please check the name and try again.&#x60;);
+        throw new SilentError(
+          &#x60;You specified the &#x27;in-repo-addon&#x27; flag, but the &#x60; +
+            &#x60;in-repo-addon &#x27;${options.inRepoAddon}&#x27; does not exist. Please check the name and try again.&#x60;
+        );
       }
     }
 
     if (options.in) {
       if (!ensureTargetDirIsAddon(options.in)) {
-        throw new SilentError(&#x60;You specified the &#x27;in&#x27; flag, but the &#x60; +
-          &#x60;in repo addon &#x27;${options.in}&#x27; does not exist. Please check the name and try again.&#x60;);
+        throw new SilentError(
+          &#x60;You specified the &#x27;in&#x27; flag, but the &#x60; +
+            &#x60;in repo addon &#x27;${options.in}&#x27; does not exist. Please check the name and try again.&#x60;
+        );
       }
     }
   },
@@ -498,15 +498,22 @@ let Blueprint = CoreObject.extend({
     @param {Function} process
     @param {Function} afterHook
   */
-  _process(options, beforeHook, process, afterHook) {
+  async _process(options, beforeHook, process, afterHook) {
     let intoDir = options.target;
 
-    return this._locals(options)
-      .then(locals =&gt; Promise.resolve()
-        .then(beforeHook.bind(this, options, locals))
-        .then(process.bind(this, intoDir, locals))
-        .then(promises =&gt; RSVP.map(promises, this._commit.bind(this)))
-        .then(afterHook.bind(this, options)));
+    let locals = await this._locals(options);
+
+    // run beforeInstall/beforeUninstall userland hooks
+    await beforeHook.call(this, options, locals);
+
+    // gather fileInfos to be processed
+    let fileInfos = await process.call(this, intoDir, locals);
+
+    // commit changes for each FileInfo (with prompting as needed)
+    await Promise.all(fileInfos.map((fi) =&gt; this._commit(fi)));
+
+    // run afterInstall/afterUninstall userland hooks
+    await afterHook.call(this, options);
   },
 
   /**
@@ -515,8 +522,8 @@ let Blueprint = CoreObject.extend({
     @return {Promise}
   */
   install(options) {
-    let ui = this.ui = options.ui;
-    let dryRun = this.dryRun = options.dryRun;
+    let ui = (this.ui = options.ui);
+    let dryRun = (this.dryRun = options.dryRun);
     this.project = options.project;
     this.pod = options.pod;
     this.options = options;
@@ -525,8 +532,7 @@ let Blueprint = CoreObject.extend({
     ui.writeLine(&#x60;installing ${this.name}&#x60;);
 
     if (dryRun) {
-      ui.writeLine(chalk.yellow(&#x27;You specified the dry-run flag, so no&#x27; +
-        &#x27; changes will be written.&#x27;));
+      ui.writeLine(chalk.yellow(&#x27;You specified the dry-run flag, so no&#x27; + &#x27; changes will be written.&#x27;));
     }
 
     this._normalizeEntityName(options.entity);
@@ -535,8 +541,9 @@ let Blueprint = CoreObject.extend({
 
     logger.info(&#x27;START: processing blueprint: &#x60;%s&#x60;&#x27;, this.name);
     let start = new Date();
-    return this._process(options, this.beforeInstall, this.processFiles, this.afterInstall)
-      .finally(() =&gt; logger.info(&#x27;END: processing blueprint: &#x60;%s&#x60; in (%dms)&#x27;, this.name, new Date() - start));
+    return this._process(options, this.beforeInstall, this.processFiles, this.afterInstall).finally(() =&gt;
+      logger.info(&#x27;END: processing blueprint: &#x60;%s&#x60; in (%dms)&#x27;, this.name, new Date() - start)
+    );
   },
 
   /**
@@ -545,8 +552,8 @@ let Blueprint = CoreObject.extend({
     @return {Promise}
   */
   uninstall(options) {
-    let ui = this.ui = options.ui;
-    let dryRun = this.dryRun = options.dryRun;
+    let ui = (this.ui = options.ui);
+    let dryRun = (this.dryRun = options.dryRun);
     this.project = options.project;
     this.pod = options.pod;
     this.options = options;
@@ -555,18 +562,13 @@ let Blueprint = CoreObject.extend({
     ui.writeLine(&#x60;uninstalling ${this.name}&#x60;);
 
     if (dryRun) {
-      ui.writeLine(chalk.yellow(&#x27;You specified the dry-run flag, so no&#x27; +
-        &#x27; files will be deleted.&#x27;));
+      ui.writeLine(chalk.yellow(&#x27;You specified the dry-run flag, so no&#x27; + &#x27; files will be deleted.&#x27;));
     }
 
     this._normalizeEntityName(options.entity);
     this._checkForPod(options.verbose);
 
-    return this._process(
-      options,
-      this.beforeUninstall,
-      this.processFilesForUninstall,
-      this.afterUninstall);
+    return this._process(options, this.beforeUninstall, this.processFilesForUninstall, this.afterUninstall);
   },
 
   /**
@@ -605,7 +607,7 @@ let Blueprint = CoreObject.extend({
     When the following is called on the command line:
 
     &#x60;&#x60;&#x60;sh
-    ember generate controller foo --type=array --dry-run
+    ember generate controller foo --type=array --dry-run isAdmin:true
     &#x60;&#x60;&#x60;
 
     The object passed to &#x60;locals&#x60; looks like this:
@@ -615,10 +617,12 @@ let Blueprint = CoreObject.extend({
       entity: {
         name: &#x27;foo&#x27;,
         options: {
-          type: &#x27;array&#x27;
+          isAdmin: true
         }
       },
       dryRun: true
+      type: &quot;array&quot;
+      // more keys
     }
     &#x60;&#x60;&#x60;
 
@@ -726,7 +730,7 @@ let Blueprint = CoreObject.extend({
   generateFileMap(fileMapVariables) {
     let tokens = this._fileMapTokens(fileMapVariables);
     let fileMapValues = _.values(tokens);
-    let tokenValues = fileMapValues.map(token =&gt; token(fileMapVariables));
+    let tokenValues = fileMapValues.map((token) =&gt; token(fileMapVariables));
     let tokenKeys = Object.keys(tokens);
     return _.zipObject(tokenKeys, tokenValues);
   },
@@ -808,8 +812,9 @@ let Blueprint = CoreObject.extend({
   */
   _checkForNoMatch(fileInfos, rawArgs) {
     if (fileInfos.filter(isFilePath).length &lt; 1 &amp;&amp; rawArgs) {
-      this.ui.writeLine(chalk.yellow(&#x60;The globPattern &quot;${rawArgs}&quot; &#x60; +
-        &#x60;did not match any files, so no file updates will be made.&#x60;));
+      this.ui.writeLine(
+        chalk.yellow(&#x60;The globPattern &quot;${rawArgs}&quot; &#x60; + &#x60;did not match any files, so no file updates will be made.&#x60;)
+      );
     }
   },
 
@@ -817,6 +822,7 @@ let Blueprint = CoreObject.extend({
     @method processFiles
     @param {String} intoDir
     @param {Object} templateVariables
+    @return {Promise&lt;FileInfo[]&gt;}
   */
   processFiles(intoDir, templateVariables) {
     let files = this._getFilesForInstall(templateVariables.targetFiles);
@@ -829,10 +835,9 @@ let Blueprint = CoreObject.extend({
 
     fileInfosToRemove = finishProcessingForUninstall(fileInfosToRemove);
 
-    return RSVP.filter(fileInfos, isValidFile)
-      .then(promises =&gt; RSVP.map(promises, prepareConfirm))
+    return Promise.all(fileInfos.filter(isValidFile).map(prepareConfirm))
       .then(finishProcessingForInstall)
-      .then(fileInfos =&gt; fileInfos.concat(fileInfosToRemove));
+      .then((fileInfos) =&gt; fileInfos.concat(fileInfosToRemove));
   },
 
   /**
@@ -845,8 +850,7 @@ let Blueprint = CoreObject.extend({
 
     this._ignoreUpdateFiles();
 
-    return RSVP.filter(fileInfos, isValidFile).
-      then(finishProcessingForUninstall);
+    return finishProcessingForUninstall(fileInfos.filter(isValidFile));
   },
 
   /**
@@ -875,7 +879,7 @@ let Blueprint = CoreObject.extend({
     @return {Boolean}
   */
   supportsAddon() {
-    return (/__root__/).test(this.files().join());
+    return /__root__/.test(this.files().join());
   },
 
   /**
@@ -919,9 +923,9 @@ let Blueprint = CoreObject.extend({
     let moduleName = (options.entity &amp;&amp; options.entity.name) || packageName;
     let sanitizedModuleName = moduleName.replace(/\//g, &#x27;-&#x27;);
 
-    return new Promise(resolve =&gt; {
+    return new Promise((resolve) =&gt; {
       resolve(this.locals(options));
-    }).then(customLocals =&gt; {
+    }).then((customLocals) =&gt; {
       let fileMapVariables = this._generateFileMapVariables(moduleName, customLocals, options);
       let fileMap = this.generateFileMap(fileMapVariables);
       let standardLocals = {
@@ -987,7 +991,7 @@ let Blueprint = CoreObject.extend({
   */
   addPackagesToProject(packages) {
     let task = this.taskFor(&#x27;npm-install&#x27;);
-    let installText = (packages.length &gt; 1) ? &#x27;install packages&#x27; : &#x27;install package&#x27;;
+    let installText = packages.length &gt; 1 ? &#x27;install packages&#x27; : &#x27;install package&#x27;;
     let packageNames = [];
     let packageArray = [];
 
@@ -1044,7 +1048,7 @@ let Blueprint = CoreObject.extend({
   */
   removePackagesFromProject(packages) {
     let task = this.taskFor(&#x27;npm-uninstall&#x27;);
-    let installText = (packages.length &gt; 1) ? &#x27;uninstall packages&#x27; : &#x27;uninstall package&#x27;;
+    let installText = packages.length &gt; 1 ? &#x27;uninstall packages&#x27; : &#x27;uninstall package&#x27;;
     let packageNames = [];
 
     let projectDependencies = this.project.dependencies();
@@ -1118,13 +1122,15 @@ let Blueprint = CoreObject.extend({
   */
   addBowerPackagesToProject(packages, installOptions) {
     let task = this.taskFor(&#x27;bower-install&#x27;);
-    let installText = (packages.length &gt; 1) ? &#x27;install bower packages&#x27; : &#x27;install bower package&#x27;;
+    let installText = packages.length &gt; 1 ? &#x27;install bower packages&#x27; : &#x27;install bower package&#x27;;
     let packageNames = [];
-    let packageNamesAndVersions = packages.map(pkg =&gt; {
-      pkg.source = pkg.source || pkg.name;
-      packageNames.push(pkg.name);
-      return pkg;
-    }).map(bowEpParser.compose);
+    let packageNamesAndVersions = packages
+      .map((pkg) =&gt; {
+        pkg.source = pkg.source || pkg.name;
+        packageNames.push(pkg.name);
+        return pkg;
+      })
+      .map(bowEpParser.compose);
 
     this._writeStatusToUI(chalk.green, installText, packageNames.join(&#x27;, &#x27;));
 
@@ -1176,7 +1182,7 @@ let Blueprint = CoreObject.extend({
 
     let packages = options.packages;
     if (packages &amp;&amp; packages.length) {
-      taskOptions.packages = packages.map(pkg =&gt; {
+      taskOptions.packages = packages.map((pkg) =&gt; {
         if (typeof pkg === &#x27;string&#x27;) {
           return pkg;
         }
@@ -1195,7 +1201,7 @@ let Blueprint = CoreObject.extend({
       throw new SilentError(&#x27;You must provide package to addAddonsToProject&#x27;);
     }
 
-    let installText = (packages.length &gt; 1) ? &#x27;install addons&#x27; : &#x27;install addon&#x27;;
+    let installText = packages.length &gt; 1 ? &#x27;install addons&#x27; : &#x27;install addon&#x27;;
     this._writeStatusToUI(chalk.green, installText, taskOptions[&#x27;packages&#x27;].join(&#x27;, &#x27;));
 
     return this.taskFor(&#x27;addon-install&#x27;).run(taskOptions);
@@ -1300,11 +1306,11 @@ let Blueprint = CoreObject.extend({
 
   getJson(verbose) {
     let json = {};
-    this._printableProperties.forEach(key =&gt; {
+    this._printableProperties.forEach((key) =&gt; {
       let value = this[key];
       if (key === &#x27;availableOptions&#x27;) {
         value = _.cloneDeep(value);
-        value.forEach(option =&gt; {
+        value.forEach((option) =&gt; {
           if (typeof option.type === &#x27;function&#x27;) {
             option.type = option.type.name;
           }
@@ -1351,7 +1357,7 @@ let Blueprint = CoreObject.extend({
     matching Blueprint could not be found
   @return {Blueprint}
 */
-Blueprint.lookup = function(name, options) {
+Blueprint.lookup = function (name, options) {
   options = options || {};
 
   let lookupPaths = generateLookupPaths(options.paths);
@@ -1378,7 +1384,7 @@ Blueprint.lookup = function(name, options) {
   @param {String} blueprintPath
   @return {Blueprint} blueprint instance
 */
-Blueprint.load = function(blueprintPath) {
+Blueprint.load = function (blueprintPath) {
   if (fs.lstatSync(blueprintPath).isDirectory()) {
     let Constructor = Blueprint;
 
@@ -1405,13 +1411,13 @@ Blueprint.load = function(blueprintPath) {
   @param {Array} [options.paths] Extra paths to search for blueprints
   @return {Array}
 */
-Blueprint.list = function(options) {
+Blueprint.list = function (options) {
   options = options || {};
 
   let lookupPaths = generateLookupPaths(options.paths);
   let seen = [];
 
-  return lookupPaths.map(lookupPath =&gt; {
+  return lookupPaths.map((lookupPath) =&gt; {
     let source;
     let packagePath = path.join(lookupPath, &#x27;../package.json&#x27;);
     if (Blueprint._existsSync(packagePath)) {
@@ -1420,7 +1426,7 @@ Blueprint.list = function(options) {
       source = path.basename(path.join(lookupPath, &#x27;..&#x27;));
     }
 
-    let blueprints = dir(lookupPath).map(blueprintPath =&gt; {
+    let blueprints = dir(lookupPath).map((blueprintPath) =&gt; {
       let blueprint = Blueprint.load(blueprintPath);
       if (blueprint) {
         let name = blueprint.name;
@@ -1438,11 +1444,11 @@ Blueprint.list = function(options) {
   });
 };
 
-Blueprint._existsSync = function(path, parent) {
+Blueprint._existsSync = function (path, parent) {
   return fs.existsSync(path, parent);
 };
 
-Blueprint._readdirSync = function(path) {
+Blueprint._readdirSync = function (path) {
   return fs.readdirSync(path);
 };
 
@@ -1458,7 +1464,7 @@ Blueprint._readdirSync = function(path) {
   @property renamedFiles
 */
 Blueprint.renamedFiles = {
-  &#x27;gitignore&#x27;: &#x27;.gitignore&#x27;,
+  gitignore: &#x27;.gitignore&#x27;,
 };
 
 /**
@@ -1471,20 +1477,14 @@ Blueprint.ignoredFiles = initialIgnoredFiles;
   @static
   @property ignoredUpdateFiles
 */
-Blueprint.ignoredUpdateFiles = [
-  &#x27;.gitkeep&#x27;,
-  &#x27;app.css&#x27;,
-  &#x27;LICENSE.md&#x27;,
-];
+Blueprint.ignoredUpdateFiles = [&#x27;.gitkeep&#x27;, &#x27;app.css&#x27;, &#x27;LICENSE.md&#x27;];
 
 /**
   @static
   @property defaultLookupPaths
 */
-Blueprint.defaultLookupPaths = function() {
-  return [
-    path.resolve(__dirname, &#x27;..&#x27;, &#x27;..&#x27;, &#x27;blueprints&#x27;),
-  ];
+Blueprint.defaultLookupPaths = function () {
+  return [path.resolve(__dirname, &#x27;..&#x27;, &#x27;..&#x27;, &#x27;blueprints&#x27;)];
 };
 
 /**
@@ -1494,7 +1494,7 @@ Blueprint.defaultLookupPaths = function() {
   @return {Promise}
 */
 function prepareConfirm(info) {
-  return info.checkForConflict().then(resolution =&gt; {
+  return info.checkForConflict().then((resolution) =&gt; {
     info.resolution = resolution;
     return info;
   });
@@ -1536,16 +1536,6 @@ function gatherConfirmationMessages(collection, info) {
 
 /**
   @private
-  @method isFile
-  @param {FileInfo} info
-  @return {Promise}
-*/
-function isFile(info) {
-  return stat(info.inputPath).then(it =&gt; it.isFile());
-}
-
-/**
-  @private
   @method isIgnored
   @param {FileInfo} info
   @return {Boolean}
@@ -1553,7 +1543,7 @@ function isFile(info) {
 function isIgnored(info) {
   let fn = info.inputPath;
 
-  return Blueprint.ignoredFiles.some(ignoredFile =&gt; minimatch(fn, ignoredFile, { matchBase: true }));
+  return Blueprint.ignoredFiles.some((ignoredFile) =&gt; minimatch(fn, ignoredFile, { matchBase: true }));
 }
 
 /**
@@ -1581,17 +1571,17 @@ function generateLookupPaths(lookupPaths) {
   @return {Boolean}
 */
 function hasPathToken(files) {
-  return (/__path__/).test(files.join());
+  return /__path__/.test(files.join());
 }
 
 function findAddonByName(addonOrProject, name) {
-  let addon = addonOrProject.addons.find(addon =&gt; addon.name === name);
+  let addon = addonOrProject.addons.find((addon) =&gt; addon.name === name);
 
   if (addon) {
     return addon;
   }
 
-  return addonOrProject.addons.find(addon =&gt; findAddonByName(addon, name));
+  return addonOrProject.addons.find((addon) =&gt; findAddonByName(addon, name));
 }
 
 function ensureTargetDirIsAddon(addonPath) {
@@ -1618,9 +1608,9 @@ function ensureTargetDirIsAddon(addonPath) {
 */
 function isValidFile(fileInfo) {
   if (isIgnored(fileInfo)) {
-    return Promise.resolve(false);
+    return false;
   } else {
-    return isFile(fileInfo);
+    return isFilePath(fileInfo);
   }
 }
 
@@ -1641,7 +1631,7 @@ function isFilePath(fileInfo) {
 */
 function dir(fullPath) {
   if (Blueprint._existsSync(fullPath)) {
-    return Blueprint._readdirSync(fullPath).map(fileName =&gt; path.join(fullPath, fileName));
+    return Blueprint._readdirSync(fullPath).map((fileName) =&gt; path.join(fullPath, fileName));
   } else {
     return [];
   }
@@ -1666,7 +1656,7 @@ function finishProcessingForInstall(infos) {
 }
 
 function finishProcessingForUninstall(infos) {
-  let validInfos = infos.filter(info =&gt; fs.existsSync(info.outputPath));
+  let validInfos = infos.filter((info) =&gt; fs.existsSync(info.outputPath));
   validInfos.forEach(markToBeRemoved);
 
   return validInfos;

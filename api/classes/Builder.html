@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -92,11 +95,8 @@
                       <li><a href="#method_canDeleteOutputPath">canDeleteOutputPath</a></li>
                       <li><a href="#method_checkForPostBuildEnvironmentIssues">checkForPostBuildEnvironmentIssues</a></li>
                       <li><a href="#method_cleanup">cleanup</a></li>
-                      <li><a href="#method_compatNode">compatNode</a></li>
                       <li><a href="#method_copyToOutputPath">copyToOutputPath</a></li>
-                      <li><a href="#method_finalizeBuild">finalizeBuild</a></li>
                       <li><a href="#method_processAddonBuildSteps">processAddonBuildSteps</a></li>
-                      <li><a href="#method_processBuildResult">processBuildResult</a></li>
                       <li><a href="#method_readBuildFile">readBuildFile</a></li>
                       <li><a href="#method_setupBroccoliBuilder">setupBroccoliBuilder</a></li>
                   </ul>
@@ -106,14 +106,14 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_models_builder.js.html#l16"><code>lib&#x2F;models&#x2F;builder.js:16</code></a></span>
+    <span class="source-link"><a href="../files/lib_models_builder.js.html#l14"><code>lib&#x2F;models&#x2F;builder.js:14</code></a></span>
     <h1 class="class-name">Builder</h1>
 </div>
 
@@ -209,21 +209,6 @@
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_compatNode">compatNode</a>(node)
-            </div>
-            <div class="short-description">
-              <p>broccoli-builder reformats the response into {directory, graph}, this method is a backwards compatible shim for broccoli 1.x</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
               <a href="#method_copyToOutputPath">copyToOutputPath</a>(inputPath)
             </div>
             <div class="short-description">
@@ -239,37 +224,7 @@
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_finalizeBuild">finalizeBuild</a>( )
-            </div>
-            <div class="short-description">
-              
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
               <a href="#method_processAddonBuildSteps">processAddonBuildSteps</a>(buildStep, results): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
-            </div>
-            <div class="short-description">
-              
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
-              <a href="#method_processBuildResult">processBuildResult</a>(results): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
             </div>
             <div class="short-description">
               
@@ -327,7 +282,7 @@
         <h2 id="private-methods">Private Methods</h2>
 <div class="method item private">
     <div id="method_build" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l197"><code>lib&#x2F;models&#x2F;builder.js:197</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l164"><code>lib&#x2F;models&#x2F;builder.js:164</code></a></span>
         <h3 class="">
             private
             
@@ -353,7 +308,7 @@
 </div>
 <div class="method item private">
     <div id="method_canDeleteOutputPath" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l113"><code>lib&#x2F;models&#x2F;builder.js:113</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l93"><code>lib&#x2F;models&#x2F;builder.js:93</code></a></span>
         <h3 class="">
             private
             
@@ -411,7 +366,7 @@ return <code>true</code>.</p>
 </div>
 <div class="method item private">
     <div id="method_checkForPostBuildEnvironmentIssues" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l270"><code>lib&#x2F;models&#x2F;builder.js:270</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l265"><code>lib&#x2F;models&#x2F;builder.js:265</code></a></span>
         <h3 class="">
             private
             
@@ -435,7 +390,7 @@ after a build and issues any necessary deprecation warnings.</p>
 </div>
 <div class="method item private">
     <div id="method_cleanup" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l236"><code>lib&#x2F;models&#x2F;builder.js:236</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l233"><code>lib&#x2F;models&#x2F;builder.js:233</code></a></span>
         <h3 class="">
             private
             
@@ -461,58 +416,8 @@ after a build and issues any necessary deprecation warnings.</p>
 
 </div>
 <div class="method item private">
-    <div id="method_compatNode" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l295"><code>lib&#x2F;models&#x2F;builder.js:295</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            compatNode(node)
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>broccoli-builder reformats the response into {directory, graph}, this method is a backwards
-compatible shim for broccoli 1.x</p>
-</div>
-
-      <div class="params">
-        <h4>Parameters:</h4>
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Attribute</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>node</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>The node returned from Broccoli builder</p>
-</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-
-
-</div>
-<div class="method item private">
     <div id="method_copyToOutputPath" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l135"><code>lib&#x2F;models&#x2F;builder.js:135</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l115"><code>lib&#x2F;models&#x2F;builder.js:115</code></a></span>
         <h3 class="">
             private
             
@@ -558,27 +463,8 @@ compatible shim for broccoli 1.x</p>
 
 </div>
 <div class="method item private">
-    <div id="method_finalizeBuild" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l287"><code>lib&#x2F;models&#x2F;builder.js:287</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            finalizeBuild( )
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"></div>
-
-
-
-
-</div>
-<div class="method item private">
     <div id="method_processAddonBuildSteps" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l174"><code>lib&#x2F;models&#x2F;builder.js:174</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l139"><code>lib&#x2F;models&#x2F;builder.js:139</code></a></span>
         <h3 class="">
             private
             
@@ -644,62 +530,8 @@ compatible shim for broccoli 1.x</p>
 
 </div>
 <div class="method item private">
-    <div id="method_processBuildResult" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l159"><code>lib&#x2F;models&#x2F;builder.js:159</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            processBuildResult(results): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"></div>
-
-      <div class="params">
-        <h4>Parameters:</h4>
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Attribute</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>results</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td> </td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-      <div class="return">
-        <h4>Return:</h4>
-        <div>
-          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>
-          <span class="return-description"></span>
-        </div>
-      </div>
-
-
-</div>
-<div class="method item private">
     <div id="method_readBuildFile" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l43"><code>lib&#x2F;models&#x2F;builder.js:43</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l40"><code>lib&#x2F;models&#x2F;builder.js:40</code></a></span>
         <h3 class="">
             private
             
@@ -747,7 +579,7 @@ compatible shim for broccoli 1.x</p>
 </div>
 <div class="method item private">
     <div id="method_setupBroccoliBuilder" class="title">
-        <span class="source-link"><a href="../files/lib_models_builder.js.html#l58"><code>lib&#x2F;models&#x2F;builder.js:58</code></a></span>
+        <span class="source-link"><a href="../files/lib_models_builder.js.html#l55"><code>lib&#x2F;models&#x2F;builder.js:55</code></a></span>
         <h3 class="">
             private
             

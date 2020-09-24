@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -90,7 +93,7 @@ const cleanBaseURL = require(&#x27;clean-base-url&#x27;);
  * @method normalizeUrl
  * @param {String} Raw url.
  * @return {String} Normalized url.
-*/
+ */
 function normalizeUrl(rootURL) {
   if (rootURL === undefined || rootURL === null || rootURL === &#x27;&#x27;) {
     return &#x27;&#x27;;
@@ -107,7 +110,7 @@ function normalizeUrl(rootURL) {
  * @method convertObjectToString
  * @param {Object} Any Javascript Object.
  * @return {String} A string representation of a Javascript Object.
-*/
+ */
 function convertObjectToString(env) {
   return JSON.stringify(env || {});
 }
@@ -119,7 +122,7 @@ function convertObjectToString(env) {
  * @param {String} baseURL
  * @param {String} locationType &#x27;history&#x27;, &#x27;none&#x27; or &#x27;hash&#x27;.
  * @return {String} Base tag or an empty string
-*/
+ */
 function calculateBaseTag(baseURL, locationType) {
   let normalizedBaseUrl = cleanBaseURL(baseURL);
 
@@ -148,15 +151,13 @@ function calculateBaseTag(baseURL, locationType) {
  *
  * @method contentFor
  * @param {Object} config Ember.js application configuration
- * @param {RegExp} mathch Regular expression to match against
+ * @param {RegExp} match Regular expression to match against
  * @param {String} type Type of content
  * @param {Object} options Settings that control the default content
  * @param {Boolean} options.autoRun Controls whether to bootstrap the
                     application or not
  * @param {Boolean} options.storeConfigInMeta Controls whether to include the
                     contents of config
- * @param {Boolean} options.isModuleUnification Signifies if the application
-                    supports module unification or not
  * @return {String} The content.
 */
 function contentFor(config, match, type, options) {
@@ -173,7 +174,11 @@ function contentFor(config, match, type, options) {
       content.push(calculateBaseTag(config.baseURL, config.locationType));
 
       if (options.storeConfigInMeta) {
-        content.push(&#x60;&lt;meta name=&quot;${config.modulePrefix}/config/environment&quot; content=&quot;${encodeURIComponent(JSON.stringify(config))}&quot; /&gt;&#x60;);
+        content.push(
+          &#x60;&lt;meta name=&quot;${config.modulePrefix}/config/environment&quot; content=&quot;${encodeURIComponent(
+            JSON.stringify(config)
+          )}&quot; /&gt;&#x60;
+        );
       }
 
       break;
@@ -194,7 +199,7 @@ function contentFor(config, match, type, options) {
       break;
     case &#x27;app-boot&#x27;:
       if (options.autoRun) {
-        let moduleToRequire = &#x60;${config.modulePrefix}/${options.isModuleUnification ? &#x27;src/main&#x27; : &#x27;app&#x27;}&#x60;;
+        let moduleToRequire = &#x60;${config.modulePrefix}/app&#x60;;
         content.push(&#x60;
           if (!runningTests) {
             require(&quot;${moduleToRequire}&quot;)[&quot;default&quot;].create(${convertObjectToString(config.APP)});
@@ -204,7 +209,9 @@ function contentFor(config, match, type, options) {
 
       break;
     case &#x27;test-body-footer&#x27;:
-      content.push(&#x60;&lt;script&gt;Ember.assert(&#x27;The tests file was not loaded. Make sure your tests index.html includes &quot;assets/tests.js&quot;.&#x27;, EmberENV.TESTS_FILE_LOADED);&lt;/script&gt;&#x60;);
+      content.push(
+        &#x60;&lt;script&gt;Ember.assert(&#x27;The tests file was not loaded. Make sure your tests index.html includes &quot;assets/tests.js&quot;.&#x27;, EmberENV.TESTS_FILE_LOADED);&lt;/script&gt;&#x60;
+      );
 
       break;
   }
@@ -232,32 +239,35 @@ function contentFor(config, match, type, options) {
                     application or not
  * @param {Boolean} options.storeConfigInMeta Controls whether to include the
                     contents of config
- * @param {Boolean} options.isModuleUnification Signifies if the application
-                    supports module unification or not
    @return {Array} An array of patterns to match against and replace
 */
 function configReplacePatterns(options) {
-  return [{
-    match: /{{rootURL}}/g,
-    replacement(config) {
-      return normalizeUrl(config.rootURL);
+  return [
+    {
+      match: /{{\s?rootURL\s?}}/g,
+      replacement(config) {
+        return normalizeUrl(config.rootURL);
+      },
     },
-  }, {
-    match: /{{EMBER_ENV}}/g,
-    replacement(config) {
-      return convertObjectToString(config.EmberENV);
+    {
+      match: /{{\s?EMBER_ENV\s?}}/g,
+      replacement(config) {
+        return convertObjectToString(config.EmberENV);
+      },
     },
-  }, {
-    match: /{{content-for [&#x27;&quot;](.+?)[&quot;&#x27;]}}/g,
-    replacement(config, match, type) {
-      return contentFor(config, match, type, options);
+    {
+      match: /{{content-for [&#x27;&quot;](.+?)[&quot;&#x27;]}}/g,
+      replacement(config, match, type) {
+        return contentFor(config, match, type, options);
+      },
     },
-  }, {
-    match: /{{MODULE_PREFIX}}/g,
-    replacement(config) {
-      return config.modulePrefix;
+    {
+      match: /{{\s?MODULE_PREFIX\s?}}/g,
+      replacement(config) {
+        return config.modulePrefix;
+      },
     },
-  }];
+  ];
 }
 
 module.exports = { normalizeUrl, convertObjectToString, calculateBaseTag, contentFor, configReplacePatterns };

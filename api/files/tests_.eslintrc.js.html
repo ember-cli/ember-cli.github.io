@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ember-cli - ember-cli</title>
+    <title>tests/.eslintrc.js - ember-cli</title>
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
@@ -64,33 +64,6 @@
             </div>
             
             
-            <div id="sections" class="sidebox">
-              <div class="hd">
-                <h2 class="no-toc">ember-cli</h2>
-              </div>
-              <div class="bd">
-            
-            
-                  <div><a href="#constructor-summary">Constructor Summary</a></div>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-              </div>
-            </div>
             
             
             
@@ -102,46 +75,59 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-  <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l98"><code>tests&#x2F;helpers&#x2F;package-cache.js:98</code></a></span>
-  <h1 class="module-name">ember-cli</h1>
+  <h1 class="file-name">tests/.eslintrc.js</h1>
 </div>
 
-<div class="intro"></div>
+<pre class="code prettyprint linenums">
+&#x27;use strict&#x27;;
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        <p>This module has the following classes:</p>
-        <ul>
-            <li><a href="../classes/Addon.html">Addon</a></li>
-            <li><a href="../classes/AmdTransformAddon.html">AmdTransformAddon</a></li>
-            <li><a href="../classes/Blueprint.html">Blueprint</a></li>
-            <li><a href="../classes/Builder.html">Builder</a></li>
-            <li><a href="../classes/CLI.html">CLI</a></li>
-            <li><a href="../classes/Command.html">Command</a></li>
-            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
-            <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
-            <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
-            <li><a href="../classes/EmberApp.html">EmberApp</a></li>
-            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
-            <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
-            <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
-            <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
-            <li><a href="../classes/NpmTask.html">NpmTask</a></li>
-            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
-            <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
-            <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
-            <li><a href="../classes/Project.html">Project</a></li>
-            <li><a href="../classes/ServeFilesAddon.html">ServeFilesAddon</a></li>
-            <li><a href="../classes/TestsServerAddon.html">TestsServerAddon</a></li>
-            <li><a href="../classes/WatcherAddon.html">WatcherAddon</a></li>
-            <li><a href="../classes/WindowsSymlinkChecker.html">WindowsSymlinkChecker</a></li>
-        </ul>
-    </div>
-    <div class="yui3-u-1-2">
-    </div>
-    <div class="yui3-u-1-2">
-    </div>
-</div>
+module.exports = {
+  plugins: [&#x27;chai-expect&#x27;, &#x27;mocha&#x27;],
+  env: {
+    mocha: true,
+  },
+  rules: {
+    // JSHint &quot;expr&quot;, disabled due to chai expect assertions
+    &#x27;no-unused-expressions&#x27;: 0,
+
+    // disabled for easier asserting of file contents
+    quotes: 0,
+
+    // disabled because describe(), it(), etc. should not use arrow functions
+    &#x27;prefer-arrow-callback&#x27;: 0,
+
+    camelcase: [&#x27;error&#x27;, { allow: [&#x27;bower_components&#x27;, &#x27;node_modules&#x27;] }],
+
+    /*** chai-expect ***/
+
+    &#x27;chai-expect/missing-assertion&#x27;: 2,
+    &#x27;chai-expect/terminating-properties&#x27;: 2,
+    &#x27;chai-expect/no-inner-compare&#x27;: 2,
+
+    /*** mocha ***/
+
+    &#x27;mocha/no-exclusive-tests&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/no-skipped-tests&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/no-pending-tests&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/handle-done-callback&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/no-synchronous-tests&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/no-global-tests&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/no-return-and-callback&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/valid-test-description&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/valid-suite-description&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/no-sibling-hooks&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/no-mocha-arrows&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/no-hooks&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/no-hooks-for-single-case&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/no-top-level-hooks&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/no-identical-title&#x27;: &#x27;error&#x27;,
+    &#x27;mocha/max-top-level-suites&#x27;: &#x27;off&#x27;,
+    &#x27;mocha/no-nested-tests&#x27;: &#x27;error&#x27;,
+  },
+};
+
+</pre>
+
 </div>
         </div>
     </div>

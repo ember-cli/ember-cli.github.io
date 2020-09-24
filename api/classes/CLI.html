@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -107,6 +110,7 @@
                   <ul>
                       <li><a href="#method_callHelp">callHelp</a></li>
                       <li><a href="#method_logError">logError</a></li>
+                      <li><a href="#method_maybeMakeCommand">maybeMakeCommand</a></li>
                       <li><a href="#method_run">run</a></li>
                   </ul>
               </div>
@@ -115,14 +119,14 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l17"><code>lib&#x2F;cli&#x2F;cli.js:17</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l15"><code>lib&#x2F;cli&#x2F;cli.js:15</code></a></span>
     <h1 class="class-name">CLI</h1>
 </div>
 
@@ -348,7 +352,22 @@
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_run">run</a>(environment): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
+              <a href="#method_maybeMakeCommand">maybeMakeCommand</a>(commandName, commandArgs): Null | CurrentCommand
+            </div>
+            <div class="short-description">
+              
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_run">run</a>(environmentPromiseHash): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
             </div>
             <div class="short-description">
               
@@ -370,7 +389,7 @@
     <h2 id="private-constructors">Private Constructors</h2>
 <div class="method item private">
     <div id="method_CLI" class="title">
-        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l17"><code>lib&#x2F;cli&#x2F;cli.js:17</code></a></span>
+        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l15"><code>lib&#x2F;cli&#x2F;cli.js:15</code></a></span>
         <h3 class="">
             private
             
@@ -423,7 +442,7 @@
         <h2 id="private-properties">Private Properties</h2>
 <div class="property item private">
   <div id="props_analytics" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l37"><code>lib&#x2F;cli&#x2F;cli.js:37</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l35"><code>lib&#x2F;cli&#x2F;cli.js:35</code></a></span>
     <h3 class="">
       private
       
@@ -438,7 +457,7 @@
 </div>
 <div class="property item private">
   <div id="props_disableDependencyChecker" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l50"><code>lib&#x2F;cli&#x2F;cli.js:50</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l48"><code>lib&#x2F;cli&#x2F;cli.js:48</code></a></span>
     <h3 class="">
       private
       
@@ -453,7 +472,7 @@
 </div>
 <div class="property item private">
   <div id="props_instrumentation" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l69"><code>lib&#x2F;cli&#x2F;cli.js:69</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l67"><code>lib&#x2F;cli&#x2F;cli.js:67</code></a></span>
     <h3 class="">
       private
       
@@ -468,7 +487,7 @@
 </div>
 <div class="property item private">
   <div id="props_name" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l24"><code>lib&#x2F;cli&#x2F;cli.js:24</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l22"><code>lib&#x2F;cli&#x2F;cli.js:22</code></a></span>
     <h3 class="">
       private
       
@@ -483,7 +502,7 @@
 </div>
 <div class="property item private">
   <div id="props_npmPackage" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l63"><code>lib&#x2F;cli&#x2F;cli.js:63</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l61"><code>lib&#x2F;cli&#x2F;cli.js:61</code></a></span>
     <h3 class="">
       private
       
@@ -498,7 +517,7 @@
 </div>
 <div class="property item private">
   <div id="props_root" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l57"><code>lib&#x2F;cli&#x2F;cli.js:57</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l55"><code>lib&#x2F;cli&#x2F;cli.js:55</code></a></span>
     <h3 class="">
       private
       
@@ -513,7 +532,7 @@
 </div>
 <div class="property item private">
   <div id="props_testing" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l43"><code>lib&#x2F;cli&#x2F;cli.js:43</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l41"><code>lib&#x2F;cli&#x2F;cli.js:41</code></a></span>
     <h3 class="">
       private
       
@@ -528,7 +547,7 @@
 </div>
 <div class="property item private">
   <div id="props_ui" class="title">
-    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l30"><code>lib&#x2F;cli&#x2F;cli.js:30</code></a></span>
+    <span class="source-link"><a href="../files/lib_cli_cli.js.html#l28"><code>lib&#x2F;cli&#x2F;cli.js:28</code></a></span>
     <h3 class="">
       private
       
@@ -549,7 +568,7 @@
         <h2 id="private-methods">Private Methods</h2>
 <div class="method item private">
     <div id="method_callHelp" class="title">
-        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l229"><code>lib&#x2F;cli&#x2F;cli.js:229</code></a></span>
+        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l262"><code>lib&#x2F;cli&#x2F;cli.js:262</code></a></span>
         <h3 class="">
             private
             
@@ -603,7 +622,7 @@
 </div>
 <div class="method item private">
     <div id="method_logError" class="title">
-        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l270"><code>lib&#x2F;cli&#x2F;cli.js:270</code></a></span>
+        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l303"><code>lib&#x2F;cli&#x2F;cli.js:303</code></a></span>
         <h3 class="">
             private
             
@@ -656,13 +675,13 @@
 
 </div>
 <div class="method item private">
-    <div id="method_run" class="title">
+    <div id="method_maybeMakeCommand" class="title">
         <span class="source-link"><a href="../files/lib_cli_cli.js.html#l83"><code>lib&#x2F;cli&#x2F;cli.js:83</code></a></span>
         <h3 class="">
             private
             
             
-            run(environment): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
+            maybeMakeCommand(commandName, commandArgs): Null | CurrentCommand
         </h3>
     </div>
 
@@ -683,8 +702,75 @@
           </thead>
           <tbody>
             <tr>
-              <td>environment</td>
+              <td>commandName</td>
               <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td> </td>
+            </tr>
+
+            <tr>
+              <td>commandArgs</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td> </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Null | CurrentCommand</span>
+          <span class="return-description"></span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_run" class="title">
+        <span class="source-link"><a href="../files/lib_cli_cli.js.html#l122"><code>lib&#x2F;cli&#x2F;cli.js:122</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            run(environmentPromiseHash): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"></div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>environmentPromiseHash</td>
+              <td>Promise<object></td>
               <td>
                 <ul>
                   

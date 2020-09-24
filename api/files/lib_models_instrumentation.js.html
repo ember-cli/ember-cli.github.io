@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -81,8 +84,10 @@
 const fs = require(&#x27;fs-extra&#x27;);
 const chalk = require(&#x27;chalk&#x27;);
 const heimdallGraph = require(&#x27;heimdalljs-graph&#x27;);
+const getConfig = require(&#x27;../utilities/get-config&#x27;);
 const utilsInstrumentation = require(&#x27;../utilities/instrumentation&#x27;);
 const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:instrumentation&#x27;);
+const hwinfo = require(&#x27;./hardware-info&#x27;);
 
 let vizEnabled = utilsInstrumentation.vizEnabled;
 let instrumentationEnabled = utilsInstrumentation.instrumentationEnabled;
@@ -99,6 +104,16 @@ function _enableFSMonitorIfInstrumentationEnabled(config) {
 
 _enableFSMonitorIfInstrumentationEnabled();
 
+function _getHardwareInfo(platform) {
+  const startTime = process.hrtime();
+
+  Object.getOwnPropertyNames(hwinfo).forEach((metric) =&gt; (platform[metric] = hwinfo[metric]()));
+
+  const collectionTime = process.hrtime(startTime);
+
+  // Convert from integer [seconds, nanoseconds] to floating-point milliseconds.
+  platform.collectionTime = collectionTime[0] * 10e3 + collectionTime[1] / 10e6;
+}
 
 class Instrumentation {
   /**
@@ -143,6 +158,8 @@ class Instrumentation {
 
     this._heimdall = null;
 
+    this.config = getConfig();
+
     if (!options.initInstrumentation &amp;&amp; this.isEnabled()) {
       this.instrumentations.init = {
         token: null,
@@ -164,18 +181,22 @@ class Instrumentation {
     let nextNode;
     let nextStat;
 
-    for (nodeItr = tree.dfsIterator(); ;) {
+    for (nodeItr = tree.dfsIterator(); ; ) {
       nextNode = nodeItr.next();
-      if (nextNode.done) { break; }
+      if (nextNode.done) {
+        break;
+      }
 
       node = nextNode.value;
       if (node.label.broccoliNode &amp;&amp; !node.label.broccoliCachedNode) {
         ++buildSteps;
       }
 
-      for (statsItr = node.statsIterator(); ;) {
+      for (statsItr = node.statsIterator(); ; ) {
         nextStat = statsItr.next();
-        if (nextStat.done) { break; }
+        if (nextStat.done) {
+          break;
+        }
 
         statName = nextStat.value[0];
         statValue = nextStat.value[1];
@@ -200,6 +221,8 @@ class Instrumentation {
       buildSteps,
     };
 
+    _getHardwareInfo(summary.platform);
+
     if (result) {
       summary.build.outputChangedFiles = result.outputChanges;
       summary.output = result.directory;
@@ -215,16 +238,20 @@ class Instrumentation {
   }
 
   _initSummary(tree) {
-    return {
+    const summary = {
       totalTime: totalTime(tree),
       platform: {
         name: process.platform,
       },
     };
+
+    _getHardwareInfo(summary.platform);
+
+    return summary;
   }
 
   _commandSummary(tree, commandName, commandArgs) {
-    return {
+    const summary = {
       name: commandName,
       args: commandArgs,
       totalTime: totalTime(tree),
@@ -232,15 +259,23 @@ class Instrumentation {
         name: process.platform,
       },
     };
+
+    _getHardwareInfo(summary.platform);
+
+    return summary;
   }
 
   _shutdownSummary(tree) {
-    return {
+    const summary = {
       totalTime: totalTime(tree),
       platform: {
         name: process.platform,
       },
     };
+
+    _getHardwareInfo(summary.platform);
+
+    return summary;
   }
 
   _instrumentationFor(name) {
@@ -257,7 +292,7 @@ class Instrumentation {
 
   _invokeAddonHook(name, instrumentationInfo) {
     if (this.project &amp;&amp; this.project.addons.length) {
-      this.project.addons.forEach(addon =&gt; {
+      this.project.addons.forEach((addon) =&gt; {
         if (typeof addon.instrumentation === &#x27;function&#x27;) {
           addon.instrumentation(name, instrumentationInfo);
         }
@@ -266,7 +301,9 @@ class Instrumentation {
   }
 
   _writeInstrumentation(name, instrumentationInfo) {
-    if (!vizEnabled()) { return; }
+    if (!vizEnabled()) {
+      return;
+    }
 
     let filename = &#x60;instrumentation.${name}&#x60;;
     if (name === &#x27;build&#x27;) {
@@ -283,7 +320,9 @@ class Instrumentation {
   }
 
   start(name) {
-    if (!instrumentationEnabled()) { return; }
+    if (!instrumentationEnabled(this.config)) {
+      return;
+    }
 
     let instr = this._instrumentationFor(name);
     this._heimdall = this._heimdall || require(&#x27;heimdalljs&#x27;);
@@ -300,7 +339,9 @@ class Instrumentation {
   }
 
   stopAndReport(name) {
-    if (!instrumentationEnabled()) { return; }
+    if (!instrumentationEnabled(this.config)) {
+      return;
+    }
 
     let instr = this._instrumentationFor(name);
     if (!instr.token) {
@@ -347,15 +388,19 @@ function totalTime(tree) {
   let nextNode;
   let nextStat;
 
-  for (nodeItr = tree.dfsIterator(); ;) {
+  for (nodeItr = tree.dfsIterator(); ; ) {
     nextNode = nodeItr.next();
-    if (nextNode.done) { break; }
+    if (nextNode.done) {
+      break;
+    }
 
     node = nextNode.value;
 
-    for (statsItr = node.statsIterator(); ;) {
+    for (statsItr = node.statsIterator(); ; ) {
       nextStat = statsItr.next();
-      if (nextStat.done) { break; }
+      if (nextStat.done) {
+        break;
+      }
 
       statName = nextStat.value[0];
       statValue = nextStat.value[1];
@@ -371,8 +416,6 @@ function totalTime(tree) {
 
 // exported for testing
 Instrumentation._enableFSMonitorIfInstrumentationEnabled = _enableFSMonitorIfInstrumentationEnabled;
-Instrumentation._vizEnabled = vizEnabled();
-Instrumentation._instrumentationEnabled = instrumentationEnabled();
 
 module.exports = Instrumentation;
 

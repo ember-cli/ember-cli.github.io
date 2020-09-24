@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -90,91 +93,11 @@ const Errors = require(&#x27;./errors&#x27;);
 const PackageInfo = require(&#x27;./package-info&#x27;);
 const NodeModulesList = require(&#x27;./node-modules-list&#x27;);
 const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:package-info-cache&#x27;);
+const resolvePackagePath = require(&#x27;resolve-package-path&#x27;);
 
-let realFilePathCache;
-let realDirectoryPathCache;
-
-/**
- * Resolve the real path for a file, return null if does not
- * exist or is not a file or FIFO, return the real path otherwise.
- *
- * @private
- * @method getRealFilePath
- * @param  {String} filePath the path to the file of interest
- * @return {String} real path or null
- */
-function getRealFilePath(filePath) {
-  let realPath;
-
-  try {
-    realPath = realFilePathCache[filePath];
-
-    if (realPath) {
-      return realPath;
-    }
-
-    let stat = fs.statSync(filePath);
-
-    if (stat.isFile() || stat.isFIFO()) {
-      realPath = fs.realpathSync(filePath);
-    }
-  } catch (e) {
-    if (
-      e !== null &amp;&amp;
-      typeof e === &#x27;object&#x27; &amp;&amp;
-      (e.code === &#x27;ENOENT&#x27; || e.code === &#x27;ENOTDIR&#x27;)
-    ) {
-      realPath = null;
-    } else {
-      throw e;
-    }
-  }
-
-  realFilePathCache[filePath] = realPath;
-
-  return realPath;
-}
-
-/**
- * Resolve the real path for a directory, return null if does not
- * exist or is not a directory, return the real path otherwise.
- *
- * @private
- * @method getRealDirectoryPath
- * @param  {String} directoryPath the path to the directory of interest
- * @return {String} real path or null
- */
-function getRealDirectoryPath(directoryPath) {
-  let realPath;
-
-  try {
-    realPath = realDirectoryPathCache[directoryPath];
-
-    if (realPath) {
-      return realPath;
-    }
-
-    let stat = fs.statSync(directoryPath);
-
-    if (stat.isDirectory()) {
-      realPath = fs.realpathSync(directoryPath);
-    }
-  } catch (e) {
-    if (
-      e !== null &amp;&amp;
-      typeof e === &#x27;object&#x27; &amp;&amp;
-      (e.code === &#x27;ENOENT&#x27; || e.code === &#x27;ENOTDIR&#x27;)
-    ) {
-      realPath = null;
-    } else {
-      throw e;
-    }
-  }
-
-  realDirectoryPathCache[directoryPath] = realPath;
-
-  return realPath;
-}
+const getRealFilePath = resolvePackagePath.getRealFilePath;
+const getRealDirectoryPath = resolvePackagePath.getRealDirectoryPath;
+const _resetCache = resolvePackagePath._resetCache;
 
 const PACKAGE_JSON = &#x27;package.json&#x27;;
 
@@ -200,8 +123,7 @@ class PackageInfoCache {
   _clear() {
     this.entries = Object.create(null);
     this.projects = [];
-    realFilePathCache = Object.create(null);
-    realDirectoryPathCache = Object.create(null);
+    _resetCache();
   }
 
   /**
@@ -214,7 +136,7 @@ class PackageInfoCache {
   hasErrors() {
     let paths = Object.keys(this.entries);
 
-    if (paths.find(entryPath =&gt; this.getEntry(entryPath).hasErrors())) {
+    if (paths.find((entryPath) =&gt; this.getEntry(entryPath).hasErrors())) {
       return true;
     }
 
@@ -231,7 +153,7 @@ class PackageInfoCache {
   showErrors() {
     let paths = Object.keys(this.entries).sort();
 
-    paths.forEach(entryPath =&gt; {
+    paths.forEach((entryPath) =&gt; {
       this._showObjErrors(this.getEntry(entryPath));
     });
   }
@@ -250,10 +172,9 @@ class PackageInfoCache {
    * @method _showObjErrors
    */
   _showObjErrors(obj) {
-    let errorEntries = (obj.hasErrors() ? obj.errors.getErrors() : null);
+    let errorEntries = obj.hasErrors() ? obj.errors.getErrors() : null;
 
-    if (!errorEntries ||
-        (errorEntries.length === 1 &amp;&amp; errorEntries[0].type === Errors.ERROR_PACKAGE_DIR_MISSING)) {
+    if (!errorEntries || (errorEntries.length === 1 &amp;&amp; errorEntries[0].type === Errors.ERROR_PACKAGE_DIR_MISSING)) {
       return;
     }
 
@@ -264,13 +185,13 @@ class PackageInfoCache {
       logger.info(&#x27;Top level errors:&#x27;);
       rootPath = this.realPath || &#x27;&#x27;;
     } else {
-      let typeName = (obj.project ? &#x27;project&#x27; : &#x27;addon&#x27;);
+      let typeName = obj.project ? &#x27;project&#x27; : &#x27;addon&#x27;;
 
       logger.info(&#x60;The &#x27;package.json&#x27; file for the ${typeName} at ${obj.realPath}&#x60;);
       rootPath = obj.realPath;
     }
 
-    errorEntries.forEach(errorEntry =&gt; {
+    errorEntries.forEach((errorEntry) =&gt; {
       switch (errorEntry.type) {
         case Errors.ERROR_PACKAGE_JSON_MISSING:
           logger.info(&#x60;  does not exist&#x60;);
@@ -288,12 +209,10 @@ class PackageInfoCache {
           break;
         case Errors.ERROR_DEPENDENCIES_MISSING:
           if (errorEntry.data.length === 1) {
-            logger.info(
-              &#x60;  specifies a missing dependency &#x27;${errorEntry.data[0]}&#x27;&#x60;
-            );
+            logger.info(&#x60;  specifies a missing dependency &#x27;${errorEntry.data[0]}&#x27;&#x60;);
           } else {
             logger.info(&#x60;  specifies some missing dependencies:&#x60;);
-            errorEntry.data.forEach(dependencyName =&gt; {
+            errorEntry.data.forEach((dependencyName) =&gt; {
               logger.info(&#x60;    ${dependencyName}&#x60;);
             });
           }
@@ -325,6 +244,7 @@ class PackageInfoCache {
    * No copy is made.
    */
   loadProject(projectInstance) {
+    logger.info(&#x27;Loading project at %o...&#x27;, projectInstance.root);
 
     let pkgInfo = this._readPackage(projectInstance.root, projectInstance.pkg, true);
 
@@ -339,6 +259,7 @@ class PackageInfoCache {
       pkgInfo.project = projectInstance;
 
       if (projectInstance.cli &amp;&amp; projectInstance.cli.root) {
+        logger.info(&#x27;Reading package for &quot;ember-cli&quot;: %o&#x27;, projectInstance.cli.root);
         pkgInfo.cliInfo = this._readPackage(projectInstance.cli.root);
       }
 
@@ -347,8 +268,9 @@ class PackageInfoCache {
       // create a PackageInfo unless there is really a directory at the
       // suggested location. The created addon may internally have errors,
       // as with any other PackageInfo.
-      projectInstance.supportedInternalAddonPaths().forEach(internalAddonPath =&gt; {
+      projectInstance.supportedInternalAddonPaths().forEach((internalAddonPath) =&gt; {
         if (getRealDirectoryPath(internalAddonPath)) {
+          logger.info(&#x27;Reading package for internal addon: %o&#x27;, internalAddonPath);
           pkgInfo.addInternalAddon(this._readPackage(internalAddonPath));
         }
       });
@@ -381,7 +303,7 @@ class PackageInfoCache {
   reloadProjects() {
     let projects = this.projects.slice();
     this._clear();
-    projects.forEach(project =&gt; this.loadProject(project));
+    projects.forEach((project) =&gt; this.loadProject(project));
   }
 
   /**
@@ -430,8 +352,10 @@ class PackageInfoCache {
    * @method _resolveDependencies
    */
   _resolveDependencies() {
+    logger.info(&#x27;Resolving dependencies...&#x27;);
+
     let packageInfos = this._getPackageInfos();
-    packageInfos.forEach(pkgInfo =&gt; {
+    packageInfos.forEach((pkgInfo) =&gt; {
       if (!pkgInfo.processed) {
         let pkgs = pkgInfo.addDependencies(pkgInfo.pkg.dependencies);
         if (pkgs) {
@@ -488,7 +412,7 @@ class PackageInfoCache {
   _getPackageInfos() {
     let result = [];
 
-    Object.keys(this.entries).forEach(path =&gt; {
+    Object.keys(this.entries).forEach((path) =&gt; {
       let entry = this.entries[path];
       if (entry instanceof PackageInfo) {
         result.push(entry);
@@ -529,9 +453,7 @@ class PackageInfoCache {
     while (currPath !== root) {
       let endsWithNodeModules = path.basename(currPath) === &#x27;node_modules&#x27;;
 
-      let nodeModulesPath = endsWithNodeModules
-        ? currPath
-        : &#x60;${currPath}${path.sep}node_modules&#x60;;
+      let nodeModulesPath = endsWithNodeModules ? currPath : &#x60;${currPath}${path.sep}node_modules&#x60;;
 
       let nodeModulesList = this._readNodeModulesList(nodeModulesPath);
 
@@ -660,6 +582,7 @@ class PackageInfoCache {
 
     // Create a new PackageInfo and load any errors as needed.
     // Note that pkg may be an empty object here.
+    logger.info(&#x27;Creating new PackageInfo instance for %o at %o&#x27;, pkg.name, realPath);
     pkgInfo = new PackageInfo(pkg, realPath, this, isRoot);
 
     if (setupErrors.hasErrors()) {
@@ -670,6 +593,7 @@ class PackageInfoCache {
     // If we have an ember-addon, check that the main exists and points
     // to a valid file.
     if (pkgInfo.isAddon()) {
+      logger.info(&#x27;%s is an addon&#x27;, pkg.name);
 
       // Note: when we have both &#x27;main&#x27; and ember-addon:main, the latter takes precedence
       let main = (pkg[&#x27;ember-addon&#x27;] &amp;&amp; pkg[&#x27;ember-addon&#x27;].main) || pkg[&#x27;main&#x27;];
@@ -680,6 +604,7 @@ class PackageInfoCache {
         main = &#x60;${main}.js&#x60;;
       }
 
+      logger.info(&#x27;Addon entry point is %o&#x27;, main);
       pkg.main = main;
 
       let mainPath = path.join(realPath, main);
@@ -705,8 +630,9 @@ class PackageInfoCache {
       let paths = emberAddonInfo.paths;
 
       if (paths) {
-        paths.forEach(p =&gt; {
+        paths.forEach((p) =&gt; {
           let addonPath = path.join(realPath, p); // real path, though may not exist.
+          logger.info(&#x27;Adding in-repo-addon at %o&#x27;, addonPath);
           let addonPkgInfo = this._readPackage(addonPath); // may have errors in the addon package.
           pkgInfo.addInRepoAddon(addonPkgInfo);
         });
@@ -714,6 +640,8 @@ class PackageInfoCache {
     }
 
     if (pkgInfo.mayHaveAddons) {
+      logger.info(&#x27;Reading &quot;node_modules&quot; for %o&#x27;, realPath);
+
       // read addon modules from node_modules. We read the whole directory
       // because it&#x27;s assumed that npm/yarn may have placed addons in the
       // directory from lower down in the project tree, and we want to get
@@ -786,19 +714,27 @@ class PackageInfoCache {
     // At this point we know the directory node_modules exists and we can
     // process it. Further errors will be recorded here, or in the objects
     // that correspond to the node_modules entries.
+    logger.info(&#x27;Creating new NodeModulesList instance for %o&#x27;, realPath);
     nodeModulesList = new NodeModulesList(realPath, this);
 
-    let entries = fs.readdirSync(realPath); // should not fail because getRealDirectoryPath passed
-
-    entries.forEach(entryName =&gt; {
-      // entries should be either a package or a scoping directory. I think
-      // there can also be files, but we&#x27;ll ignore those.
-
-      if (entryName.startsWith(&#x27;.&#x27;) || entryName.startsWith(&#x27;_&#x27;)) {
+    const entries = fs.readdirSync(realPath).filter((fileName) =&gt; {
+      if (fileName.startsWith(&#x27;.&#x27;) || fileName.startsWith(&#x27;_&#x27;)) {
         // we explicitly want to ignore these, according to the
         // definition of a valid package name.
-        return;
+        return false;
+      } else if (fileName.startsWith(&#x27;@&#x27;)) {
+        return true;
+      } else if (!fs.existsSync(&#x60;${realPath}/${fileName}/package.json&#x60;)) {
+        // a node_module is only valid if it contains a package.json
+        return false;
+      } else {
+        return true;
       }
+    }); // should not fail because getRealDirectoryPath passed
+
+    entries.forEach((entryName) =&gt; {
+      // entries should be either a package or a scoping directory. I think
+      // there can also be files, but we&#x27;ll ignore those.
 
       let entryPath = path.join(realPath, entryName);
 
@@ -840,10 +776,6 @@ class PackageInfoCache {
 }
 
 module.exports = PackageInfoCache;
-
-// export the getRealXXXPath functions to enable testing
-module.exports.getRealFilePath = getRealFilePath;
-module.exports.getRealDirectoryPath = getRealDirectoryPath;
 
 </pre>
 

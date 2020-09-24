@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -82,6 +85,7 @@ const p = require(&#x27;ember-cli-preprocess-registry/preprocessors&#x27;);
 const path = require(&#x27;path&#x27;);
 const concat = require(&#x27;broccoli-concat&#x27;);
 const Funnel = require(&#x27;broccoli-funnel&#x27;);
+const BroccoliDebug = require(&#x27;broccoli-debug&#x27;);
 const mergeTrees = require(&#x27;./merge-trees&#x27;);
 const ConfigLoader = require(&#x27;broccoli-config-loader&#x27;);
 const UnwatchedDir = require(&#x27;broccoli-source&#x27;).UnwatchedDir;
@@ -187,7 +191,6 @@ module.exports = class DefaultPackager {
     this._cachedPublic = null;
     this._cachedConfig = null;
     this._cachedJavascript = null;
-    this._cachedProcessedSrc = null;
     this._cachedProcessedIndex = null;
     this._cachedTransformedTree = null;
     this._cachedProcessedStyles = null;
@@ -198,6 +201,8 @@ module.exports = class DefaultPackager {
     this._cachedProcessedAppAndDependencies = null;
 
     this.options = options || {};
+
+    this._debugTree = BroccoliDebug.buildDebugCallback(&#x27;default-packager&#x27;);
 
     this.env = this.options.env;
     this.name = this.options.name;
@@ -215,7 +220,6 @@ module.exports = class DefaultPackager {
     this.additionalAssetPaths = this.options.additionalAssetPaths;
     this.vendorTestStaticStyles = this.options.vendorTestStaticStyles;
     this.legacyTestFilesToAppend = this.options.legacyTestFilesToAppend;
-    this.isModuleUnificationEnabled = this.options.isModuleUnificationEnabled;
   }
 
   /*
@@ -244,7 +248,7 @@ module.exports = class DefaultPackager {
    * @method processIndex
    * @param {BroccoliTree}
    * @return {BroccoliTree}
-  */
+   */
   processIndex(tree) {
     if (this._cachedProcessedIndex === null) {
       let indexFilePath = this.distPaths.appHtmlFile;
@@ -256,27 +260,10 @@ module.exports = class DefaultPackager {
         annotation: &#x27;Classic: index.html&#x27;,
       });
 
-      if (this.isModuleUnificationEnabled) {
-        let srcIndex = new Funnel(tree, {
-          files: [&#x27;src/ui/index.html&#x27;],
-          getDestinationPath: () =&gt; indexFilePath,
-          annotation: &#x27;Module Unification &#x60;index.html&#x60;&#x27;,
-        });
-
-        index = mergeTrees([
-          index,
-          srcIndex,
-        ], {
-          overwrite: true,
-          annotation: &#x27;Classic And Module Unification &#x60;index.html&#x60;&#x27;,
-        });
-      }
-
       let patterns = configReplacePatterns({
         addons: this.project.addons,
         autoRun: this.autoRun,
         storeConfigInMeta: this.storeConfigInMeta,
-        isModuleUnification: this.isModuleUnificationEnabled,
       });
 
       this._cachedProcessedIndex = new ConfigReplace(index, this.packageConfig(), {
@@ -310,38 +297,38 @@ module.exports = class DefaultPackager {
    * @method processAppAndDependencies
    * @param {BroccoliTree}
    * @return {BroccoliTree}
-  */
+   */
   processAppAndDependencies(allTrees) {
     if (this._cachedProcessedAppAndDependencies === null) {
       let config = this.packageConfig();
       let internal = this.packageEmberCliInternalFiles();
-      let templates = this.processTemplates(allTrees);
+      let appContentsWithCompiledTemplates = this._debugTree(
+        this.processTemplates(allTrees),
+        &#x27;app-and-deps:post-templates&#x27;
+      );
 
-      let trees = [
-        allTrees,
-        templates,
-        this.processSrc(allTrees),
-      ].filter(Boolean);
+      let trees = [allTrees, appContentsWithCompiledTemplates].filter(Boolean);
 
-      let mergedTree = mergeTrees(trees, {
-        annotation: &#x27;TreeMerger (preprocessedApp &amp; templates)&#x27;,
-        overwrite: true,
-      });
+      let mergedTree = this._debugTree(
+        mergeTrees(trees, {
+          annotation: &#x27;TreeMerger (preprocessedApp &amp; templates)&#x27;,
+          overwrite: true,
+        }),
+        &#x27;app-and-deps:merged&#x27;
+      );
 
       let external = this.applyCustomTransforms(allTrees);
       let postprocessedApp = this.processJavascript(mergedTree);
 
-      let sourceTrees = [
-        external,
-        postprocessedApp,
-        config,
-        internal,
-      ];
+      let sourceTrees = [external, postprocessedApp, config, internal];
 
-      this._cachedProcessedAppAndDependencies = mergeTrees(sourceTrees, {
-        overwrite: true,
-        annotation: &#x27;Processed Application and Dependencies&#x27;,
-      });
+      this._cachedProcessedAppAndDependencies = this._debugTree(
+        mergeTrees(sourceTrees, {
+          overwrite: true,
+          annotation: &#x27;Processed Application and Dependencies&#x27;,
+        }),
+        &#x27;app-and-deps:final&#x27;
+      );
     }
 
     return this._cachedProcessedAppAndDependencies;
@@ -365,10 +352,10 @@ module.exports = class DefaultPackager {
    * @method importAdditionalAssets
    * @param {BroccoliTree}
    * @return {BroccoliTree}
-  */
+   */
   importAdditionalAssets(tree) {
     if (this._cachedProcessedAdditionalAssets === null) {
-      let otherAssetTrees = funnelReducer(this.additionalAssetPaths).map(options =&gt; {
+      let otherAssetTrees = funnelReducer(this.additionalAssetPaths).map((options) =&gt; {
         let files = options.include.join(&#x27;,&#x27;);
         options.annotation = &#x60;${options.srcDir}/{${files}} =&gt; ${options.destDir}/{${files}}&#x60;;
 
@@ -403,7 +390,7 @@ module.exports = class DefaultPackager {
    * @method applyCustomTransforms
    * @param {BroccoliTree} External (vendor) tree
    * @return {BroccoliTree}
-  */
+   */
   applyCustomTransforms(externalTree) {
     if (this._cachedTransformedTree === null) {
       this._cachedTransformedTree = externalTree;
@@ -417,10 +404,13 @@ module.exports = class DefaultPackager {
           annotation: &#x60;Funnel (custom transform: ${transformName})&#x60;,
         });
 
-        this._cachedTransformedTree = mergeTrees([this._cachedTransformedTree, transformConfig.callback(transformTree, transformConfig.options)], {
-          annotation: &#x60;TreeMerger (custom transform: ${transformName})&#x60;,
-          overwrite: true,
-        });
+        this._cachedTransformedTree = mergeTrees(
+          [this._cachedTransformedTree, transformConfig.callback(transformTree, transformConfig.options)],
+          {
+            annotation: &#x60;TreeMerger (custom transform: ${transformName})&#x60;,
+            overwrite: true,
+          }
+        );
       }
     }
 
@@ -455,14 +445,13 @@ module.exports = class DefaultPackager {
    * @private
    * @method packageEmberCliInternalFiles
    * @return {BroccoliTree}
-  */
+   */
   packageEmberCliInternalFiles() {
     if (this._cachedEmberCliInternalTree === null) {
       let patterns = configReplacePatterns({
         addons: this.project.addons,
         autoRun: this.autoRun,
         storeConfigInMeta: this.storeConfigInMeta,
-        isModuleUnification: this.isModuleUnificationEnabled,
       });
 
       let configTree = this.packageConfig();
@@ -513,31 +502,22 @@ module.exports = class DefaultPackager {
    * @method processTemplates
    * @param {BroccoliTree} tree
    * @return {BroccoliTree}
-  */
-  processTemplates(templates) {
+   */
+  processTemplates(inputTree) {
     if (this._cachedProcessedTemplates === null) {
-      let include = this.registry.extensionsForType(&#x27;template&#x27;)
-        .map(extension =&gt; &#x60;**/*/template.${extension}&#x60;);
+      let appFiles = new Funnel(inputTree, {
+        srcDir: &#x60;${this.name}/&#x60;,
+        destDir: &#x60;${this.name}/&#x60;,
+        annotation: &#x27;processTemplates: app files&#x27;,
+      });
 
-      let pods = new Funnel(templates, {
-        include,
-        exclude: [&#x27;templates/**/*&#x27;],
-        annotation: &#x27;Pod Templates&#x27;,
-      });
-      let classic = new Funnel(templates, {
-        srcDir: &#x60;${this.name}/templates&#x60;,
-        destDir: &#x60;${this.name}/templates&#x60;,
-        annotation: &#x27;Classic Templates&#x27;,
-      });
-      let mergedTemplates = mergeTrees([pods, classic], {
+      let mergedTemplates = [appFiles];
+
+      mergedTemplates = mergeTrees(mergedTemplates, {
         overwrite: true,
-        annotation: &#x27;Pod &amp; Classic Templates&#x27;,
+        annotation: &#x27;Templates&#x27;,
       });
-      let preprocessedTemplatesFromAddons = callAddonsPreprocessTreeHook(
-        this.project,
-        &#x27;template&#x27;,
-        mergedTemplates
-      );
+      let preprocessedTemplatesFromAddons = callAddonsPreprocessTreeHook(this.project, &#x27;template&#x27;, mergedTemplates);
 
       this._cachedProcessedTemplates = callAddonsPostprocessTreeHook(
         this.project,
@@ -591,7 +571,7 @@ module.exports = class DefaultPackager {
    * @method processJavascript
    * @param {BroccoliTree} tree
    * @return {BroccoliTree}
-  */
+   */
   processJavascript(tree) {
     if (this._cachedProcessedJavascript === null) {
       let javascript = new Funnel(tree, {
@@ -605,11 +585,7 @@ module.exports = class DefaultPackager {
         registry: this.registry,
       });
 
-      this._cachedProcessedJavascript = callAddonsPostprocessTreeHook(
-        this.project,
-        &#x27;js&#x27;,
-        preprocessedApp
-      );
+      this._cachedProcessedJavascript = callAddonsPostprocessTreeHook(this.project, &#x27;js&#x27;, preprocessedApp);
     }
 
     return this._cachedProcessedJavascript;
@@ -647,7 +623,7 @@ module.exports = class DefaultPackager {
    * @private
    * @method packageStyles
    * @return {BroccoliTree}
-  */
+   */
   packageStyles(tree) {
     if (this._cachedProcessedStyles === null) {
       let cssMinificationEnabled = this.minifyCSS.enabled;
@@ -657,43 +633,27 @@ module.exports = class DefaultPackager {
         minifyCSS: this.minifyCSS.options,
       };
 
-      let stylesAndVendor, preprocessedStyles;
+      let stylesAndVendor = callAddonsPreprocessTreeHook(this.project, &#x27;css&#x27;, tree);
+      stylesAndVendor = this._debugTree(stylesAndVendor, &#x27;mu-layout:addonsPreprocessTree:css&#x27;);
 
-      if (this._cachedProcessedSrc !== null &amp;&amp; this.isModuleUnificationEnabled === true) {
-        stylesAndVendor = mergeTrees([
-          this._cachedProcessedSrc,
-          tree,
-        ], {
-          annotation: &#x27;Module Unification Styles&#x27;,
-        });
-        preprocessedStyles = new Funnel(this._cachedProcessedSrc, {
-          srcDir: &#x60;${this.name}/assets&#x60;,
-          destDir: &#x27;assets&#x27;,
-        });
-      } else {
-        stylesAndVendor = callAddonsPreprocessTreeHook(this.project, &#x27;css&#x27;, tree);
-
-        preprocessedStyles = preprocessCss(
-          stylesAndVendor,
-          &#x27;/app/styles&#x27;,
-          &#x27;/assets&#x27;,
-          options
-        );
-      }
+      let preprocessedStyles = preprocessCss(stylesAndVendor, &#x27;/app/styles&#x27;, &#x27;/assets&#x27;, options);
+      preprocessedStyles = this._debugTree(preprocessedStyles, &#x27;mu-layout:preprocess:css&#x27;);
 
       let vendorStyles = [];
       for (let outputFile in this.styleOutputFiles) {
         let isMainVendorFile = outputFile === this.distPaths.vendorCssFile;
         let headerFiles = this.styleOutputFiles[outputFile];
-        let inputFiles = isMainVendorFile ? [&#x27;addon-tree-output/**/*.css&#x27;] : [];
+        let inputFiles = isMainVendorFile ? [&#x27;addon-tree-output/**/__COMPILED_STYLES__/**/*.css&#x27;] : [];
 
-        vendorStyles.push(concat(stylesAndVendor, {
-          headerFiles,
-          inputFiles,
-          outputFile,
-          allowNone: true,
-          annotation: &#x60;Concat: Vendor Styles${outputFile}&#x60;,
-        }));
+        vendorStyles.push(
+          concat(stylesAndVendor, {
+            headerFiles,
+            inputFiles,
+            outputFile,
+            allowNone: true,
+            annotation: &#x60;Concat: Vendor Styles${outputFile}&#x60;,
+          })
+        );
       }
 
       vendorStyles = mergeTrees(vendorStyles, {
@@ -707,90 +667,16 @@ module.exports = class DefaultPackager {
         vendorStyles = preprocessMinifyCss(vendorStyles, options.minifyCSS);
       }
 
-      this._cachedProcessedStyles = callAddonsPostprocessTreeHook(this.project, &#x27;css&#x27;, mergeTrees([
-        preprocessedStyles,
-        vendorStyles,
-      ], {
-        annotation: &#x27;Packaged Styles&#x27;,
-      }));
+      this._cachedProcessedStyles = callAddonsPostprocessTreeHook(
+        this.project,
+        &#x27;css&#x27;,
+        mergeTrees([preprocessedStyles, vendorStyles], {
+          annotation: &#x27;Packaged Styles&#x27;,
+        })
+      );
     }
 
     return this._cachedProcessedStyles;
-  }
-
-  /*
-   * Runs pre/post-processors hooks on the application files (javascript,
-   * styles, templates) and returns a single tree with the processed ones.
-   *
-   * Used only when &#x60;MODULE_UNIFICATION&#x60; experiment is enabled.
-   *
-   * Given a tree:
-   *
-   * &#x60;&#x60;&#x60;
-   * /
-   * └── src
-   *     ├── main.js
-   *     ├── resolver.js
-   *     ├── router.js
-   *     └── ui
-   *         ├── components
-   *         ├── index.html
-   *         ├── routes
-   *         │   └── application
-   *         │   └── template.hbs
-   *         └── styles
-   *             └── app.css
-   * &#x60;&#x60;&#x60;
-   *
-   * Returns the tree with the same structure, but with processed files.
-   *
-   * @private
-   * @method processSrc
-   * @param {BroccoliTree} tree
-   * @return {BroccoliTree}
-  */
-  processSrc(tree) {
-    if (this._cachedProcessedSrc === null &amp;&amp; this.isModuleUnificationEnabled) {
-      let src = new Funnel(tree, {
-        srcDir: &#x27;src&#x27;,
-        destDir: &#x27;src&#x27;,
-        exclude: [&#x27;**/*-test.js&#x27;],
-        annotation: &#x27;Module Unification Src&#x27;,
-      });
-
-      let srcAfterPreprocessTreeHook = callAddonsPreprocessTreeHook(this.project, &#x27;src&#x27;, src);
-
-      let options = {
-        outputPaths: this.distPaths.appCssFile,
-        registry: this.registry,
-      };
-
-      // TODO: This isn&#x27;t quite correct (but it does function properly in most cases),
-      // and should be re-evaluated before enabling the &#x60;MODULE_UNIFICATION&#x60; feature
-      let srcAfterStylePreprocessing = preprocessCss(srcAfterPreprocessTreeHook, &#x27;/src/ui/styles&#x27;, &#x27;/assets&#x27;, options);
-
-      let srcAfterTemplatePreprocessing = preprocessTemplates(srcAfterPreprocessTreeHook, {
-        registry: this.registry,
-        annotation: &#x27;Process Templates: src&#x27;,
-      });
-
-      let srcAfterPostprocessTreeHook = callAddonsPostprocessTreeHook(
-        this.project,
-        &#x27;src&#x27;,
-        srcAfterTemplatePreprocessing
-      );
-
-      this._cachedProcessedSrc = new Funnel(mergeTrees([
-        srcAfterPostprocessTreeHook,
-        srcAfterStylePreprocessing,
-      ], { ovewrite: true }), {
-        srcDir: &#x27;/&#x27;,
-        destDir: this.name,
-        annotation: &#x27;Funnel: src&#x27;,
-      });
-    }
-
-    return this._cachedProcessedSrc;
   }
 
   /*
@@ -818,7 +704,7 @@ module.exports = class DefaultPackager {
    * @method packageBower
    * @param {BroccoliTree} tree
    * @param {String} bowerDirectory Custom path to bower components
-  */
+   */
   packageBower(tree, bowerDirectory) {
     if (this._cachedBower === null) {
       this._cachedBower = new Funnel(tree, {
@@ -862,7 +748,7 @@ module.exports = class DefaultPackager {
    * @private
    * @method packageVendor
    * @param {BroccoliTree} tree
-  */
+   */
   packageVendor(tree) {
     if (this._cachedVendor === null) {
       this._cachedVendor = new Funnel(tree, {
@@ -909,7 +795,7 @@ module.exports = class DefaultPackager {
    * @private
    * @method processTests
    * @param {BroccoliTree} tree
-  */
+   */
   processTests(tree) {
     if (this._cachedTests === null) {
       let addonTestSupportTree = new Funnel(tree, {
@@ -922,19 +808,6 @@ module.exports = class DefaultPackager {
         exclude: [&#x27;addon-test-support/**/*&#x27;],
       });
 
-      if (this.isModuleUnificationEnabled) {
-
-        let testSrcTree = new Funnel(tree, {
-          srcDir: &#x27;src&#x27;,
-          include: [&#x27;**/*-test.js&#x27;],
-          annotation: &#x27;Module Unification Tests&#x27;,
-        });
-        testTree = mergeTrees([testTree, testSrcTree], {
-          annotation: &#x27;Merge MU Tests&#x27;,
-        });
-
-      }
-
       let treeToCompile = new Funnel(testTree, {
         destDir: &#x60;${this.name}/tests&#x60;,
         annotation: &#x27;Tests To Process&#x27;,
@@ -942,7 +815,8 @@ module.exports = class DefaultPackager {
 
       treeToCompile = callAddonsPreprocessTreeHook(this.project, &#x27;test&#x27;, treeToCompile);
 
-      let preprocessedTests = preprocessJs(treeToCompile, &#x27;/tests&#x27;, this.name, {
+      const inputPath = &#x27;/tests&#x27;;
+      let preprocessedTests = preprocessJs(treeToCompile, inputPath, this.name, {
         registry: this.registry,
       });
 
@@ -991,7 +865,7 @@ module.exports = class DefaultPackager {
    * @method packageTests
    * @param {BroccoliTree}
    * @return {BroccoliTree}
-  */
+   */
   packageTests(tree) {
     let coreTestTree = this.processTests(tree);
 
@@ -1031,7 +905,7 @@ module.exports = class DefaultPackager {
    * @method processTestIndex
    * @param {BroccoliTree}
    * @return {BroccoliTree}
-  */
+   */
   processTestIndex(tree) {
     let index = new Funnel(tree, {
       srcDir: &#x27;/tests&#x27;,
@@ -1044,7 +918,6 @@ module.exports = class DefaultPackager {
       addons: this.project.addons,
       autoRun: this.autoRun,
       storeConfigInMeta: this.storeConfigInMeta,
-      isModuleUnification: this.isModuleUnificationEnabled,
     });
 
     let configPath = path.join(this.name, &#x27;config&#x27;, &#x27;environments&#x27;, &#x27;test.json&#x27;);
@@ -1084,14 +957,13 @@ module.exports = class DefaultPackager {
    * &#x60;&#x60;&#x60;
    * @private
    * @method packageTestApplicationConfig
-  */
+   */
   packageTestApplicationConfig() {
     let files = [&#x27;app-config.js&#x27;];
     let patterns = configReplacePatterns({
       addons: this.project.addons,
       autoRun: this.autoRun,
       storeConfigInMeta: this.storeConfigInMeta,
-      isModuleUnification: this.isModuleUnificationEnabled,
     });
 
     let configPath = path.join(this.name, &#x27;config&#x27;, &#x27;environments&#x27;, &#x60;test.json&#x60;);
@@ -1140,13 +1012,11 @@ module.exports = class DefaultPackager {
    * @method packageApplicationTests
    * @param {BroccoliTree}
    * @return {BroccoliTree}
-  */
+   */
   packageApplicationTests(tree) {
-    let appTestTrees = [].concat(
-      this.packageEmberCliInternalFiles(),
-      this.packageTestApplicationConfig(),
-      tree
-    ).filter(Boolean);
+    let appTestTrees = []
+      .concat(this.packageEmberCliInternalFiles(), this.packageTestApplicationConfig(), tree)
+      .filter(Boolean);
 
     appTestTrees = mergeTrees(appTestTrees, {
       overwrite: true,
@@ -1154,11 +1024,12 @@ module.exports = class DefaultPackager {
     });
 
     return concat(appTestTrees, {
-      inputFiles: [&#x60;${this.name}/tests/**/*.js&#x60;],
+      inputFiles: [&#x27;**/tests/**/*.js&#x27;],
       headerFiles: [&#x27;vendor/ember-cli/tests-prefix.js&#x27;],
       footerFiles: [&#x27;vendor/ember-cli/app-config.js&#x27;, &#x27;vendor/ember-cli/tests-suffix.js&#x27;],
       outputFile: this.distPaths.testJsFile,
       annotation: &#x27;Concat: App Tests&#x27;,
+      sourceMapConfig: this.sourcemaps,
     });
   }
 
@@ -1193,7 +1064,7 @@ module.exports = class DefaultPackager {
    * @private
    * @method packageTestFiles
    * @return {BroccoliTree}
-  */
+   */
   packageTestFiles(tree, coreTestTree) {
     let testSupportPath = this.distPaths.testSupportJsFile;
 
@@ -1201,10 +1072,7 @@ module.exports = class DefaultPackager {
 
     let emberCLITree = this.packageEmberCliInternalFiles();
 
-    let headerFiles = [].concat(
-      &#x27;vendor/ember-cli/test-support-prefix.js&#x27;,
-      this.legacyTestFilesToAppend
-    );
+    let headerFiles = [].concat(&#x27;vendor/ember-cli/test-support-prefix.js&#x27;, this.legacyTestFilesToAppend);
 
     let inputFiles = [&#x27;addon-test-support/**/*.js&#x27;];
 
@@ -1222,6 +1090,7 @@ module.exports = class DefaultPackager {
       outputFile: testSupportPath,
       annotation: &#x27;Concat: Test Support JS&#x27;,
       allowNone: true,
+      sourceMapConfig: this.sourcemaps,
     });
 
     let testemPath = path.join(__dirname, &#x27;testem&#x27;);
@@ -1232,10 +1101,7 @@ module.exports = class DefaultPackager {
       annotation: &#x27;Funnel (testem)&#x27;,
     });
 
-    let sourceTrees = [
-      testemTree,
-      testJs,
-    ];
+    let sourceTrees = [testemTree, testJs];
 
     if (this.vendorTestStaticStyles.length &gt; 0) {
       sourceTrees.push(
@@ -1243,6 +1109,7 @@ module.exports = class DefaultPackager {
           headerFiles: this.vendorTestStaticStyles,
           outputFile: this.distPaths.testSupportCssFile,
           annotation: &#x27;Concat: Test Support CSS&#x27;,
+          sourceMapConfig: this.sourcemaps,
         })
       );
     }
@@ -1281,7 +1148,7 @@ module.exports = class DefaultPackager {
    * @method packagePublic
    * @param {BroccoliTree} tree
    * @return {BroccoliTree}
-  */
+   */
   packagePublic(tree) {
     if (this._cachedPublic === null) {
       this._cachedPublic = new Funnel(tree, {
@@ -1316,7 +1183,7 @@ module.exports = class DefaultPackager {
    * &#x60;&#x60;&#x60;
    * @private
    * @method packageConfig
-  */
+   */
   packageConfig() {
     let env = this.env;
     let name = this.name;
@@ -1384,7 +1251,7 @@ module.exports = class DefaultPackager {
    * @private
    * @method packageJavascript
    * @return {BroccoliTree}
-  */
+   */
   packageJavascript(tree) {
     if (this._cachedJavascript === null) {
       let applicationJs = this.processAppAndDependencies(tree);
@@ -1447,12 +1314,10 @@ module.exports = class DefaultPackager {
    * @private
    * @method packageApplicationJs
    * @return {BroccoliTree}
-  */
+   */
   packageApplicationJs(tree) {
     let inputFiles = [&#x60;${this.name}/**/*.js&#x60;];
-    let headerFiles = [
-      &#x27;vendor/ember-cli/app-prefix.js&#x27;,
-    ];
+    let headerFiles = [&#x27;vendor/ember-cli/app-prefix.js&#x27;];
     let footerFiles = [
       &#x27;vendor/ember-cli/app-suffix.js&#x27;,
       &#x27;vendor/ember-cli/app-config.js&#x27;,
@@ -1512,14 +1377,14 @@ module.exports = class DefaultPackager {
    * @method packageVendorJs
    * @param {BroccoliTree} tree
    * @return {BroccoliTree}
-  */
+   */
   packageVendorJs(tree) {
     let importPaths = Object.keys(this.scriptOutputFiles);
 
     // iterate over the keys and concat files
     // to support scenarios like
     // app.import(&#x27;vendor/foobar.js&#x27;, { outputFile: &#x27;assets/baz.js&#x27; });
-    let vendorTrees = importPaths.map(importPath =&gt; {
+    let vendorTrees = importPaths.map((importPath) =&gt; {
       let files = this.scriptOutputFiles[importPath];
       let isMainVendorFile = importPath === this.distPaths.vendorJsFile;
 

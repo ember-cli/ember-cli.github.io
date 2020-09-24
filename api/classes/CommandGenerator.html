@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>NodeModulesList - ember-cli</title>
+    <title>CommandGenerator - ember-cli</title>
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
@@ -66,12 +66,14 @@
             
             <div id="sections" class="sidebox">
               <div class="hd">
-                <h2 class="no-toc">NodeModulesList</h2>
+                <h2 class="no-toc">CommandGenerator</h2>
               </div>
               <div class="bd">
             
             
+                  <div><a href="#constructor-summary">Constructor Summary</a></div>
             
+                  <div><a href="#property-summary">Property Summary</a></div>
             
                   <div><a href="#method-summary">Method Summary</a></div>
             
@@ -81,23 +83,25 @@
             
             
             
+                  <div><a href="#public-constructors">Public Constructors</a></div>
+                  <ul>
+                      <li><a href="#method_CommandGenerator">CommandGenerator</a></li>
+                  </ul>
             
             
             
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_options.command The command you want to run">options.command The command you want to run</a></li>
+                  </ul>
             
             
             
                   <div><a href="#public-methods">Public Methods</a></div>
                   <ul>
-                      <li><a href="#method_findPackage">findPackage</a></li>
-                      <li><a href="#method_hasErrors">hasErrors</a></li>
+                      <li><a href="#method_command">command</a></li>
                   </ul>
             
-                  <div><a href="#protected-methods">Protected Methods</a></div>
-                  <ul>
-                      <li><a href="#method_addEntry">addEntry</a></li>
-                      <li><a href="#method_addError">addError</a></li>
-                  </ul>
             
               </div>
             </div>
@@ -112,23 +116,81 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_models_package-info-cache_node-modules-list.js.html#l7"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;node-modules-list.js:7</code></a></span>
-    <h1 class="class-name">NodeModulesList</h1>
+    <span class="source-link"><a href="../files/tests_helpers_command-generator.js.html#l5"><code>tests&#x2F;helpers&#x2F;command-generator.js:5</code></a></span>
+    <h1 class="class-name">CommandGenerator</h1>
 </div>
 
 
 
 
-<div class="class-description"><p>Class that stores information about a node_modules directory (i.e., the
-packages and subdirectories in the directory). It is one of the
-two types of entries in a PackageInfoCache. It is only created by the
-PackageInfoCache.</p>
+<div class="class-description"><p>A simple tool to make behavior and API consistent between commands
+the user wraps in this.</p>
+<p>Usage:</p>
+<pre class="code prettyprint"><code>var bower = new CommandGenerator(require.resolve('bower/bin/bower'));
+bower.invoke('install', 'ember');
+</code></pre>
 </div>
 
 
 
 
+  <h2 id="constructor-summary">Constructor Summary</h2>
 
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Constructors</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_CommandGenerator">CommandGenerator</a>(program): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a>
+            </div>
+            <div class="short-description">
+              <p>A simple tool to make behavior and API consistent between commands the user wraps in this.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_options.command The command you want to run">options.command The command you want to run</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>Use <code>createTestTargets</code> in the before hook to do the initial setup of a project. This will ensure that we limit the amount of times we go to the network to fetch dependencies.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
 
 
@@ -149,75 +211,15 @@ PackageInfoCache.</p>
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_findPackage">findPackage</a>(packageName): 
+              <a href="#method_command">command</a>([arguments], [options={}])
             </div>
             <div class="short-description">
-              <p>Return a PackageInfo object for a given package name (which may include a scope)</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            public
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
-              <a href="#method_hasErrors">hasErrors</a>( )
-            </div>
-            <div class="short-description">
-              <p>Indicate if there are any errors in the NodeModulesList itself (not including errors within the individual entries).</p>
+              <p>The <code>invoke</code> method is responsible for building the final executable command.</p>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-
-    <table class="summary">
-      <thead>
-      <tr>
-        <th colspan="2">Protected Methods</th>
-      </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            protected
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
-              <a href="#method_addEntry">addEntry</a>(entryName, entryVal)
-            </div>
-            <div class="short-description">
-              <p>Add an entry (PackageInfo or NodeModulesList instance) to the entries for this list. This is only called by PackageInfoCache. It is not intended to be called directly by anything else.</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            protected
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
-              <a href="#method_addError">addError</a>(errorType, errorData)
-            </div>
-            <div class="short-description">
-              <p>Given error data, add an ErrorEntry to the ErrorList for this object.</p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-
-
-
-
 
 
 
@@ -228,23 +230,21 @@ PackageInfoCache.</p>
 
 
   <div id="methods public">
-    <h2 id="public-methods">Public Methods</h2>
-<div class="method item public">
-    <div id="method_findPackage" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_node-modules-list.js.html#l84"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;node-modules-list.js:84</code></a></span>
+    <h2 id="public-constructors">Public Constructors</h2>
+<div class="method item">
+    <div id="method_CommandGenerator" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_command-generator.js.html#l5"><code>tests&#x2F;helpers&#x2F;command-generator.js:5</code></a></span>
         <h3 class="">
             public
             
             
-            findPackage(packageName): 
+            CommandGenerator(program): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a>
         </h3>
     </div>
 
 
 
-    <div class="method-description"><p>Return a PackageInfo object for a given package name (which may include
-a scope)</p>
-</div>
+    <div class="method-description"></div>
 
       <div class="params">
         <h4>Parameters:</h4>
@@ -259,8 +259,8 @@ a scope)</p>
           </thead>
           <tbody>
             <tr>
-              <td>packageName</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>program</td>
+              <td>Path</td>
               <td>
                 <ul>
                   
@@ -268,8 +268,7 @@ a scope)</p>
                   
                 </ul>
               </td>
-              <td><p>the name (possibly including a scope) of
-the PackageInfo the caller wants returned.</p>
+              <td><p>The path to the command.</p>
 </td>
             </tr>
 
@@ -280,171 +279,110 @@ the PackageInfo the caller wants returned.</p>
       <div class="return">
         <h4>Return:</h4>
         <div>
-          
-          <span class="return-description"><p>the desired PackageInfo if one exists for the given name, else null.</p>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+          <span class="return-description"><p>A command helper.</p>
 </span>
         </div>
       </div>
 
 
 </div>
-<div class="method item public">
-    <div id="method_hasErrors" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_node-modules-list.js.html#l56"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;node-modules-list.js:56</code></a></span>
+  </div>
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_options.command The command you want to run" class="title">
+    <span class="source-link"><a href="../files/tests_helpers_acceptance.js.html#l46"><code>tests&#x2F;helpers&#x2F;acceptance.js:46</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      options.command The command you want to run: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Use <code>createTestTargets</code> in the before hook to do the initial
+setup of a project. This will ensure that we limit the amount of times
+we go to the network to fetch dependencies.</p>
+</div>
+
+</div>
+    </div>
+
+
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method_command" class="title">
+        <span class="source-link"><a href="../files/tests_helpers_command-generator.js.html#l26"><code>tests&#x2F;helpers&#x2F;command-generator.js:26</code></a></span>
         <h3 class="">
             public
             
             
-            hasErrors( )
+            command([arguments], [options={}])
         </h3>
     </div>
 
 
 
-    <div class="method-description"><p>Indicate if there are any errors in the NodeModulesList itself (not
-including errors within the individual entries).</p>
+    <div class="method-description"><p>The <code>invoke</code> method is responsible for building the final executable command.</p>
 </div>
 
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>arguments</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  
+                  <li>multiple</li>
+                </ul>
+              </td>
+              <td><p>Arguments to be passed into the command.</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>options</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  <li>optional</li>
+                  <li>default: {}</li>
+                  
+                </ul>
+              </td>
+              <td><p>The options passed into child_process.spawnSync.
+(<a href="https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options">https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options</a>)</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
 
 
 
 </div>
   </div>
 
-    <div id="methods protected">
-        <h2 id="protected-methods">Protected Methods</h2>
-<div class="method item protected">
-    <div id="method_addEntry" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_node-modules-list.js.html#l67"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;node-modules-list.js:67</code></a></span>
-        <h3 class="">
-            protected
-            
-            
-            addEntry(entryName, entryVal)
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>Add an entry (PackageInfo or NodeModulesList instance) to the entries
-for this list. This is only called by PackageInfoCache. It is not intended
-to be called directly by anything else.</p>
-</div>
-
-      <div class="params">
-        <h4>Parameters:</h4>
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Attribute</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>entryName</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>the name of the entry, i.e., the name of the
-file or subdirectory in the directory listing.</p>
-</td>
-            </tr>
-
-            <tr>
-              <td>entryVal</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>the PackageInfo or NodeModulesList tha corresponds
-to the given entry name in the file system.</p>
-</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-
-
-</div>
-<div class="method item protected">
-    <div id="method_addError" class="title">
-        <span class="source-link"><a href="../files/lib_models_package-info-cache_node-modules-list.js.html#l43"><code>lib&#x2F;models&#x2F;package-info-cache&#x2F;node-modules-list.js:43</code></a></span>
-        <h3 class="">
-            protected
-            
-            
-            addError(errorType, errorData)
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>Given error data, add an ErrorEntry to the ErrorList for this object.</p>
-</div>
-
-      <div class="params">
-        <h4>Parameters:</h4>
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Attribute</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>errorType</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>one of the Errors.ERROR_* constants.</p>
-</td>
-            </tr>
-
-            <tr>
-              <td>errorData</td>
-              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
-              <td>
-                <ul>
-                  
-                  
-                  
-                </ul>
-              </td>
-              <td><p>any error data relevant to the type of error
-being created. See showErrors().</p>
-</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-
-
-</div>
-    </div>
 
 
 

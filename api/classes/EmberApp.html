@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -128,7 +131,6 @@
                       <li><a href="#method_initializeAddons">initializeAddons</a></li>
                       <li><a href="#method_populateLegacyFiles">populateLegacyFiles</a></li>
                       <li><a href="#method_shouldIncludeAddon">shouldIncludeAddon</a></li>
-                      <li><a href="#method_testIndex">testIndex</a></li>
                       <li><a href="#method_toArray">toArray</a></li>
                   </ul>
               </div>
@@ -137,14 +139,14 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l81"><code>lib&#x2F;broccoli&#x2F;ember-app.js:81</code></a></span>
+    <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l73"><code>lib&#x2F;broccoli&#x2F;ember-app.js:73</code></a></span>
     <h1 class="class-name">EmberApp</h1>
 </div>
 
@@ -665,21 +667,6 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_testIndex">testIndex</a>( ): Tree
-            </div>
-            <div class="short-description">
-              <p>Returns the tree for /tests/index.html</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            private
-            
-            
-          </td>
-          <td>
-            <div class="method-name ">
               <a href="#method_toArray">toArray</a>( ): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a>
             </div>
             <div class="short-description">
@@ -697,7 +684,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
         <h2 id="static-public-methods">Static Public Methods</h2>
 <div class="method item public">
     <div id="method_env" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l500"><code>lib&#x2F;broccoli&#x2F;ember-app.js:500</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l498"><code>lib&#x2F;broccoli&#x2F;ember-app.js:498</code></a></span>
         <h3 class="">
             public
             static
@@ -731,7 +718,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
     <h2 id="public-constructors">Public Constructors</h2>
 <div class="method item">
     <div id="method_EmberApp" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l81"><code>lib&#x2F;broccoli&#x2F;ember-app.js:81</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l73"><code>lib&#x2F;broccoli&#x2F;ember-app.js:73</code></a></span>
         <h3 class="">
             public
             
@@ -801,7 +788,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
     <h2 id="public-methods">Public Methods</h2>
 <div class="method item public">
     <div id="method_dependencies" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1435"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1435</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1351"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1351</code></a></span>
         <h3 class="">
             public
             
@@ -828,7 +815,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item public">
     <div id="method_import" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1444"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1444</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1360"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1360</code></a></span>
         <h3 class="">
             public
             
@@ -956,7 +943,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item public">
     <div id="method_toTree" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1738"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1738</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1636"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1636</code></a></span>
         <h3 class="">
             public
             
@@ -1018,7 +1005,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
         <h2 id="private-methods">Private Methods</h2>
 <div class="method item private">
     <div id="method__addonDisabledByBlacklist" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l539"><code>lib&#x2F;broccoli&#x2F;ember-app.js:539</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l537"><code>lib&#x2F;broccoli&#x2F;ember-app.js:537</code></a></span>
         <h3 class="">
             private
             
@@ -1072,7 +1059,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__addonDisabledByWhitelist" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l550"><code>lib&#x2F;broccoli&#x2F;ember-app.js:550</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l548"><code>lib&#x2F;broccoli&#x2F;ember-app.js:548</code></a></span>
         <h3 class="">
             private
             
@@ -1126,7 +1113,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__addonEnabled" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l527"><code>lib&#x2F;broccoli&#x2F;ember-app.js:527</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l525"><code>lib&#x2F;broccoli&#x2F;ember-app.js:525</code></a></span>
         <h3 class="">
             private
             
@@ -1181,7 +1168,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__addonInstalled" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1425"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1425</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1341"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1341</code></a></span>
         <h3 class="">
             private
             
@@ -1236,7 +1223,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__checkEmberCliBabel" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l561"><code>lib&#x2F;broccoli&#x2F;ember-app.js:561</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l559"><code>lib&#x2F;broccoli&#x2F;ember-app.js:559</code></a></span>
         <h3 class="">
             private
             
@@ -1290,7 +1277,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__concatFiles" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l512"><code>lib&#x2F;broccoli&#x2F;ember-app.js:512</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l510"><code>lib&#x2F;broccoli&#x2F;ember-app.js:510</code></a></span>
         <h3 class="">
             private
             
@@ -1358,7 +1345,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__getAssetPath" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1573"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1573</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1491"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1491</code></a></span>
         <h3 class="">
             private
             
@@ -1413,7 +1400,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__import" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1494"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1494</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1406"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1406</code></a></span>
         <h3 class="">
             private
             
@@ -1512,7 +1499,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__importAddonTransforms" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l641"><code>lib&#x2F;broccoli&#x2F;ember-app.js:641</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l639"><code>lib&#x2F;broccoli&#x2F;ember-app.js:639</code></a></span>
         <h3 class="">
             private
             
@@ -1532,7 +1519,7 @@ a <code>toTree()</code> method you can use to get the entire tree for your appli
 </div>
 <div class="method item private">
     <div id="method__initOptions" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l221"><code>lib&#x2F;broccoli&#x2F;ember-app.js:221</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l215"><code>lib&#x2F;broccoli&#x2F;ember-app.js:215</code></a></span>
         <h3 class="">
             private
             
@@ -1581,7 +1568,7 @@ a set of default values from Ember CLI.</p>
 </div>
 <div class="method item private">
     <div id="method__initProject" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l203"><code>lib&#x2F;broccoli&#x2F;ember-app.js:203</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l194"><code>lib&#x2F;broccoli&#x2F;ember-app.js:194</code></a></span>
         <h3 class="">
             private
             
@@ -1630,7 +1617,7 @@ closest Ember CLI project from the current working directory.</p>
 </div>
 <div class="method item private">
     <div id="method__initTestsAndHinting" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l187"><code>lib&#x2F;broccoli&#x2F;ember-app.js:187</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l178"><code>lib&#x2F;broccoli&#x2F;ember-app.js:178</code></a></span>
         <h3 class="">
             private
             
@@ -1679,7 +1666,7 @@ closest Ember CLI project from the current working directory.</p>
 </div>
 <div class="method item private">
     <div id="method__initVendorFiles" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l391"><code>lib&#x2F;broccoli&#x2F;ember-app.js:391</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l379"><code>lib&#x2F;broccoli&#x2F;ember-app.js:379</code></a></span>
         <h3 class="">
             private
             
@@ -1718,7 +1705,7 @@ closest Ember CLI project from the current working directory.</p>
 </div>
 <div class="method item private">
     <div id="method__podTemplatePatterns" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1130"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1130</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1086"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1086</code></a></span>
         <h3 class="">
             private
             
@@ -1745,7 +1732,7 @@ closest Ember CLI project from the current working directory.</p>
 </div>
 <div class="method item private">
     <div id="method__resolveLocal" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l381"><code>lib&#x2F;broccoli&#x2F;ember-app.js:381</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l369"><code>lib&#x2F;broccoli&#x2F;ember-app.js:369</code></a></span>
         <h3 class="">
             private
             
@@ -1765,7 +1752,7 @@ closest Ember CLI project from the current working directory.</p>
 </div>
 <div class="method item private">
     <div id="method_addonLintTree" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l883"><code>lib&#x2F;broccoli&#x2F;ember-app.js:883</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l886"><code>lib&#x2F;broccoli&#x2F;ember-app.js:886</code></a></span>
         <h3 class="">
             private
             
@@ -1837,7 +1824,7 @@ their output.</p>
 </div>
 <div class="method item private">
     <div id="method_addonPostprocessTree" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l809"><code>lib&#x2F;broccoli&#x2F;ember-app.js:809</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l813"><code>lib&#x2F;broccoli&#x2F;ember-app.js:813</code></a></span>
         <h3 class="">
             private
             
@@ -1927,7 +1914,7 @@ only after the existing pre-processors have run.</p>
 </div>
 <div class="method item private">
     <div id="method_addonPreprocessTree" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l847"><code>lib&#x2F;broccoli&#x2F;ember-app.js:847</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l850"><code>lib&#x2F;broccoli&#x2F;ember-app.js:850</code></a></span>
         <h3 class="">
             private
             
@@ -2016,7 +2003,7 @@ module.exports = {
 </div>
 <div class="method item private">
     <div id="method_addonTreesFor" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l713"><code>lib&#x2F;broccoli&#x2F;ember-app.js:713</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l715"><code>lib&#x2F;broccoli&#x2F;ember-app.js:715</code></a></span>
         <h3 class="">
             private
             
@@ -2073,7 +2060,7 @@ module.exports = {
 </div>
 <div class="method item private">
     <div id="method_getLintTests" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1375"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1375</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1301"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1301</code></a></span>
         <h3 class="">
             private
             
@@ -2101,7 +2088,7 @@ module.exports = {
 </div>
 <div class="method item private">
     <div id="method_initializeAddons" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l686"><code>lib&#x2F;broccoli&#x2F;ember-app.js:686</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l688"><code>lib&#x2F;broccoli&#x2F;ember-app.js:688</code></a></span>
         <h3 class="">
             private
             
@@ -2122,7 +2109,7 @@ Calls initializeAddons on the Project.</p>
 </div>
 <div class="method item private">
     <div id="method_populateLegacyFiles" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l902"><code>lib&#x2F;broccoli&#x2F;ember-app.js:902</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l905"><code>lib&#x2F;broccoli&#x2F;ember-app.js:905</code></a></span>
         <h3 class="">
             private
             
@@ -2196,36 +2183,8 @@ Calls initializeAddons on the Project.</p>
 
 </div>
 <div class="method item private">
-    <div id="method_testIndex" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l953"><code>lib&#x2F;broccoli&#x2F;ember-app.js:953</code></a></span>
-        <h3 class="">
-            private
-            
-            
-            testIndex( ): Tree
-        </h3>
-    </div>
-
-
-
-    <div class="method-description"><p>Returns the tree for /tests/index.html</p>
-</div>
-
-
-      <div class="return">
-        <h4>Return:</h4>
-        <div>
-          <span class="return-type">Tree</span>
-          <span class="return-description"><p>Tree for /tests/index.html</p>
-</span>
-        </div>
-      </div>
-
-
-</div>
-<div class="method item private">
     <div id="method_toArray" class="title">
-        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1608"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1608</code></a></span>
+        <span class="source-link"><a href="../files/lib_broccoli_ember-app.js.html#l1532"><code>lib&#x2F;broccoli&#x2F;ember-app.js:1532</code></a></span>
         <h3 class="">
             private
             

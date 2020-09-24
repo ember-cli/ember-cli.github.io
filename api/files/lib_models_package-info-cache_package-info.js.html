@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -267,7 +270,9 @@ class PackageInfo {
 
     let missingDependencies = [];
 
-    dependencyNames.forEach(dependencyName =&gt; {
+    dependencyNames.forEach((dependencyName) =&gt; {
+      logger.info(&#x27;%s: Trying to find dependency %o&#x27;, this.pkg.name, dependencyName);
+
       let dependencyPackage;
 
       // much of the time the package will have dependencies in
@@ -279,10 +284,7 @@ class PackageInfo {
       }
 
       if (!dependencyPackage) {
-        dependencyPackage = this.cache._findPackage(
-          dependencyName,
-          path.dirname(this.realPath)
-        );
+        dependencyPackage = this.cache._findPackage(dependencyName, path.dirname(this.realPath));
       }
 
       if (dependencyPackage) {
@@ -323,13 +325,13 @@ class PackageInfo {
     let result = [];
     if (Array.isArray(packageInfoList)) {
       if (excludeFn) {
-        packageInfoList = packageInfoList.filter(pkgInfo =&gt; !excludeFn(pkgInfo));
+        packageInfoList = packageInfoList.filter((pkgInfo) =&gt; !excludeFn(pkgInfo));
       }
 
-      packageInfoList.forEach(pkgInfo =&gt; result.push(pkgInfo));
+      packageInfoList.forEach((pkgInfo) =&gt; result.push(pkgInfo));
     } else {
       // We&#x27;re going to assume we have a map of name to packageInfo
-      Object.keys(packageInfoList).forEach(name =&gt; {
+      Object.keys(packageInfoList).forEach((name) =&gt; {
         let pkgInfo = packageInfoList[name];
         if (!excludeFn || !excludeFn(pkgInfo)) {
           result.push(pkgInfo);
@@ -337,7 +339,7 @@ class PackageInfo {
       });
     }
 
-    result.sort(lexicographically).forEach(pkgInfo =&gt; pushUnique(addonPackageList, pkgInfo));
+    result.sort(lexicographically).forEach((pkgInfo) =&gt; pushUnique(addonPackageList, pkgInfo));
 
     return addonPackageList;
   }
@@ -350,8 +352,11 @@ class PackageInfo {
   discoverAddonAddons() {
     let addonPackageList = [];
 
-    this.addPackages(addonPackageList,
-      this.dependencyPackages, pkgInfo =&gt; !pkgInfo.isAddon() || pkgInfo.name === &#x27;ember-cli&#x27;);
+    this.addPackages(
+      addonPackageList,
+      this.dependencyPackages,
+      (pkgInfo) =&gt; !pkgInfo.isAddon() || pkgInfo.name === &#x27;ember-cli&#x27;
+    );
     this.addPackages(addonPackageList, this.inRepoAddons);
 
     return addonPackageList;
@@ -367,11 +372,11 @@ class PackageInfo {
 
     let addonPackageList = [];
 
-    this.addPackages(addonPackageList, (project.isEmberCLIAddon() ? [this] : null));
-    this.addPackages(addonPackageList, (this.cliInfo ? this.cliInfo.inRepoAddons : null));
+    this.addPackages(addonPackageList, project.isEmberCLIAddon() ? [this] : null);
+    this.addPackages(addonPackageList, this.cliInfo ? this.cliInfo.inRepoAddons : null);
     this.addPackages(addonPackageList, this.internalAddons);
-    this.addPackages(addonPackageList, this.devDependencyPackages, pkgInfo =&gt; !pkgInfo.isAddon());
-    this.addPackages(addonPackageList, this.dependencyPackages, pkgInfo =&gt; !pkgInfo.isAddon());
+    this.addPackages(addonPackageList, this.devDependencyPackages, (pkgInfo) =&gt; !pkgInfo.isAddon());
+    this.addPackages(addonPackageList, this.dependencyPackages, (pkgInfo) =&gt; !pkgInfo.isAddon());
     this.addPackages(addonPackageList, this.inRepoAddons);
 
     return addonPackageList;
@@ -393,7 +398,7 @@ class PackageInfo {
 
     let packageMap = Object.create(null);
 
-    validPackages.forEach(pkgInfo =&gt; {
+    validPackages.forEach((pkgInfo) =&gt; {
       let addonInfo = new AddonInfo(pkgInfo.name, pkgInfo.realPath, pkgInfo.pkg);
       if (!excludeFn || !excludeFn(addonInfo)) {
         packageMap[pkgInfo.name] = addonInfo;
@@ -404,36 +409,42 @@ class PackageInfo {
   }
 
   getValidPackages(addonPackageList) {
-    return addonPackageList.filter(pkgInfo =&gt; pkgInfo.valid);
+    return addonPackageList.filter((pkgInfo) =&gt; pkgInfo.valid);
   }
 
   getInvalidPackages(addonPackageList) {
-    return addonPackageList.filter(pkgInfo =&gt; !pkgInfo.valid);
+    return addonPackageList.filter((pkgInfo) =&gt; !pkgInfo.valid);
   }
 
   dumpInvalidAddonPackages(addonPackageList) {
-    if (this._hasDumpedInvalidAddonPackages) { return; }
+    if (this._hasDumpedInvalidAddonPackages) {
+      return;
+    }
     this._hasDumpedInvalidAddonPackages = true;
 
     let invalidPackages = this.getInvalidPackages(addonPackageList);
 
     if (invalidPackages.length &gt; 0) {
-      let typeName = (this.project ? &#x27;project&#x27; : &#x27;addon&#x27;);
+      let typeName = this.project ? &#x27;project&#x27; : &#x27;addon&#x27;;
 
-      logger.info(&#x27;&#x27;);
-      logger.info(&#x60;The &#x27;package.json&#x27; file for the ${typeName} at ${this.realPath}&#x60;);
+      let msg = &#x60;The &#x27;package.json&#x27; file for the ${typeName} at ${this.realPath}&#x60;;
 
       let relativePath;
-
       if (invalidPackages.length === 1) {
         relativePath = path.relative(this.realPath, invalidPackages[0].realPath);
-        logger.info(&#x60;  specifies an invalid, malformed or missing addon at relative path &#x27;${relativePath}&#x27;&#x60;);
+        msg = &#x60;${msg}\n  specifies an invalid, malformed or missing addon at relative path &#x27;${relativePath}&#x27;&#x60;;
       } else {
-        logger.info(&#x27;  specifies invalid, malformed or missing addons at relative paths&#x27;);
-        invalidPackages.forEach(packageInfo =&gt; {
+        msg = &#x60;${msg}\n  specifies invalid, malformed or missing addons at relative paths&#x60;;
+        invalidPackages.forEach((packageInfo) =&gt; {
           let relativePath = path.relative(this.realPath, packageInfo.realPath);
-          logger.info(&#x60;    &#x27;${relativePath}&#x27;&#x60;);
+          msg = &#x60;${msg}\n    &#x27;${relativePath}&#x27;&#x60;;
         });
+      }
+
+      if (process.env.EMBER_CLI_ERROR_ON_INVALID_ADDON) {
+        throw msg;
+      } else {
+        this.cache.ui.writeWarnLine(msg);
       }
     }
   }
@@ -467,9 +478,7 @@ class PackageInfo {
     } else {
       const Addon = require(&#x27;../addon&#x27;); // done here because of circular dependency
 
-      ctor = Addon.extend(
-        Object.assign({ root: mainDir, pkg: this.pkg }, module)
-      );
+      ctor = Addon.extend(Object.assign({ root: mainDir, pkg: this.pkg }, module));
     }
 
     // XXX Probably want to store the timings here in PackageInfo,

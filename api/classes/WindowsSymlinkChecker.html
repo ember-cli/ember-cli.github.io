@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -118,29 +121,29 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-    <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l7"><code>lib&#x2F;utilities&#x2F;windows-admin.js:7</code></a></span>
+    <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l6"><code>lib&#x2F;utilities&#x2F;windows-admin.js:6</code></a></span>
     <h1 class="class-name">WindowsSymlinkChecker</h1>
 </div>
 
 
 
 
-<div class="class-description"><p>On windows users will have a much better experience if symlinks are enabled
-an usable. This object when queried informs windows users, if they can
-improve there build performance, and how.</p>
+<div class="class-description"><p>On Windows, users will have a much better experience if symlinks are enabled
+and usable. When queried, this object informs Windows users regarding
+improving their build performance, and how.</p>
 <blockquote>
-<p>Windows vista: nothing we can really do, so we fall back to junctions for folders + copying of files
-&lt;= Windows vista: symlinks are available but using them is somewhat tricky
-* if the users is an admin, the process needed to have been started with elevated privs
+<p>Windows Vista: nothing we can really do, so we fall back to junctions for folders + copying of files
+&lt;= Windows Vista: symlinks are available but using them is somewhat tricky
+* if the user is an admin, the process needs to have been started with elevated privileges
 * if the user is not an admin, a specific setting needs to be enabled
-&lt;= Windows 10 Insiders build 14972
+&lt;= Windows 10
 * if developer mode is enabled, symlinks "just work"
 * <a href="https://blogs.windows.com/buildingapps/2016/12/02/symlinks-windows-10">https://blogs.windows.com/buildingapps/2016/12/02/symlinks-windows-10</a></p>
 </blockquote>
@@ -221,7 +224,7 @@ improve there build performance, and how.</p>
           </td>
           <td>
             <div class="method-name ">
-              <a href="#method_contentFor">contentFor</a>(config, mathch, type, options): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+              <a href="#method_contentFor">contentFor</a>(config, match, type, options): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
             </div>
             <div class="short-description">
               <p>Returns the content for a specific type (section) for index.html.</p>
@@ -568,7 +571,7 @@ improve there build performance, and how.</p>
 </div>
 <div class="method item public">
     <div id="method_checkIfSymlinksNeedToBeEnabled" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l39"><code>lib&#x2F;utilities&#x2F;windows-admin.js:39</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l38"><code>lib&#x2F;utilities&#x2F;windows-admin.js:38</code></a></span>
         <h3 class="">
             public
             
@@ -603,7 +606,7 @@ achieve better windows build performance</p>
 </div>
 <div class="method item public">
     <div id="method_checkIfSymlinksNeedToBeEnabled" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l83"><code>lib&#x2F;utilities&#x2F;windows-admin.js:83</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l81"><code>lib&#x2F;utilities&#x2F;windows-admin.js:81</code></a></span>
         <h3 class="">
             public
             
@@ -635,7 +638,7 @@ achieve better windows build performance</p>
             public
             
             
-            contentFor(config, mathch, type, options): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            contentFor(config, match, type, options): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
         </h3>
     </div>
 
@@ -682,7 +685,7 @@ achieve better windows build performance</p>
             </tr>
 
             <tr>
-              <td>mathch</td>
+              <td>match</td>
               <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" class="crosslink external" target="_blank">RegExp</a></td>
               <td>
                 <ul>
@@ -749,20 +752,6 @@ application or not</p>
                 </td>
                 <td><p>Controls whether to include the
 contents of config</p>
-</td>
-              </tr>
-              <tr>
-                <td>options.isModuleUnification</td>
-                <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></td>
-                <td>
-                  <ul>
-                    
-                    
-                    
-                  </ul>
-                </td>
-                <td><p>Signifies if the application
-supports module unification or not</p>
 </td>
               </tr>
           </tbody>
@@ -841,7 +830,7 @@ in.</p>
 </div>
 <div class="method item">
     <div id="method_insertIntoFile" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_insert-into-file.js.html#l10"><code>lib&#x2F;utilities&#x2F;insert-into-file.js:10</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_insert-into-file.js.html#l6"><code>lib&#x2F;utilities&#x2F;insert-into-file.js:6</code></a></span>
         <h3 class="">
             public
             
@@ -1006,7 +995,7 @@ in.</p>
 </div>
 <div class="method item">
     <div id="method_setupSignalsTrap" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l118"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:118</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l122"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:122</code></a></span>
         <h3 class="">
             public
             
@@ -1028,7 +1017,7 @@ which enforces <code>capture-exit</code> to run registered interruption handlers
 </div>
 <div class="method item">
     <div id="method_startsWithNumber" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_valid-project-name.js.html#l3"><code>lib&#x2F;utilities&#x2F;valid-project-name.js:3</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_valid-project-name.js.html#l5"><code>lib&#x2F;utilities&#x2F;valid-project-name.js:5</code></a></span>
         <h3 class="">
             public
             
@@ -1055,7 +1044,7 @@ which enforces <code>capture-exit</code> to run registered interruption handlers
 </div>
 <div class="method item">
     <div id="method_teardownSignalsTrap" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l136"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:136</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l140"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:140</code></a></span>
         <h3 class="">
             public
             
@@ -1075,7 +1064,7 @@ which enforces <code>capture-exit</code> to run registered interruption handlers
 </div>
 <div class="method item">
     <div id="method_trapWindowsSignals" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l151"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:151</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l155"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:155</code></a></span>
         <h3 class="">
             public
             
@@ -1095,7 +1084,7 @@ which enforces <code>capture-exit</code> to run registered interruption handlers
 </div>
 <div class="method item">
     <div id="method_validProjectName" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_valid-project-name.js.html#l13"><code>lib&#x2F;utilities&#x2F;valid-project-name.js:13</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_valid-project-name.js.html#l24"><code>lib&#x2F;utilities&#x2F;valid-project-name.js:24</code></a></span>
         <h3 class="">
             public
             
@@ -1159,7 +1148,7 @@ numbers are considered invalid as well.</p>
         <h2 id="private-methods">Private Methods</h2>
 <div class="method item private">
     <div id="method__checkForElevatedRights" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l106"><code>lib&#x2F;utilities&#x2F;windows-admin.js:106</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l104"><code>lib&#x2F;utilities&#x2F;windows-admin.js:104</code></a></span>
         <h3 class="">
             private
             
@@ -1219,7 +1208,7 @@ current user has elevated rights (think sudo, but Windows).</p>
 </div>
 <div class="method item private">
     <div id="method__setup" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l61"><code>lib&#x2F;utilities&#x2F;windows-admin.js:61</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_windows-admin.js.html#l60"><code>lib&#x2F;utilities&#x2F;windows-admin.js:60</code></a></span>
         <h3 class="">
             private
             
@@ -1387,7 +1376,7 @@ yarn workspace root.</p>
 </div>
 <div class="method item private">
     <div id="method_onInterrupt" class="title">
-        <span class="source-link"><a href="../files/lib_tasks_serve.js.html#l92"><code>lib&#x2F;tasks&#x2F;serve.js:92</code></a></span>
+        <span class="source-link"><a href="../files/lib_tasks_serve.js.html#l100"><code>lib&#x2F;tasks&#x2F;serve.js:100</code></a></span>
         <h3 class="">
             private
             
@@ -1407,7 +1396,7 @@ yarn workspace root.</p>
 </div>
 <div class="method item private">
     <div id="method_onInterrupt" class="title">
-        <span class="source-link"><a href="../files/lib_tasks_test-server.js.html#l62"><code>lib&#x2F;tasks&#x2F;test-server.js:62</code></a></span>
+        <span class="source-link"><a href="../files/lib_tasks_test-server.js.html#l61"><code>lib&#x2F;tasks&#x2F;test-server.js:61</code></a></span>
         <h3 class="">
             private
             
@@ -1427,7 +1416,7 @@ yarn workspace root.</p>
 </div>
 <div class="method item private">
     <div id="method_release" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l48"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:48</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l47"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:47</code></a></span>
         <h3 class="">
             private
             
@@ -1452,7 +1441,7 @@ similar to the original <code>exit</code> except of cases when we need to do cle
 </div>
 <div class="method item private">
     <div id="method_removeHandler" class="title">
-        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l95"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:95</code></a></span>
+        <span class="source-link"><a href="../files/lib_utilities_will-interrupt-process.js.html#l97"><code>lib&#x2F;utilities&#x2F;will-interrupt-process.js:97</code></a></span>
         <h3 class="">
             private
             

@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -81,16 +84,16 @@
 const fs = require(&#x27;fs&#x27;);
 const path = require(&#x27;path&#x27;);
 const ExpressServer = require(&#x27;./server/express-server&#x27;);
-const RSVP = require(&#x27;rsvp&#x27;);
 const Task = require(&#x27;../models/task&#x27;);
 const Watcher = require(&#x27;../models/watcher&#x27;);
 const ServerWatcher = require(&#x27;../models/server-watcher&#x27;);
 const Builder = require(&#x27;../models/builder&#x27;);
 const SilentError = require(&#x27;silent-error&#x27;);
 const serveURL = require(&#x27;../utilities/get-serve-url&#x27;);
+const pDefer = require(&#x27;p-defer&#x27;);
 
 function mockWatcher(distDir) {
-  let watcher = RSVP.Promise.resolve({ directory: distDir });
+  let watcher = Promise.resolve({ directory: distDir });
   watcher.on = () =&gt; {};
   return watcher;
 }
@@ -109,31 +112,37 @@ class ServeTask extends Task {
     this._builder = null;
   }
 
-  run(options) {
+  async run(options) {
     let hasBuild = !!options.path;
 
     if (hasBuild) {
       if (!fs.existsSync(options.path)) {
-        throw new SilentError(&#x60;The path ${options.path} does not exist. Please specify a valid build directory to serve.&#x60;);
+        throw new SilentError(
+          &#x60;The path ${options.path} does not exist. Please specify a valid build directory to serve.&#x60;
+        );
       }
       options._builder = mockBuilder();
       options._watcher = mockWatcher(options.path);
     }
 
-    let builder = this._builder = options._builder || new Builder({
-      ui: this.ui,
-      outputPath: options.outputPath,
-      project: this.project,
-      environment: options.environment,
-    });
+    let builder = (this._builder =
+      options._builder ||
+      new Builder({
+        ui: this.ui,
+        outputPath: options.outputPath,
+        project: this.project,
+        environment: options.environment,
+      }));
 
-    let watcher = options._watcher || new Watcher({
-      ui: this.ui,
-      builder,
-      analytics: this.analytics,
-      options,
-      serving: true,
-    });
+    let watcher =
+      options._watcher ||
+      new Watcher({
+        ui: this.ui,
+        builder,
+        analytics: this.analytics,
+        options,
+        serving: true,
+      });
 
     let serverRoot = &#x27;./server&#x27;;
     let serverWatcher = null;
@@ -146,25 +155,27 @@ class ServeTask extends Task {
       });
     }
 
-    let expressServer = options._expressServer || new ExpressServer({
-      ui: this.ui,
-      project: this.project,
-      analytics: this.analytics,
-      watcher,
-      serverRoot,
-      serverWatcher,
-    });
+    let expressServer =
+      options._expressServer ||
+      new ExpressServer({
+        ui: this.ui,
+        project: this.project,
+        analytics: this.analytics,
+        watcher,
+        serverRoot,
+        serverWatcher,
+      });
 
     /* hang until the user exits */
-    this._runDeferred = RSVP.defer();
+    this._runDeferred = pDefer();
 
-    return expressServer.start(options)
-      .then(() =&gt; {
-        if (hasBuild) {
-          this.ui.writeLine(&#x60;– Serving on ${serveURL(options, this.project)}&#x60;);
-        }
-        return this._runDeferred.promise;
-      });
+    await expressServer.start(options);
+
+    if (hasBuild) {
+      this.ui.writeLine(&#x60;– Serving on ${serveURL(options, this.project)}&#x60;);
+    }
+
+    return this._runDeferred.promise;
   }
 
   /**
@@ -173,8 +184,9 @@ class ServeTask extends Task {
    * @private
    * @method onInterrupt
    */
-  onInterrupt() {
-    return this._builder.cleanup().then(() =&gt; this._runDeferred.resolve());
+  async onInterrupt() {
+    await this._builder.cleanup();
+    return this._runDeferred.resolve();
   }
 }
 

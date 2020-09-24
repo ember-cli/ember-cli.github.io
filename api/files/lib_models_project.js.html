@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -81,10 +84,10 @@
 /**
 @module ember-cli
 */
-const RSVP = require(&#x27;rsvp&#x27;);
+const util = require(&#x27;util&#x27;);
 const path = require(&#x27;path&#x27;);
 const findup = require(&#x27;find-up&#x27;);
-const resolve = RSVP.denodeify(require(&#x27;resolve&#x27;));
+const resolve = util.promisify(require(&#x27;resolve&#x27;));
 const fs = require(&#x27;fs-extra&#x27;);
 const _ = require(&#x27;ember-cli-lodash-subset&#x27;);
 const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:project&#x27;);
@@ -147,7 +150,7 @@ class Project {
       canNestRoots: false,
     };
 
-    let instrumentation = this._instrumentation = ensureInstrumentation(cli, ui);
+    let instrumentation = (this._instrumentation = ensureInstrumentation(cli, ui));
     instrumentation.project = this;
 
     this.emberCLIVersion = emberCLIVersion;
@@ -226,23 +229,21 @@ class Project {
   }
 
   static nullProject(ui, cli) {
-    if (NULL_PROJECT) { return NULL_PROJECT; }
+    if (NULL_PROJECT) {
+      return NULL_PROJECT;
+    }
 
     NULL_PROJECT = new Project(processCwd, {}, ui, cli);
 
-    NULL_PROJECT.isEmberCLIProject = function() {
+    NULL_PROJECT.isEmberCLIProject = function () {
       return false;
     };
 
-    NULL_PROJECT.isEmberCLIAddon = function() {
+    NULL_PROJECT.isEmberCLIAddon = function () {
       return false;
     };
 
-    NULL_PROJECT.isModuleUnification = function() {
-      return false;
-    };
-
-    NULL_PROJECT.name = function() {
+    NULL_PROJECT.name = function () {
       return path.basename(process.cwd());
     };
 
@@ -287,21 +288,6 @@ class Project {
   }
 
   /**
-     Returns whether this is using a module unification format.
-     @private
-     @method isModuleUnification
-     @return {Boolean} Whether this is using a module unification format.
-    */
-  isModuleUnification() {
-    const { isExperimentEnabled } = require(&#x27;../experiments&#x27;);
-    if (isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;)) {
-      return this.has(&#x27;src&#x27;);
-    } else {
-      return false;
-    }
-  }
-
-  /**
     Returns the path to the configuration.
 
     @private
@@ -327,10 +313,11 @@ class Project {
     @return {Object}     Merged configuration object
    */
   config(env) {
-    let key = &#x60;${this.configPath()}|${env}&#x60;;
+    let _env = env === undefined ? process.env.EMBER_ENV : env;
+    let key = &#x60;${this.configPath()}|${_env}&#x60;;
     let config = this.configCache.get(key);
     if (config === undefined) {
-      config = this.configWithoutCache(env);
+      config = this.configWithoutCache(_env);
       this.configCache.set(key, config);
     }
     return _.cloneDeep(config);
@@ -340,7 +327,7 @@ class Project {
    * @private
    * @method configWithoutCache
    * @param  {String} env Environment name
-   * @return {Object}     Merged confiration object
+   * @return {Object}     Merged configuration object
    */
   configWithoutCache(env) {
     let configPath = this.configPath();
@@ -477,7 +464,7 @@ class Project {
   bowerDependencies(bower) {
     if (!bower) {
       let bowerPath = path.join(this.root, &#x27;bower.json&#x27;);
-      bower = (fs.existsSync(bowerPath)) ? require(bowerPath) : {};
+      bower = fs.existsSync(bowerPath) ? require(bowerPath) : {};
     }
     return Object.assign({}, bower[&#x27;devDependencies&#x27;], bower[&#x27;dependencies&#x27;]);
   }
@@ -490,7 +477,9 @@ class Project {
     @method supportedInternalAddonPaths
   */
   supportedInternalAddonPaths() {
-    if (!this.root) { return []; }
+    if (!this.root) {
+      return [];
+    }
 
     let internalMiddlewarePath = path.join(__dirname, &#x27;../tasks/server/middleware&#x27;);
     let internalTransformPath = path.join(__dirname, &#x27;../tasks/transforms&#x27;);
@@ -547,7 +536,7 @@ class Project {
     this.discoverAddons();
 
     this.addons = instantiateAddons(this, this, this.addonPackages);
-    this.addons.forEach(addon =&gt; logger.info(&#x27;addon: %s&#x27;, addon.name));
+    this.addons.forEach((addon) =&gt; logger.info(&#x27;addon: %s&#x27;, addon.name));
   }
 
   /**
@@ -561,8 +550,10 @@ class Project {
   addonCommands() {
     const Command = require(&#x27;../models/command&#x27;);
     let commands = Object.create(null);
-    this.addons.forEach(addon =&gt; {
-      if (!addon.includedCommands) { return; }
+    this.addons.forEach((addon) =&gt; {
+      if (!addon.includedCommands) {
+        return;
+      }
 
       let token = heimdall.start({
         name: &#x60;lookup-commands: ${addon.name}&#x60;,
@@ -649,13 +640,17 @@ class Project {
     @return {Array} List of paths
    */
   addonBlueprintLookupPaths() {
-    let addonPaths = this.addons.reduce((sum, addon) =&gt; {
-      if (addon.blueprintsPath) {
-        let val = addon.blueprintsPath();
-        if (val) { sum.push(val); }
-      }
-      return sum;
-    }, []).reverse();
+    let addonPaths = this.addons
+      .reduce((sum, addon) =&gt; {
+        if (addon.blueprintsPath) {
+          let val = addon.blueprintsPath();
+          if (val) {
+            sum.push(val);
+          }
+        }
+        return sum;
+      }, [])
+      .reverse();
 
     return addonPaths;
   }
@@ -693,7 +688,7 @@ class Project {
   /**
     Find an addon by its name
 
-    @private
+    @public
     @method findAddonByName
     @param  {String} name Addon name as specified in package.json
     @return {Addon}       Addon instance
@@ -806,7 +801,7 @@ class Project {
     const pkg = require(packagePath);
 
     if (pkg &amp;&amp; pkg.name === &#x27;ember-cli&#x27;) {
-      logger.info(&#x27;getProjectRoot: named \&#x27;ember-cli\&#x27;. Will use cwd: %s&#x27;, process.cwd());
+      logger.info(&quot;getProjectRoot: named &#x27;ember-cli&#x27;. Will use cwd: %s&quot;, process.cwd());
       return process.cwd();
     }
 
@@ -819,7 +814,7 @@ class NotFoundError extends Error {
   constructor(message) {
     super(message);
     this.name = &#x27;NotFoundError&#x27;;
-    this.stack = (new Error()).stack;
+    this.stack = new Error().stack;
   }
 }
 
@@ -847,8 +842,8 @@ function ensureUI(_ui) {
     ui = new UI({
       inputStream: process.stdin,
       outputStream: process.stdout,
-      ci: process.env.CI || (/^(dumb|emacs)$/).test(process.env.TERM),
-      writeLevel: (process.argv.indexOf(&#x27;--silent&#x27;) !== -1) ? &#x27;ERROR&#x27; : undefined,
+      ci: process.env.CI || /^(dumb|emacs)$/.test(process.env.TERM),
+      writeLevel: process.argv.indexOf(&#x27;--silent&#x27;) !== -1 ? &#x27;ERROR&#x27; : undefined,
     });
   }
 
@@ -865,9 +860,10 @@ function findupPath(pathName) {
 }
 
 function isEmberCliProject(pkg) {
-  return pkg &amp;&amp; (
-    (pkg.dependencies &amp;&amp; Object.keys(pkg.dependencies).indexOf(&#x27;ember-cli&#x27;) !== -1) ||
-    (pkg.devDependencies &amp;&amp; Object.keys(pkg.devDependencies).indexOf(&#x27;ember-cli&#x27;) !== -1)
+  return (
+    pkg &amp;&amp;
+    ((pkg.dependencies &amp;&amp; Object.keys(pkg.dependencies).indexOf(&#x27;ember-cli&#x27;) !== -1) ||
+      (pkg.devDependencies &amp;&amp; Object.keys(pkg.devDependencies).indexOf(&#x27;ember-cli&#x27;) !== -1))
   );
 }
 

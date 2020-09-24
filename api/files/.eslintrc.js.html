@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ember-cli - ember-cli</title>
+    <title>.eslintrc.js - ember-cli</title>
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
@@ -64,33 +64,6 @@
             </div>
             
             
-            <div id="sections" class="sidebox">
-              <div class="hd">
-                <h2 class="no-toc">ember-cli</h2>
-              </div>
-              <div class="bd">
-            
-            
-                  <div><a href="#constructor-summary">Constructor Summary</a></div>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-              </div>
-            </div>
             
             
             
@@ -102,46 +75,83 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><div class="title">
-  <span class="source-link"><a href="../files/tests_helpers_package-cache.js.html#l98"><code>tests&#x2F;helpers&#x2F;package-cache.js:98</code></a></span>
-  <h1 class="module-name">ember-cli</h1>
+  <h1 class="file-name">.eslintrc.js</h1>
 </div>
 
-<div class="intro"></div>
+<pre class="code prettyprint linenums">
+&#x27;use strict&#x27;;
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        <p>This module has the following classes:</p>
-        <ul>
-            <li><a href="../classes/Addon.html">Addon</a></li>
-            <li><a href="../classes/AmdTransformAddon.html">AmdTransformAddon</a></li>
-            <li><a href="../classes/Blueprint.html">Blueprint</a></li>
-            <li><a href="../classes/Builder.html">Builder</a></li>
-            <li><a href="../classes/CLI.html">CLI</a></li>
-            <li><a href="../classes/Command.html">Command</a></li>
-            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
-            <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
-            <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
-            <li><a href="../classes/EmberApp.html">EmberApp</a></li>
-            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
-            <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
-            <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
-            <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
-            <li><a href="../classes/NpmTask.html">NpmTask</a></li>
-            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
-            <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
-            <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
-            <li><a href="../classes/Project.html">Project</a></li>
-            <li><a href="../classes/ServeFilesAddon.html">ServeFilesAddon</a></li>
-            <li><a href="../classes/TestsServerAddon.html">TestsServerAddon</a></li>
-            <li><a href="../classes/WatcherAddon.html">WatcherAddon</a></li>
-            <li><a href="../classes/WindowsSymlinkChecker.html">WindowsSymlinkChecker</a></li>
-        </ul>
-    </div>
-    <div class="yui3-u-1-2">
-    </div>
-    <div class="yui3-u-1-2">
-    </div>
-</div>
+module.exports = {
+  root: true,
+  parserOptions: {
+    ecmaVersion: 2018,
+  },
+  plugins: [&#x27;node&#x27;, &#x27;prettier&#x27;],
+  extends: [&#x27;eslint:recommended&#x27;, &#x27;plugin:node/recommended&#x27;, &#x27;plugin:prettier/recommended&#x27;],
+  env: {
+    browser: false,
+    node: true,
+    es6: true,
+  },
+  globals: {},
+  rules: {
+    /*** Possible Errors ***/
+
+    &#x27;no-console&#x27;: &#x27;off&#x27;,
+    &#x27;no-template-curly-in-string&#x27;: &#x27;error&#x27;,
+    &#x27;no-unsafe-negation&#x27;: &#x27;error&#x27;,
+
+    /*** Best Practices ***/
+
+    curly: &#x27;error&#x27;,
+    eqeqeq: &#x27;error&#x27;,
+    &#x27;guard-for-in&#x27;: &#x27;off&#x27;,
+    &#x27;no-caller&#x27;: &#x27;error&#x27;,
+    &#x27;no-eq-null&#x27;: &#x27;error&#x27;,
+    &#x27;no-eval&#x27;: &#x27;error&#x27;,
+    &#x27;no-new&#x27;: &#x27;off&#x27;,
+    &#x27;no-unused-expressions&#x27;: [
+      &#x27;error&#x27;,
+      {
+        allowShortCircuit: true,
+        allowTernary: true,
+      },
+    ],
+    &#x27;wrap-iife&#x27;: &#x27;off&#x27;,
+    yoda: &#x27;error&#x27;,
+
+    /*** Strict Mode ***/
+
+    strict: [&#x27;error&#x27;, &#x27;global&#x27;],
+
+    /*** Variables ***/
+
+    &#x27;no-undef&#x27;: &#x27;error&#x27;,
+    &#x27;no-unused-vars&#x27;: &#x27;error&#x27;,
+    &#x27;no-use-before-define&#x27;: [&#x27;error&#x27;, &#x27;nofunc&#x27;],
+
+    /*** Stylistic Issues ***/
+
+    camelcase: &#x27;error&#x27;,
+    &#x27;new-cap&#x27;: [&#x27;error&#x27;, { properties: false }],
+    &#x27;no-array-constructor&#x27;: &#x27;error&#x27;,
+    &#x27;no-bitwise&#x27;: &#x27;error&#x27;,
+    &#x27;no-lonely-if&#x27;: &#x27;error&#x27;,
+    &#x27;no-plusplus&#x27;: &#x27;off&#x27;,
+    &#x27;no-unneeded-ternary&#x27;: &#x27;error&#x27;,
+
+    /*** ECMAScript 6 ***/
+
+    &#x27;no-useless-computed-key&#x27;: &#x27;error&#x27;,
+    &#x27;no-var&#x27;: &#x27;error&#x27;,
+    &#x27;object-shorthand&#x27;: &#x27;error&#x27;,
+    &#x27;prefer-template&#x27;: &#x27;error&#x27;,
+    &#x27;symbol-description&#x27;: &#x27;error&#x27;,
+  },
+};
+
+</pre>
+
 </div>
         </div>
     </div>

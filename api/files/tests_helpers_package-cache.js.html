@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>tests/helpers/package-cache.js - ember-cli</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  <img src="https://ember-cli.com/assets/images/ember-cli-logo-small-dark.png">
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/ember-cli.html">ember-cli</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/Addon.html">Addon</a></li>
+                            <li><a href="../classes/AmdTransformAddon.html">AmdTransformAddon</a></li>
+                            <li><a href="../classes/Blueprint.html">Blueprint</a></li>
+                            <li><a href="../classes/Builder.html">Builder</a></li>
+                            <li><a href="../classes/CLI.html">CLI</a></li>
+                            <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
+                            <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
+                            <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
+                            <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
+                            <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
+                            <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
+                            <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
+                            <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
+                            <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
+                            <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/ServeFilesAddon.html">ServeFilesAddon</a></li>
+                            <li><a href="../classes/TestsServerAddon.html">TestsServerAddon</a></li>
+                            <li><a href="../classes/WatcherAddon.html">WatcherAddon</a></li>
+                            <li><a href="../classes/WindowsSymlinkChecker.html">WindowsSymlinkChecker</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 3.21.2-release-97b3bd79fc
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">tests/helpers/package-cache.js</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+&#x27;use strict&#x27;;
+
+const fs = require(&#x27;fs-extra&#x27;);
+const path = require(&#x27;path&#x27;);
+const quickTemp = require(&#x27;quick-temp&#x27;);
+const Configstore = require(&#x27;configstore&#x27;);
+const CommandGenerator = require(&#x27;./command-generator&#x27;);
+const stableStringify = require(&#x27;json-stable-stringify&#x27;);
+const symlinkOrCopySync = require(&#x27;symlink-or-copy&#x27;).sync;
+
+let originalWorkingDirectory = process.cwd();
+
+// Module scoped variable to store whether a particular cache has been
+// attempted to be upgraded.
+let upgraded = {};
+
+/*
+List of keys which could possibly result in the package manager installing
+something. This is the &quot;err on the side of caution&quot; approach. It actually
+doesn&#x27;t matter if something is or isn&#x27;t automatically installed in any of the
+cases where we use this.
+*/
+let DEPENDENCY_KEYS = [&#x27;dependencies&#x27;, &#x27;devDependencies&#x27;, &#x27;peerDependencies&#x27;, &#x27;optionalDependencies&#x27;];
+
+/**
+ * The &#x60;bower&#x60; command helper.
+ *
+ * @method bower
+ * @param {String} subcommand The subcommand to be passed into bower.
+ * @param {String} [...arguments] Arguments to be passed into the bower subcommand.
+ * @param {Object} [options={}] The options passed into child_process.spawnSync.
+ *   (https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options)
+ */
+let bower = new CommandGenerator(&#x27;bower&#x27;);
+
+/**
+ * The &#x60;npm&#x60; command helper.
+ *
+ * @method npm
+ * @param {String} subcommand The subcommand to be passed into npm.
+ * @param {String} [...arguments] Arguments to be passed into the npm subcommand.
+ * @param {Object} [options={}] The options passed into child_process.spawnSync.
+ *   (https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options)
+ */
+let npm = new CommandGenerator(&#x27;npm&#x27;);
+
+/**
+ * The &#x60;yarn&#x60; command helper.
+ *
+ * @method yarn
+ * @param {String} subcommand The subcommand to be passed into yarn.
+ * @param {String} [...arguments] Arguments to be passed into the yarn subcommand.
+ * @param {Object} [options={}] The options passed into child_process.spawnSync.
+ *   (https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options)
+ */
+let yarn = new CommandGenerator(&#x27;yarn&#x27;);
+
+// This lookup exists to make it possible to look the commands up based upon context.
+let originals;
+let commands = {
+  bower,
+  npm,
+  yarn,
+};
+
+// The definition list of translation terms.
+let lookups = {
+  manifest: {
+    bower: &#x27;bower.json&#x27;,
+    npm: &#x27;package.json&#x27;,
+    yarn: &#x27;package.json&#x27;,
+  },
+  path: {
+    bower: &#x27;bower_components&#x27;,
+    npm: &#x27;node_modules&#x27;,
+    yarn: &#x27;node_modules&#x27;,
+  },
+  upgrade: {
+    bower: &#x27;update&#x27;,
+    npm: &#x27;install&#x27;,
+    yarn: &#x27;upgrade&#x27;,
+  },
+};
+
+/**
+ * The &#x60;translate&#x60; command is used to turn a consistent argument into
+ * appropriate values based upon the context in which it is used. It&#x27;s
+ * a convenience helper to avoid littering lookups throughout the code.
+ *
+ * @method translate
+ * @param {String} type Either &#x27;bower&#x27;, &#x27;npm&#x27;, or &#x27;yarn&#x27;.
+ * @param {String} lookup Either &#x27;manifest&#x27;, &#x27;path&#x27;, or &#x27;upgrade&#x27;.
+ */
+function translate(type, lookup) {
+  return lookups[lookup][type];
+}
+
+/**
+ * The PackageCache wraps all package management functions. It also
+ * handles initial global state setup.
+ *
+ * Usage:
+ *
+ * &#x60;&#x60;&#x60;
+ * let cache = new PackageCache();
+ * let dir = cache.create(&#x27;your-cache&#x27;, &#x27;yarn&#x27;, &#x27;{
+ *   &quot;dependencies&quot;: {
+ *     &quot;lodash&quot;: &quot;*&quot;,
+ *     &quot;ember-cli&quot;: &quot;*&quot;
+ *   }
+ * }&#x27;);
+ * // =&gt; process.cwd()/tmp/your-cache-A3B4C6D
+ * &#x60;&#x60;&#x60;
+ *
+ * This will generate a persistent cache which contains the results
+ * of a clean installation of the &#x60;dependencies&#x60; as you specified in
+ * the manifest argument. It will save the results of these in a
+ * temporary folder, returned as &#x60;dir&#x60;. On a second invocation
+ * (in the same process, or in a subsequent run) PackageCache will first
+ * compare the manifest to the previously installed one, using the manifest
+ * as the cache key, and make a decision as to the fastest way to get
+ * the cache up-to-date. PackageCache guarantees that your cache will
+ * always be up-to-date.
+ *
+ * If done in the same process, this simply returns the existing cache
+ * directory with no change, making the following invocation simply a
+ * cache validation check:
+ *
+ * &#x60;&#x60;&#x60;
+ * let dir2 = cache.create(&#x27;your-cache&#x27;, &#x27;yarn&#x27;, &#x27;{
+ *   &quot;dependencies&quot;: {
+ *     &quot;lodash&quot;: &quot;*&quot;,
+ *     &quot;ember-cli&quot;: &quot;*&quot;
+ *   }
+ * }&#x27;);
+ * // =&gt; process.cwd()/tmp/your-cache-A3B4C6D
+ * &#x60;&#x60;&#x60;
+ *
+ * If you wish to modify a cache you can do so using the &#x60;update&#x60; API:
+ *
+ * &#x60;&#x60;&#x60;
+ * let dir3 = cache.update(&#x27;your-cache&#x27;, &#x27;yarn&#x27;, &#x27;{
+ *   &quot;dependencies&quot;: {
+ *     &quot;&quot;: &quot;*&quot;,
+ *     &quot;lodash&quot;: &quot;*&quot;,
+ *     &quot;ember-cli&quot;: &quot;*&quot;
+ *   }
+ * }&#x27;);
+ * // =&gt; process.cwd()/tmp/your-cache-A3B4C6D
+ * &#x60;&#x60;&#x60;
+ *
+ * Underneath the hood &#x60;create&#x60; and &#x60;update&#x60; are identical–which
+ * makes clear the simplicity of this tool. It will always do the
+ * right thing. You can think of the outcome of any &#x60;create&#x60; or
+ * &#x60;update&#x60; call as identical to &#x60;rm -rf node_modules &amp;&amp; npm install&#x60;
+ * except as performant as possible.
+ *
+ * If you need to make modifications to a cache but wish to retain
+ * the original you can invoke the &#x60;clone&#x60; command:
+ *
+ * &#x60;&#x60;&#x60;
+ * let newDir = cache.clone(&#x27;your-cache&#x27;, &#x27;modified-cache&#x27;);
+ * let manifest = fs.readJsonSync(path.join(newDir, &#x27;package.json&#x27;));
+ * manifest.dependencies[&#x27;express&#x27;] = &#x27;*&#x27;;
+ * cache.update(&#x27;modified-cache&#x27;, &#x27;yarn&#x27;, JSON.stringify(manifest));
+ * // =&gt; process.cwd()/tmp/modified-cache-F8D5C8B
+ * &#x60;&#x60;&#x60;
+ *
+ * This mental model makes it easy to prevent coding mistakes, state
+ * leakage across multiple test runs by making multiple caches cheap,
+ * and has tremendous performance benefits.
+ *
+ * You can even programatically update a cache:
+ *
+ * &#x60;&#x60;&#x60;
+ * let CommandGenerator = require(&#x27;./command-generator&#x27;);
+ * let yarn = new CommandGenerator(&#x27;yarn&#x27;);
+ *
+ * let dir = cache.create(&#x27;your-cache&#x27;, &#x27;yarn&#x27;, &#x27;{ ... }&#x27;);
+ *
+ * yarn.invoke(&#x27;add&#x27;, &#x27;some-addon&#x27;, { cwd: dir });
+ * &#x60;&#x60;&#x60;
+ *
+ * The programmatic approach enables the entire set of usecases that
+ * the underlying package manager supports while continuing to wrap it
+ * in a persistent cache. You should not directly modify any files in the
+ * cache other than the manifest unless you really know what you&#x27;re doing as
+ * that can put the cache into a possibly invalid state.
+ *
+ * PackageCache also supports linking. If you pass an array of module names to
+ * in the fourth position it will ensure that those are linked, and remain
+ * linked for the lifetime of the cache. When you link a package it uses the
+ * current global link provided by the underlying package manager and invokes
+ * their built-in &#x60;link&#x60; command.
+ *
+ * &#x60;&#x60;&#x60;
+ * let dir = cache.create(&#x27;your-cache&#x27;, &#x27;yarn&#x27;, &#x27;{ ... }&#x27;, [&#x27;ember-cli&#x27;]);
+ * // =&gt; &#x60;yarn link ember-cli&#x60; happens along the way.
+ * &#x60;&#x60;&#x60;
+ *
+ * Sometimes this global linking behavior is not what you want. Instead you wish
+ * to link in some other working directory. PackageCache makes a best effort
+ * attempt at supporting this workflow by allowing you to specify an object in
+ * the &#x60;links&#x60; argument array passed to &#x60;create&#x60;.
+ *
+ * let dir = cache.create(&#x27;your-cache&#x27;, &#x27;yarn&#x27;, &#x27;{ ... }&#x27;, [
+ *   { name: &#x27;ember-cli&#x27;, path: &#x27;/the/absolute/path/to/the/package&#x27; },
+ *   &#x27;other-package&#x27;
+ * ]);
+ *
+ * This creates a symlink at the named package path to the specified directory.
+ * As package managers do different things for their own linking behavior this
+ * is &quot;best effort&quot; only. Be sure to review upstream behavior to identify if you
+ * rely on those features for your code to function:
+ *
+ * - [bower](https://github.com/bower/bower/blob/master/lib/commands/link.js)
+ * - [npm](https://github.com/npm/npm/blob/latest/lib/link.js)
+ * - [yarn](https://github.com/yarnpkg/yarn/blob/master/src/cli/commands/link.js)
+ *
+ * As the only caveat, PackageCache _is_ persistent. The consuming
+ * code is responsible for ensuring that the cache size does not
+ * grow unbounded.
+ *
+ * @class PackageCache
+ * @constructor
+ * @param {String} rootPath Root of the directory for &#x60;PackageCache&#x60;.
+ */
+module.exports = class PackageCache {
+  constructor(rootPath) {
+    this.rootPath = rootPath || originalWorkingDirectory;
+
+    let configPath = path.join(this.rootPath, &#x27;tmp&#x27;, &#x27;package-cache.json&#x27;);
+    this._conf = new Configstore(
+      &#x27;package-cache&#x27;,
+      {},
+      {
+        configPath,
+      }
+    );
+
+    this._cleanDirs();
+  }
+
+  get dirs() {
+    return this._conf.all;
+  }
+
+  /**
+   * The &#x60;__setupForTesting&#x60; modifies things in module scope.
+   *
+   * @method __setupForTesting
+   */
+  __setupForTesting(stubs) {
+    originals = commands;
+    commands = stubs.commands;
+  }
+
+  /**
+   * The &#x60;__resetForTesting&#x60; puts things back in module scope.
+   *
+   * @method __resetForTesting
+   */
+  __resetForTesting() {
+    commands = originals;
+  }
+
+  /**
+   * The &#x60;_cleanDirs&#x60; method deals with sync issues between the
+   * Configstore and what exists on disk. Non-existent directories
+   * are removed from &#x60;this.dirs&#x60;.
+   *
+   * @method _cleanDirs
+   */
+  _cleanDirs() {
+    let labels = Object.keys(this.dirs);
+
+    let label, directory;
+    for (let i = 0; i &lt; labels.length; i++) {
+      label = labels[i];
+      directory = this.dirs[label];
+      if (!fs.existsSync(directory)) {
+        this._conf.delete(label);
+      }
+    }
+  }
+
+  /**
+   * The &#x60;_readManifest&#x60; method reads the on-disk manifest for the current
+   * cache and returns its value.
+   *
+   * @method _readManifest
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   * @return {String} The manifest file contents on disk.
+   */
+  _readManifest(label, type) {
+    let readManifestDir = this.dirs[label];
+
+    if (!readManifestDir) {
+      return null;
+    }
+
+    let inputPath = path.join(readManifestDir, translate(type, &#x27;manifest&#x27;));
+
+    let result = null;
+    try {
+      result = fs.readFileSync(inputPath, &#x27;utf8&#x27;);
+    } catch (error) {
+      // Swallow non-exceptional errors.
+      if (error.code !== &#x27;ENOENT&#x27;) {
+        throw error;
+      }
+    }
+    return result;
+  }
+
+  /**
+   * The &#x60;_writeManifest&#x60; method generates the on-disk folder for the package cache
+   * and saves the manifest into it. If it is a yarn package cache it will remove
+   * the existing lock file.
+   *
+   * @method _writeManifest
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   * @param {String} manifest The contents of the manifest file to write to disk.
+   */
+  _writeManifest(label, type, manifest) {
+    process.chdir(this.rootPath);
+    let outputDir = quickTemp.makeOrReuse(this.dirs, label);
+    process.chdir(originalWorkingDirectory);
+
+    this._conf.set(label, outputDir);
+
+    let outputFile = path.join(outputDir, translate(type, &#x27;manifest&#x27;));
+    fs.outputFileSync(outputFile, manifest);
+
+    // Remove any existing yarn.lock file so that it doesn&#x27;t try to incorrectly use it as a base.
+    if (type === &#x27;yarn&#x27;) {
+      try {
+        fs.unlinkSync(path.join(outputDir, &#x27;yarn.lock&#x27;));
+      } catch (error) {
+        // Catch unexceptional error but rethrow if something is truly wrong.
+        if (error.code !== &#x27;ENOENT&#x27;) {
+          throw error;
+        }
+      }
+    }
+  }
+
+  /**
+   * The &#x60;_removeLinks&#x60; method removes from the dependencies of the manifest the
+   * assets which will be linked in so that we don&#x27;t duplicate install. It saves
+   * off the values in the internal &#x60;PackageCache&#x60; metadata for restoration after
+   * linking as those values may be necessary.
+   *
+   * It is also responsible for removing these links prior to making any changes
+   * to the specified cache.
+   *
+   * @method _removeLinks
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   */
+  _removeLinks(label, type) {
+    let cachedManifest = this._readManifest(label, type);
+    if (!cachedManifest) {
+      return;
+    }
+
+    let jsonManifest = JSON.parse(cachedManifest);
+    let links = jsonManifest._packageCache.links;
+
+    // Blindly remove existing links whether or not they appear in the manifest.
+    let link, linkPath;
+    for (let i = 0; i &lt; links.length; i++) {
+      link = links[i];
+      if (typeof link === &#x27;string&#x27;) {
+        commands[type].invoke(&#x27;unlink&#x27;, link, { cwd: this.dirs[label] });
+      } else {
+        linkPath = path.join(this.dirs[label], translate(type, &#x27;path&#x27;), link.name);
+        try {
+          fs.removeSync(linkPath);
+        } catch (error) {
+          // Catch unexceptional error but rethrow if something is truly wrong.
+          if (error.code !== &#x27;ENOENT&#x27;) {
+            throw error;
+          }
+        }
+      }
+    }
+
+    // Remove things from the manifest which we know we&#x27;ll link back in.
+    let originals = {};
+    let key, linkName;
+    for (let i = 0; i &lt; DEPENDENCY_KEYS.length; i++) {
+      key = DEPENDENCY_KEYS[i];
+      if (jsonManifest[key]) {
+        // Get a clone of the original object.
+        originals[key] = JSON.parse(JSON.stringify(jsonManifest[key]));
+      }
+      for (let j = 0; j &lt; links.length; j++) {
+        link = links[j];
+
+        // Support object-style invocation for &quot;manual&quot; linking.
+        if (typeof link === &#x27;string&#x27;) {
+          linkName = link;
+        } else {
+          linkName = link.name;
+        }
+
+        if (jsonManifest[key] &amp;&amp; jsonManifest[key][linkName]) {
+          delete jsonManifest[key][linkName];
+        }
+      }
+    }
+
+    jsonManifest._packageCache.originals = originals;
+    let manifest = JSON.stringify(jsonManifest);
+
+    this._writeManifest(label, type, manifest);
+  }
+
+  /**
+   * The &#x60;_restoreLinks&#x60; method restores the dependencies from the internal
+   * &#x60;PackageCache&#x60; metadata so that the manifest matches its original state after
+   * performing the links.
+   *
+   * It is also responsible for restoring these links into the &#x60;PackageCache&#x60;.
+   *
+   * @method _restoreLinks
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   */
+  _restoreLinks(label, type) {
+    let cachedManifest = this._readManifest(label, type);
+    if (!cachedManifest) {
+      return;
+    }
+
+    let jsonManifest = JSON.parse(cachedManifest);
+    let links = jsonManifest._packageCache.links;
+
+    // Blindly restore links.
+    let link, linkPath;
+    for (let i = 0; i &lt; links.length; i++) {
+      link = links[i];
+      if (typeof link === &#x27;string&#x27;) {
+        commands[type].invoke(&#x27;link&#x27;, link, { cwd: this.dirs[label] });
+      } else {
+        linkPath = path.join(this.dirs[label], translate(type, &#x27;path&#x27;), link.name);
+        fs.mkdirsSync(path.dirname(linkPath)); // Just in case the path doesn&#x27;t exist.
+        symlinkOrCopySync(link.path, linkPath);
+      }
+    }
+
+    // Restore to original state.
+    let keys = Object.keys(jsonManifest._packageCache.originals);
+    let key;
+    for (let i = 0; i &lt; keys.length; i++) {
+      key = keys[i];
+      jsonManifest[key] = jsonManifest._packageCache.originals[key];
+    }
+
+    // Get rid of the originals.
+    delete jsonManifest._packageCache.originals;
+
+    // Serialize back to disk.
+    let manifest = JSON.stringify(jsonManifest);
+    this._writeManifest(label, type, manifest);
+  }
+
+  /**
+   * The &#x60;_checkManifest&#x60; method compares the desired manifest to that which
+   * exists in the cache.
+   *
+   * @method _checkManifest
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   * @param {String} manifest The contents of the manifest file to compare to cache.
+   * @return {Boolean} &#x60;true&#x60; if identical.
+   */
+  _checkManifest(label, type, manifest) {
+    let cachedManifest = this._readManifest(label, type);
+
+    if (cachedManifest === null) {
+      return false;
+    }
+
+    let parsedCached = JSON.parse(cachedManifest);
+    let parsedNew = JSON.parse(manifest);
+
+    // Only inspect the keys we care about.
+    // Invalidate the cache based off the private _packageCache key as well.
+    let keys = [].concat(DEPENDENCY_KEYS, &#x27;_packageCache&#x27;);
+
+    let key, before, after;
+    for (let i = 0; i &lt; keys.length; i++) {
+      key = keys[i];
+
+      // Empty keys are identical to undefined keys.
+      before = stableStringify(parsedCached[key]) || &#x27;{}&#x27;;
+      after = stableStringify(parsedNew[key]) || &#x27;{}&#x27;;
+
+      if (before !== after) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * The &#x60;_install&#x60; method installs the contents of the manifest into the
+   * specified package cache.
+   *
+   * @method _install
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   */
+  _install(label, type) {
+    this._removeLinks(label, type);
+    commands[type].invoke(&#x27;install&#x27;, { cwd: this.dirs[label] });
+    this._restoreLinks(label, type);
+
+    // If we just did a clean install we can treat it as up-to-date.
+    upgraded[label] = true;
+  }
+
+  /**
+   * The &#x60;_upgrade&#x60; method guarantees that the contents of the manifest are
+   * allowed to drift in a SemVer compatible manner. It ensures that CI is
+   * always running against the latest versions of all dependencies.
+   *
+   * @method _upgrade
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   */
+  _upgrade(label, type) {
+    // Lock out upgrade calls after the first time upgrading the cache.
+    if (upgraded[label]) {
+      return;
+    }
+
+    if (!this._canUpgrade(label, type)) {
+      // Only way to get repeatable behavior in npm: start over.
+      // We turn an &#x60;_upgrade&#x60; task into an &#x60;_install&#x60; task.
+      fs.removeSync(path.join(this.dirs[label], translate(type, &#x27;path&#x27;)));
+      return this._install(label, type);
+    }
+
+    this._removeLinks(label, type);
+    commands[type].invoke(translate(type, &#x27;upgrade&#x27;), { cwd: this.dirs[label] });
+    this._restoreLinks(label, type);
+
+    upgraded[label] = true;
+  }
+
+  _canUpgrade(label, type) {
+    return type === &#x27;bower&#x27; || (type === &#x27;yarn&#x27; &amp;&amp; fs.existsSync(path.join(this.dirs[label], &#x27;yarn.lock&#x27;)));
+  }
+
+  // PUBLIC API BELOW
+
+  /**
+   * The &#x60;create&#x60; method adds a new package cache entry.
+   *
+   * @method create
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   * @param {String} manifest The contents of the manifest file for the cache.
+   * @param {Array} links Packages to omit for install and link.
+   * @return {String} The directory on disk which contains the cache.
+   */
+  create(label, type, manifest, links) {
+    links = links || [];
+
+    // Save metadata about the PackageCache invocation in the manifest.
+    let packageManagerVersion = commands[type].invoke(&#x27;--version&#x27;).stdout;
+
+    let jsonManifest = JSON.parse(manifest);
+    jsonManifest._packageCache = {
+      node: process.version,
+      packageManager: type,
+      packageManagerVersion,
+      links,
+    };
+
+    manifest = JSON.stringify(jsonManifest);
+
+    // Compare any existing manifest to the ideal per current blueprint.
+    let identical = this._checkManifest(label, type, manifest);
+
+    if (identical) {
+      // Use what we have, but opt in to SemVer drift.
+      this._upgrade(label, type);
+    } else {
+      // Tell the package manager to start semi-fresh.
+      this._writeManifest(label, type, manifest);
+      this._install(label, type);
+    }
+
+    return this.dirs[label];
+  }
+
+  /**
+   * The &#x60;update&#x60; method aliases the &#x60;create&#x60; method.
+   *
+   * @method update
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   * @param {String} manifest The contents of the manifest file for the cache.
+   * @param {Array} links Packages to elide for install and link.
+   * @return {String} The directory on disk which contains the cache.
+   */
+  update(/*label, type, manifest, links*/) {
+    return this.create.apply(this, arguments);
+  }
+
+  /**
+   * The &#x60;get&#x60; method returns the directory for the cache.
+   *
+   * @method get
+   * @param {String} label The label for the cache.
+   * @return {String} The directory on disk which contains the cache.
+   */
+  get(label) {
+    return this.dirs[label];
+  }
+
+  /**
+   * The &#x60;destroy&#x60; method removes all evidence of the package cache.
+   *
+   * @method destroy
+   * @param {String} label The label for the cache.
+   * @param {String} type The type of package cache.
+   */
+  destroy(label) {
+    process.chdir(this.rootPath);
+    quickTemp.remove(this.dirs, label);
+    process.chdir(originalWorkingDirectory);
+
+    this._conf.delete(label);
+  }
+
+  /**
+   * The &#x60;clone&#x60; method duplicates a cache. Some package managers can
+   * leverage a pre-existing state to speed up their installation.
+   *
+   * @method destroy
+   * @param {String} fromLabel The label for the cache to clone.
+   * @param {String} toLabel The label for the new cache.
+   */
+  clone(fromLabel, toLabel) {
+    process.chdir(this.rootPath);
+    let outputDir = quickTemp.makeOrReuse(this.dirs, toLabel);
+    process.chdir(originalWorkingDirectory);
+
+    this._conf.set(toLabel, outputDir);
+
+    fs.copySync(this.get(fromLabel), outputDir);
+
+    return this.dirs[toLabel];
+  }
+};
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

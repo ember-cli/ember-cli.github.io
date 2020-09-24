@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -101,7 +104,6 @@ const SilentError = require(&#x27;silent-error&#x27;);
  *   &#x27;pkg&#x27; object for that addon&#x27;s package.json). These are what is turned into addons.
  */
 function instantiateAddons(parent, project, addonPackages) {
-
   // depending on whether this is really a project or an addon, the &#x27;name&#x27; property may be a getter.
   let parentName = typeof parent.name === &#x27;function&#x27; ? parent.name() : parent.name;
 
@@ -120,7 +122,7 @@ function instantiateAddons(parent, project, addonPackages) {
   let graph = new DAGMap();
   let addonInfo, emberAddonConfig;
 
-  addonNames.forEach(name =&gt; {
+  addonNames.forEach((name) =&gt; {
     addonInfo = addonPackages[name];
     emberAddonConfig = addonInfo.pkg[&#x27;ember-addon&#x27;];
 
@@ -142,7 +144,9 @@ function instantiateAddons(parent, project, addonPackages) {
       let pkgInfo = parent.packageInfoCache.getEntry(addonInfo.path);
 
       if (!pkgInfo || !pkgInfo.valid) {
-        throw new SilentError(&#x60;The \&#x60;${addonInfo.pkg.name}\&#x60; addon could not be found at \&#x60;${addonInfo.path}\&#x60; or was otherwise invalid.&#x60;);
+        throw new SilentError(
+          &#x60;The \&#x60;${addonInfo.pkg.name}\&#x60; addon could not be found at \&#x60;${addonInfo.path}\&#x60; or was otherwise invalid.&#x60;
+        );
       }
 
       let AddonConstructor = pkgInfo.getAddonConstructor();
@@ -173,13 +177,16 @@ function instantiateAddons(parent, project, addonPackages) {
     }
   });
 
-  logger.info(&#x27; addon info %o&#x27;, addons.map(addon =&gt; ({
-    name: addon.name,
-    times: {
-      initialize: addon.constructor._meta_.initializeIn,
-      lookup: addon.constructor._meta_.lookupIn,
-    },
-  })));
+  logger.info(
+    &#x27; addon info %o&#x27;,
+    addons.map((addon) =&gt; ({
+      name: addon.name,
+      times: {
+        initialize: addon.constructor._meta_.initializeIn,
+        lookup: addon.constructor._meta_.lookupIn,
+      },
+    }))
+  );
 
   initializeAddonsToken.stop();
 

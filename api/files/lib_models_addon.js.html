@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -89,7 +92,6 @@ const heimdallLogger = require(&#x27;heimdalljs-logger&#x27;);
 const logger = heimdallLogger(&#x27;ember-cli:addon&#x27;);
 const treeCacheLogger = heimdallLogger(&#x27;ember-cli:addon:tree-cache&#x27;);
 const cacheKeyLogger = heimdallLogger(&#x27;ember-cli:addon:cache-key-for-tree&#x27;);
-const { isExperimentEnabled } = require(&#x27;../experiments&#x27;);
 const PackageInfoCache = require(&#x27;../models/package-info-cache&#x27;);
 
 const p = require(&#x27;ember-cli-preprocess-registry/preprocessors&#x27;);
@@ -135,7 +137,6 @@ if (!heimdall.hasMonitor(&#x27;cache-key-for-tree&#x27;)) {
 
 let DEFAULT_TREE_FOR_METHODS = {
   app: &#x27;treeForApp&#x27;,
-  src: &#x27;treeForSrc&#x27;,
   addon: &#x27;treeForAddon&#x27;,
   &#x27;addon-styles&#x27;: &#x27;treeForAddonStyles&#x27;,
   &#x27;addon-templates&#x27;: &#x27;treeForAddonTemplates&#x27;,
@@ -150,12 +151,16 @@ let DEFAULT_TREE_FOR_METHODS = {
 let GLOBAL_TREE_FOR_METHOD_METHODS = [&#x27;treeFor&#x27;, &#x27;_treeFor&#x27;, &#x27;treeGenerator&#x27;];
 let DEFAULT_TREE_FOR_METHOD_METHODS = {
   app: [&#x27;treeForApp&#x27;],
-  src: [&#x27;treeForSrc&#x27;],
   addon: [
-    &#x27;treeForAddon&#x27;, &#x27;treeForAddonStyles&#x27;, &#x27;treeForAddonTemplates&#x27;,
-    &#x27;compileAddon&#x27;, &#x27;processedAddonJsFiles&#x27;, &#x27;compileTemplates&#x27;,
-    &#x27;_addonTemplateFiles&#x27;, &#x27;compileStyles&#x27;, &#x27;preprocessJs&#x27;,
-    &#x27;addonJsFiles&#x27;,
+    &#x27;treeForAddon&#x27;,
+    &#x27;treeForAddonStyles&#x27;,
+    &#x27;treeForAddonTemplates&#x27;,
+    &#x27;compileAddon&#x27;,
+    &#x27;processedAddonJsFiles&#x27;,
+    &#x27;compileTemplates&#x27;,
+    &#x27;_addonTemplateFiles&#x27;,
+    &#x27;compileStyles&#x27;,
+    &#x27;preprocessJs&#x27;,
   ],
   &#x27;addon-styles&#x27;: [&#x27;treeForAddonStyles&#x27;],
   &#x27;addon-templates&#x27;: [&#x27;treeForAddonTemplates&#x27;],
@@ -364,7 +369,6 @@ let addonProto = {
 
     this.treePaths = {
       app: &#x27;app&#x27;,
-      src: &#x27;src&#x27;,
       styles: &#x27;app/styles&#x27;,
       templates: &#x27;app/templates&#x27;,
       addon: &#x27;addon&#x27;,
@@ -399,12 +403,7 @@ let addonProto = {
 
     p.setupRegistry(this);
 
-
     this._initDefaultBabelOptions();
-
-    if (isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;)) {
-      this.registry.remove(&#x27;template&#x27;, &#x27;ember-cli-htmlbars&#x27;);
-    }
   },
 
   _initDefaultBabelOptions() {
@@ -412,33 +411,14 @@ let addonProto = {
       babel: this[BUILD_BABEL_OPTIONS_FOR_PREPROCESSORS](),
     });
 
-    let defaultEmberCLIBabelOptions;
-    if (isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;)) {
-      defaultEmberCLIBabelOptions = {
-        compileModules: false,
-        disablePresetEnv: true,
-        disableDebugTooling: true,
-        disableEmberModulesAPIPolyfill: true,
-      };
-    } else {
-      defaultEmberCLIBabelOptions = {
-        compileModules: true,
-      };
-    }
+    let defaultEmberCLIBabelOptions = {
+      compileModules: true,
+    };
     let emberCLIBabelConfigKey = this._emberCLIBabelConfigKey();
-    this.__originalOptions[emberCLIBabelConfigKey] =
-      this.options[emberCLIBabelConfigKey] =
-      defaultsDeep(this.options[emberCLIBabelConfigKey], defaultEmberCLIBabelOptions);
-  },
-
-  /**
-     Returns whether this is using a module unification format.
-     @private
-     @method isModuleUnification
-     @return {Boolean} Whether this is using a module unification format.
-  */
-  isModuleUnification() {
-    return false;
+    this.__originalOptions[emberCLIBabelConfigKey] = this.options[emberCLIBabelConfigKey] = defaultsDeep(
+      this.options[emberCLIBabelConfigKey],
+      defaultEmberCLIBabelOptions
+    );
   },
 
   /**
@@ -462,7 +442,7 @@ let addonProto = {
    * @method findOwnAddonByName
    */
   findOwnAddonByName(name) {
-    return this.addons.find(addon =&gt; addon.name === name);
+    return this.addons.find((addon) =&gt; addon.name === name);
   },
 
   /**
@@ -474,7 +454,7 @@ let addonProto = {
    */
   hintingEnabled() {
     let isProduction = process.env.EMBER_ENV === &#x27;production&#x27;;
-    let testsEnabledDefault = process.env.EMBER_CLI_TEST_COMMAND || !isProduction;
+    let testsEnabledDefault = process.env.EMBER_CLI_TEST_COMMAND === &#x27;true&#x27; || !isProduction;
     let explicitlyDisabled = this.app &amp;&amp; this.app.options &amp;&amp; this.app.options.hinting === false;
 
     return testsEnabledDefault &amp;&amp; !explicitlyDisabled;
@@ -506,7 +486,7 @@ let addonProto = {
     @return {Boolean}
   */
   isDevelopingAddon() {
-    if (process.env.EMBER_ADDON_ENV === &#x27;development&#x27; &amp;&amp; (this.parent instanceof Project)) {
+    if (process.env.EMBER_ADDON_ENV === &#x27;development&#x27; &amp;&amp; this.parent instanceof Project) {
       const parentName = this.parent.name();
       // If the name in package.json and index.js match, we&#x27;re definitely developing
       if (parentName === this.name) {
@@ -519,10 +499,11 @@ let addonProto = {
           let pathToDisplay = process.cwd() === this.root ? process.cwd() : path.relative(process.cwd(), this.root);
 
           throw new SilentError(
-            &#x27;Your names in package.json and index.js should match. &#x27; +
-            &#x60;The addon in ${pathToDisplay} currently have &#x27;${parentName}&#x27; in package.json and &#x27;${this.name}&#x27; in index.js. &#x60; +
-            &#x27;Until ember-cli v3.9, this error can be disabled by setting env variable EMBER_CLI_IGNORE_ADDON_NAME_MISMATCH to &quot;true&quot;. &#x27; +
-            &#x27;For more information about this workaround, see: https://github.com/ember-cli/ember-cli/pull/7950.&#x27;);
+            &#x27;ember-cli: Your names in package.json and index.js should match. &#x27; +
+              &#x60;The addon in ${pathToDisplay} currently have &#x27;${parentName}&#x27; in package.json and &#x27;${this.name}&#x27; in index.js. &#x60; +
+              &#x27;Until ember-cli v3.9, this error can be disabled by setting env variable EMBER_CLI_IGNORE_ADDON_NAME_MISMATCH to &quot;true&quot;. &#x27; +
+              &#x27;For more information about this workaround, see: https://github.com/ember-cli/ember-cli/pull/7950.&#x27;
+          );
         }
 
         return true;
@@ -548,9 +529,10 @@ let addonProto = {
 
     if (pkgInfo) {
       let addonPackageList = pkgInfo.discoverAddonAddons();
-      this.addonPackages =
-          pkgInfo.generateAddonPackages(addonPackageList,
-            addonInfo =&gt; (this.shouldIncludeChildAddon &amp;&amp; !this.shouldIncludeChildAddon(addonInfo)));
+      this.addonPackages = pkgInfo.generateAddonPackages(
+        addonPackageList,
+        (addonInfo) =&gt; this.shouldIncludeChildAddon &amp;&amp; !this.shouldIncludeChildAddon(addonInfo)
+      );
 
       // in case any child addons are invalid, dump to the console about them.
       pkgInfo.dumpInvalidAddonPackages(addonPackageList);
@@ -574,7 +556,7 @@ let addonProto = {
     this.discoverAddons();
 
     this.addons = instantiateAddons(this, this.project, this.addonPackages);
-    this.addons.forEach(addon =&gt; logger.info(&#x27;addon: %s&#x27;, addon.name));
+    this.addons.forEach((addon) =&gt; logger.info(&#x27;addon: %s&#x27;, addon.name));
   },
 
   /**
@@ -594,7 +576,9 @@ let addonProto = {
       let method = addon[methodName];
       if (method) {
         let val = method.apply(addon, invokeArguments);
-        if (val) { sum.push(val); }
+        if (val) {
+          sum.push(val);
+        }
       }
       return sum;
     }, []);
@@ -617,7 +601,9 @@ let addonProto = {
       let method = addon[methodName];
       if (method) {
         let val = method.apply(addon, invokeArguments);
-        if (val) { sum.push(val); }
+        if (val) {
+          sum.push(val);
+        }
       }
       return sum;
     }, []);
@@ -642,11 +628,12 @@ let addonProto = {
     let tree;
 
     if (!this.project) {
-      this._warn(&#x60;Addon: \&#x60;${this.name}\&#x60; is missing addon.project, this may be the result of an addon forgetting to invoke \&#x60;super\&#x60; in its init.&#x60;);
+      this._warn(
+        &#x60;Addon: \&#x60;${this.name}\&#x60; is missing addon.project, this may be the result of an addon forgetting to invoke \&#x60;super\&#x60; in its init.&#x60;
+      );
     }
     // TODO: fix law of demeter &#x60;_watchmanInfo.canNestRoots&#x60; is obviously a poor idea
-    if ((this.project &amp;&amp; this.project._watchmanInfo.canNestRoots) ||
-        this.isDevelopingAddon()) {
+    if ((this.project &amp;&amp; this.project._watchmanInfo.canNestRoots) || this.isDevelopingAddon()) {
       const WatchedDir = require(&#x27;broccoli-source&#x27;).WatchedDir;
       tree = new WatchedDir(dir);
     } else {
@@ -786,7 +773,7 @@ let addonProto = {
     let cacheKeyStats = heimdall.statsFor(&#x27;cache-key-for-tree&#x27;);
 
     // determine if treeFor* (or other methods for tree type) overrides for the given tree
-    let modifiedMethods = methodsToValidate.filter(methodName =&gt; this[methodName] !== addonProto[methodName]);
+    let modifiedMethods = methodsToValidate.filter((methodName) =&gt; this[methodName] !== addonProto[methodName]);
 
     if (modifiedMethods.length) {
       cacheKeyStats.modifiedMethods++;
@@ -892,26 +879,6 @@ let addonProto = {
     @return {Tree} App file tree
   */
   treeForApp(tree) {
-    if (!isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;)) {
-      return tree;
-    } else if (this.project.isModuleUnification() &amp;&amp; this.isModuleUnification()) {
-      return null;
-    }
-
-    let srcTreePath = path.resolve(this.root, this.treePaths.src);
-
-    if (fs.existsSync(srcTreePath)) {
-      const MUReexporter = require(&#x27;broccoli-module-unification-reexporter&#x27;);
-
-      let srcTree = this.treeGenerator(srcTreePath);
-
-      let reexportedOutput = new MUReexporter(srcTree, {
-        namespace: this.name,
-      });
-
-      return reexportedOutput;
-    }
-
     return tree;
   },
 
@@ -925,39 +892,6 @@ let addonProto = {
   */
   treeForTemplates(tree) {
     return tree;
-  },
-
-  /**
-    @private
-    @method treeForSrc
-    @return
-  */
-  treeForSrc(rawSrcTree) {
-    if (!isExperimentEnabled(&#x27;MODULE_UNIFICATION&#x27;)) {
-      return null;
-    }
-    if (!rawSrcTree) { return null; }
-
-    let srcNamespacedTree = new Funnel(rawSrcTree, {
-      destDir: &#x60;${this.name}/src&#x60;,
-      annotation: &#x60;Addon#treeForSrc(${this.name}) namespace&#x60;,
-    });
-
-    let srcAfterPreprocessTreeHook = this._addonPreprocessTree(&#x27;src&#x27;, srcNamespacedTree);
-
-    let srcAfterTemplatePreprocessing = srcAfterPreprocessTreeHook;
-    if (!isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;) || registryHasPreprocessor(this.registry, &#x27;template&#x27;)) {
-      srcAfterTemplatePreprocessing = preprocessTemplates(srcAfterPreprocessTreeHook, {
-        registry: this.registry,
-        annotation: &#x60;Addon#treeForSrc(${this.name})&#x60;,
-      });
-    }
-
-    let srcAfterJsPreprocessing = preprocessJs(srcAfterTemplatePreprocessing, &#x27;/&#x27;, this.name, {
-      registry: this.registry,
-    });
-
-    return this._addonPostprocessTree(&#x27;src&#x27;, srcAfterJsPreprocessing);
   },
 
   /**
@@ -1003,9 +937,7 @@ let addonProto = {
     let addonTree = this.compileAddon(tree);
     let stylesTree = this.compileStyles(this._treeFor(&#x27;addon-styles&#x27;));
 
-    return mergeTrees([addonTree, stylesTree], {
-      annotation: &#x60;Addon#treeForAddon(${this.name})&#x60;,
-    });
+    return mergeTrees([addonTree, stylesTree], { annotation: &#x60;Addon#treeForAddon(${this.name})&#x60; });
   },
 
   /**
@@ -1095,10 +1027,12 @@ let addonProto = {
         registry: this.registry,
       });
     } else {
-      this._warn(&#x60;Addon test support files were detected in \&#x60;${this._treePathFor(&#x27;addon-test-support&#x27;)}\&#x60;, but no JavaScript &#x60; +
-                 &#x60;preprocessors were found for \&#x60;${this.name}\&#x60;. Please make sure to add a preprocessor &#x60; +
-                 &#x60;(most likely \&#x60;ember-cli-babel\&#x60;) to \&#x60;dependencies\&#x60; (NOT \&#x60;devDependencies\&#x60;) in &#x60; +
-                 &#x60;\&#x60;${this.name}\&#x60;&#x27;s \&#x60;package.json\&#x60;.&#x60;);
+      this._warn(
+        &#x60;Addon test support files were detected in \&#x60;${this._treePathFor(&#x27;addon-test-support&#x27;)}\&#x60;, but no JavaScript &#x60; +
+          &#x60;preprocessors were found for \&#x60;${this.name}\&#x60;. Please make sure to add a preprocessor &#x60; +
+          &#x60;(most likely \&#x60;ember-cli-babel\&#x60;) to \&#x60;dependencies\&#x60; (NOT \&#x60;devDependencies\&#x60;) in &#x60; +
+          &#x60;\&#x60;${this.name}\&#x60;&#x27;s \&#x60;package.json\&#x60;.&#x60;
+      );
 
       return processModulesOnly(namespacedTree, &#x60;Babel Fallback - Addon#treeForAddonTestSupport (${this.name})&#x60;);
     }
@@ -1117,8 +1051,11 @@ let addonProto = {
       let preprocessedStylesTree = this._addonPreprocessTree(&#x27;css&#x27;, addonStylesTree);
 
       let processedStylesTree = preprocessCss(preprocessedStylesTree, &#x27;/&#x27;, &#x27;/&#x27;, {
-        outputPaths: { &#x27;addon&#x27;: &#x60;${this.name}.css&#x60; },
+        outputPaths: { addon: &#x60;${this.name}.css&#x60; },
         registry: this.registry,
+      });
+      processedStylesTree = new Funnel(processedStylesTree, {
+        destDir: &#x60;${this.name}/__COMPILED_STYLES__&#x60;,
       });
 
       return this._addonPostprocessTree(&#x27;css&#x27;, processedStylesTree);
@@ -1166,9 +1103,10 @@ let addonProto = {
 
     let files = this._getAddonTreeFiles();
 
-    let addonTemplatesRelativeToAddonPath = addonTemplatesTreeInAddonTree &amp;&amp; addonTemplatesTreePath.replace(&#x60;${addonTreePath}/&#x60;, &#x27;&#x27;);
+    let addonTemplatesRelativeToAddonPath =
+      addonTemplatesTreeInAddonTree &amp;&amp; addonTemplatesTreePath.replace(&#x60;${addonTreePath}/&#x60;, &#x27;&#x27;);
     let podTemplateMatcher = new RegExp(&#x60;template.(${templateExtensions.join(&#x27;|&#x27;)})$&#x60;);
-    let hasPodTemplates = files.some(file =&gt; {
+    let hasPodTemplates = files.some((file) =&gt; {
       // short circuit if this is actually a &#x60;addon/templates&#x60; file
       if (addonTemplatesTreeInAddonTree &amp;&amp; file.indexOf(addonTemplatesRelativeToAddonPath) === 0) {
         return false;
@@ -1178,14 +1116,14 @@ let addonProto = {
     });
 
     let jsMatcher = new RegExp(&#x60;(${jsExtensions.join(&#x27;|&#x27;)})$&#x60;);
-    let hasJSFiles = files.some(file =&gt; jsMatcher.test(file));
+    let hasJSFiles = files.some((file) =&gt; jsMatcher.test(file));
 
     if (!addonTemplatesTreeInAddonTree) {
       files = files.concat(this._getAddonTemplatesTreeFiles());
     }
 
     let extensionMatcher = new RegExp(&#x60;(${templateExtensions.join(&#x27;|&#x27;)})$&#x60;);
-    let hasTemplates = files.some(file =&gt; extensionMatcher.test(file));
+    let hasTemplates = files.some((file) =&gt; extensionMatcher.test(file));
 
     this._cachedFileSystemInfo = {
       hasJSFiles,
@@ -1228,7 +1166,7 @@ let addonProto = {
     if (addonTemplates) {
       standardTemplates = new Funnel(addonTemplates, {
         srcDir: &#x27;/&#x27;,
-        destDir: &#x60;${this.name}/templates&#x60;,
+        destDir: &#x60;${this.moduleName()}/templates&#x60;,
         annotation: &#x60;Addon#_addonTemplateFiles (${this.name})&#x60;,
       });
 
@@ -1236,12 +1174,13 @@ let addonProto = {
     }
 
     if (this._shouldCompilePodTemplates()) {
-      let includePatterns = this.registry.extensionsForType(&#x27;template&#x27;)
-        .map(extension =&gt; &#x60;**/*/template.${extension}&#x60;);
+      let includePatterns = this.registry
+        .extensionsForType(&#x27;template&#x27;)
+        .map((extension) =&gt; &#x60;**/*/template.${extension}&#x60;);
 
       let podTemplates = new Funnel(addonTree, {
         include: includePatterns,
-        destDir: &#x60;${this.name}/&#x60;,
+        destDir: &#x60;${this.moduleName()}/&#x60;,
         annotation: &#x27;Funnel: Addon Pod Templates&#x27;,
       });
 
@@ -1265,27 +1204,26 @@ let addonProto = {
   */
   compileTemplates(addonTree) {
     if (this.shouldCompileTemplates()) {
-      if (!isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;) &amp;&amp; !registryHasPreprocessor(this.registry, &#x27;template&#x27;)) {
-        throw new SilentError(&#x60;Addon templates were detected, but there are no template compilers registered for \&#x60;${this.name}\&#x60;. &#x60; +
-          &#x60;Please make sure your template precompiler (commonly \&#x60;ember-cli-htmlbars\&#x60;) is listed in \&#x60;dependencies\&#x60; &#x60; +
-          &#x60;(NOT \&#x60;devDependencies\&#x60;) in \&#x60;${this.name}\&#x60;&#x27;s \&#x60;package.json\&#x60;.&#x60;);
+      if (!registryHasPreprocessor(this.registry, &#x27;template&#x27;)) {
+        throw new SilentError(
+          &#x60;Addon templates were detected, but there are no template compilers registered for \&#x60;${this.name}\&#x60;. &#x60; +
+            &#x60;Please make sure your template precompiler (commonly \&#x60;ember-cli-htmlbars\&#x60;) is listed in \&#x60;dependencies\&#x60; &#x60; +
+            &#x60;(NOT \&#x60;devDependencies\&#x60;) in \&#x60;${this.name}\&#x60;&#x27;s \&#x60;package.json\&#x60;.&#x60;
+        );
       }
 
-      let preprocessedTemplateTree = this._addonPreprocessTree(&#x27;template&#x27;, this._addonTemplateFiles(addonTree));
+      let preprocessedTemplateTree = this._addonPreprocessTree(&#x27;template&#x27;, addonTree);
 
-      let processedTemplateTree;
-      if (!isExperimentEnabled(&#x27;DELAYED_TRANSPILATION&#x27;) || registryHasPreprocessor(this.registry, &#x27;template&#x27;)) {
-        processedTemplateTree = preprocessTemplates(preprocessedTemplateTree, {
-          annotation: &#x60;compileTemplates(${this.name})&#x60;,
-          registry: this.registry,
-        });
-      } else {
-        processedTemplateTree = preprocessedTemplateTree;
-      }
+      let processedTemplateTree = preprocessTemplates(preprocessedTemplateTree, {
+        annotation: &#x60;compileTemplates(${this.name})&#x60;,
+        registry: this.registry,
+      });
 
       let postprocessedTemplateTree = this._addonPostprocessTree(&#x27;template&#x27;, processedTemplateTree);
 
-      return processModulesOnly(postprocessedTemplateTree, &#x27;Babel: Modules for Templates&#x27;);
+      return postprocessedTemplateTree;
+    } else {
+      return addonTree;
     }
   },
 
@@ -1301,9 +1239,9 @@ let addonProto = {
     if (!this.options) {
       this._warn(
         &#x60;Ember CLI addons manage their own module transpilation during the \&#x60;treeForAddon\&#x60; processing. &#x60; +
-        &#x60;\&#x60;${this.name}\&#x60; (found at \&#x60;${this.root}\&#x60;) has removed \&#x60;this.options\&#x60; &#x60; +
-        &#x60;which conflicts with the addons ability to transpile its \&#x60;addon/\&#x60; files properly. &#x60; +
-        &#x60;Falling back to default babel configuration options.&#x60;
+          &#x60;\&#x60;${this.name}\&#x60; (found at \&#x60;${this.root}\&#x60;) has removed \&#x60;this.options\&#x60; &#x60; +
+          &#x60;which conflicts with the addons ability to transpile its \&#x60;addon/\&#x60; files properly. &#x60; +
+          &#x60;Falling back to default babel configuration options.&#x60;
       );
 
       this.options = {};
@@ -1312,9 +1250,9 @@ let addonProto = {
     if (!this.options.babel) {
       this._warn(
         &#x60;Ember CLI addons manage their own module transpilation during the \&#x60;treeForAddon\&#x60; processing. &#x60; +
-        &#x60;\&#x60;${this.name}\&#x60; (found at \&#x60;${this.root}\&#x60;) has overridden the \&#x60;this.options.babel\&#x60; &#x60; +
-        &#x60;options which conflicts with the addons ability to transpile its \&#x60;addon/\&#x60; files properly. &#x60; +
-        &#x60;Falling back to default babel configuration options.&#x60;
+          &#x60;\&#x60;${this.name}\&#x60; (found at \&#x60;${this.root}\&#x60;) has overridden the \&#x60;this.options.babel\&#x60; &#x60; +
+          &#x60;options which conflicts with the addons ability to transpile its \&#x60;addon/\&#x60; files properly. &#x60; +
+          &#x60;Falling back to default babel configuration options.&#x60;
       );
 
       this.options.babel = this.__originalOptions.babel;
@@ -1324,23 +1262,23 @@ let addonProto = {
     if (!this.options[emberCLIBabelConfigKey]) {
       this._warn(
         &#x60;Ember CLI addons manage their own module transpilation during the \&#x60;treeForAddon\&#x60; processing. &#x60; +
-        &#x60;\&#x60;${this.name}\&#x60; (found at \&#x60;${this.root}\&#x60;) has overridden the \&#x60;this.options.${emberCLIBabelConfigKey}\&#x60; &#x60; +
-        &#x60;options which conflicts with the addons ability to transpile its \&#x60;addon/\&#x60; files properly. &#x60; +
-        &#x60;Falling back to default babel configuration options.&#x60;
+          &#x60;\&#x60;${this.name}\&#x60; (found at \&#x60;${this.root}\&#x60;) has overridden the \&#x60;this.options.${emberCLIBabelConfigKey}\&#x60; &#x60; +
+          &#x60;options which conflicts with the addons ability to transpile its \&#x60;addon/\&#x60; files properly. &#x60; +
+          &#x60;Falling back to default babel configuration options.&#x60;
       );
 
       this.options[emberCLIBabelConfigKey] = this.__originalOptions[emberCLIBabelConfigKey];
     }
 
-    let addonJs = this.processedAddonJsFiles(tree);
-    let templatesTree = this.compileTemplates(tree);
-
-    let trees = [addonJs, templatesTree].filter(Boolean);
-
-    return mergeTrees(trees, {
-      overwrite: true,
-      annotation: &#x60;Addon#compileAddon(${this.name})&#x60;,
+    let scopedInput = new Funnel(tree, {
+      destDir: this.moduleName(),
+      annotation: &#x60;Funnel: ${this.name}/addon&#x60;,
     });
+
+    let treeWithCompiledTemplates = this.compileTemplates(scopedInput);
+    let final = this.processedAddonJsFiles(treeWithCompiledTemplates);
+
+    return final;
   },
 
   /**
@@ -1355,8 +1293,8 @@ let addonProto = {
 
     let addonPath = this._treePathFor(&#x27;addon&#x27;);
     if (fs.existsSync(addonPath)) {
-      let addonJs = new Funnel(this.addonJsFiles(addonPath), {
-        srcDir: this.moduleName(),
+      let addonJs = new Funnel(addonPath, {
+        exclude: [&#x27;templates/**/*&#x27;],
         destDir: &#x27;addon&#x27;,
         allowEmpty: true,
       });
@@ -1375,7 +1313,10 @@ let addonProto = {
     let addonTestSupportPath = this._treePathFor(&#x27;addon-test-support&#x27;);
     if (fs.existsSync(addonTestSupportPath)) {
       let addonTestSupportTree = new Funnel(addonTestSupportPath, { destDir: &#x27;addon-test-support&#x27; });
-      let lintAddonTestSupportJsTrees = this._eachProjectAddonInvoke(&#x27;lintTree&#x27;, [&#x27;addon-test-support&#x27;, addonTestSupportTree]);
+      let lintAddonTestSupportJsTrees = this._eachProjectAddonInvoke(&#x27;lintTree&#x27;, [
+        &#x27;addon-test-support&#x27;,
+        addonTestSupportTree,
+      ]);
       trees = trees.concat(lintAddonTestSupportJsTrees);
     }
 
@@ -1410,20 +1351,18 @@ let addonProto = {
     Returns a tree containing the addon&#x27;s js files
 
     @private
+    @deprecated
     @method addonJsFiles
     @return {Tree} The filtered addon js files
   */
   addonJsFiles(tree) {
-    let includePatterns = this.registry.extensionsForType(&#x27;js&#x27;)
-      .map(extension =&gt; new RegExp(&#x60;${extension}$&#x60;));
+    this._warn(&#x60;Addon.prototype.addonJsFiles is deprecated&#x60;);
 
     return new Funnel(tree, {
-      include: includePatterns,
       destDir: this.moduleName(),
       annotation: &#x27;Funnel: Addon JS&#x27;,
     });
   },
-
 
   /**
     Preprocesses a javascript tree.
@@ -1444,8 +1383,8 @@ let addonProto = {
     @param {Tree} the tree to preprocess
     @return {Tree} Processed javascript file tree
   */
-  processedAddonJsFiles(addonTree) {
-    let preprocessedAddonJS = this._addonPreprocessTree(&#x27;js&#x27;, this.addonJsFiles(addonTree));
+  processedAddonJsFiles(inputTree) {
+    let preprocessedAddonJS = this._addonPreprocessTree(&#x27;js&#x27;, inputTree);
 
     let processedAddonJS = this.preprocessJs(preprocessedAddonJS, &#x27;/&#x27;, this.name, {
       annotation: &#x60;processedAddonJsFiles(${this.name})&#x60;,
@@ -1455,10 +1394,12 @@ let addonProto = {
     let postprocessedAddonJs = this._addonPostprocessTree(&#x27;js&#x27;, processedAddonJS);
 
     if (!registryHasPreprocessor(this.registry, &#x27;js&#x27;)) {
-      this._warn(&#x60;Addon files were detected in \&#x60;${this._treePathFor(&#x27;addon&#x27;)}\&#x60;, but no JavaScript &#x60; +
-                 &#x60;preprocessors were found for \&#x60;${this.name}\&#x60;. Please make sure to add a preprocessor &#x60; +
-                 &#x27;(most likely &#x60;ember-cli-babel&#x60;) to in &#x60;dependencies&#x60; (NOT &#x60;devDependencies&#x60;) in &#x27; +
-                 &#x60;\&#x60;${this.name}\&#x60;&#x27;s \&#x60;package.json\&#x60;.&#x60;);
+      this._warn(
+        &#x60;Addon files were detected in \&#x60;${this._treePathFor(&#x27;addon&#x27;)}\&#x60;, but no JavaScript &#x60; +
+          &#x60;preprocessors were found for \&#x60;${this.name}\&#x60;. Please make sure to add a preprocessor &#x60; +
+          &#x27;(most likely &#x60;ember-cli-babel&#x60;) to in &#x60;dependencies&#x60; (NOT &#x60;devDependencies&#x60;) in &#x27; +
+          &#x60;\&#x60;${this.name}\&#x60;&#x27;s \&#x60;package.json\&#x60;.&#x60;
+      );
 
       postprocessedAddonJs = processModulesOnly(
         postprocessedAddonJs,
@@ -1478,7 +1419,7 @@ let addonProto = {
   */
   moduleName() {
     if (!this.modulePrefix) {
-      this.modulePrefix = (this.modulePrefix || this.name).toLowerCase().replace(/\s/g, &#x27;-&#x27;);
+      this.modulePrefix = this.name.toLowerCase().replace(/\s/g, &#x27;-&#x27;);
     }
 
     return this.modulePrefix;
@@ -1617,9 +1558,8 @@ let addonProto = {
   &#x60;&#x60;&#x60;
 */
 
-
 /**
-  Allows addons to define a custom transfrom function that other addons and app can use when using &#x60;app.import&#x60;.
+  Allows addons to define a custom transform function that other addons and app can use when using &#x60;app.import&#x60;.
 
   This function is not implemented by default
 
@@ -1671,25 +1611,23 @@ let addonProto = {
 
   @public
   @method preprocessTree
-  @param {String} type What kind of tree (eg. &#x27;js&#x27;, &#x27;css&#x27;, &#x27;src&#x27;, &#x27;template&#x27;)
+  @param {String} type What kind of tree (eg. &#x27;js&#x27;, &#x27;css&#x27;, &#x27;template&#x27;)
   @param {Tree} tree Tree to process
   @return {Tree} Processed tree
  */
-
 
 /**
   Post-process a tree
 
   @public
   @method postprocessTree
-  @param {String} type What kind of tree (eg. &#x27;js&#x27;, &#x27;css&#x27;, &#x27;src&#x27;, &#x27;template&#x27;)
+  @param {String} type What kind of tree (eg. &#x27;js&#x27;, &#x27;css&#x27;, &#x27;template&#x27;)
   @param {Tree} tree Tree to process
   @return {Tree} Processed tree
 
   @example
   - [broccoli-asset-rev](https://github.com/rickharrison/broccoli-asset-rev/blob/c82c3580855554a31f7d6600b866aecf69cdaa6d/index.js#L29)
  */
-
 
 /**
   This hook allows you to make changes to the express server run by ember-cli.
@@ -1730,7 +1668,6 @@ let addonProto = {
   - [history-support-addon](https://github.com/ember-cli/ember-cli/blob/v2.4.3/lib/tasks/server/middleware/history-support/index.js#L25)
  */
 
-
 /**
  This hook allows you to make changes to the express server run by testem.
 
@@ -1746,7 +1683,6 @@ let addonProto = {
  @param {Object} app the express app instance
  */
 
-
 /**
   This hook is called before a build takes place.
 
@@ -1754,7 +1690,6 @@ let addonProto = {
   @method preBuild
   @param {Object} result Build object
 */
-
 
 /**
   This hook is called after a build is complete.
@@ -1771,7 +1706,6 @@ let addonProto = {
   @method postBuild
   @param {Object} result Build result object
 */
-
 
 /**
   This hook is called after the build has been processed and the build files have been copied to the output directory
@@ -1790,7 +1724,6 @@ let addonProto = {
       This allows our ruby gem to block incoming requests until after the build happens reliably.
  */
 
-
 /**
   This hook is called when an error occurs during the preBuild, postBuild or outputReady hooks
   for addons, or when the build fails
@@ -1806,7 +1739,6 @@ let addonProto = {
   @example
   - [ember-cli-rails-addon](https://github.com/rondale-sc/ember-cli-rails-addon/blob/v0.7.0/index.js#L11)
 */
-
 
 /**
  Used to add preprocessors to the preprocessor registry. This is often used by addons like [ember-cli-htmlbars](https://github.com/ember-cli/ember-cli-htmlbars)
@@ -1850,7 +1782,6 @@ let addonProto = {
  &#x60;&#x60;&#x60;
 */
 
-
 /**
  Return value is merged into the **tests** tree. This lets you inject
  linter output as test results.
@@ -1869,7 +1800,6 @@ let addonProto = {
  - [ember-cli-qunit](https://github.com/ember-cli/ember-cli-qunit/blob/v1.4.1/index.js#L206)
  - [ember-cli-mocha](https://github.com/ef4/ember-cli-mocha/blob/66803037fe203b24e96dea83a2bd91de48b842e1/index.js#L101)
 */
-
 
 /**
  Allow addons to implement contentFor method to add string output into the associated &#x60;{{content-for &#x27;foo&#x27;}}&#x60; section in &#x60;index.html&#x60;
@@ -1896,7 +1826,7 @@ function methodsForTreeType(treeType) {
 
 let Addon = CoreObject.extend(addonProto);
 
-Addon.prototype[BUILD_BABEL_OPTIONS_FOR_PREPROCESSORS] = function() {
+Addon.prototype[BUILD_BABEL_OPTIONS_FOR_PREPROCESSORS] = function () {
   let emberCLIBabelInstance = findAddonByName(this.addons, &#x27;ember-cli-babel&#x27;);
   let version;
   if (emberCLIBabelInstance) {

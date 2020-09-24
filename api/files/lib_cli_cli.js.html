@@ -42,13 +42,16 @@
                             <li><a href="../classes/Builder.html">Builder</a></li>
                             <li><a href="../classes/CLI.html">CLI</a></li>
                             <li><a href="../classes/Command.html">Command</a></li>
+                            <li><a href="../classes/CommandGenerator.html">CommandGenerator</a></li>
                             <li><a href="../classes/DefaultPackager.html">DefaultPackager</a></li>
                             <li><a href="../classes/EmberAddon.html">EmberAddon</a></li>
                             <li><a href="../classes/EmberApp.html">EmberApp</a></li>
+                            <li><a href="../classes/HardwareInfo.html">HardwareInfo</a></li>
                             <li><a href="../classes/HistorySupportAddon.html">HistorySupportAddon</a></li>
                             <li><a href="../classes/Instrumentation.html">Instrumentation</a></li>
                             <li><a href="../classes/NodeModulesList.html">NodeModulesList</a></li>
                             <li><a href="../classes/NpmTask.html">NpmTask</a></li>
+                            <li><a href="../classes/PackageCache.html">PackageCache</a></li>
                             <li><a href="../classes/PackageInfo.html">PackageInfo</a></li>
                             <li><a href="../classes/PackageInfoCache.html">PackageInfoCache</a></li>
                             <li><a href="../classes/Project.html">Project</a></li>
@@ -65,7 +68,7 @@
             
             
             <div class="version-info">
-              Version: 3.8.1--84707b2801
+              Version: 3.21.2-release-97b3bd79fc
             </div>
             
         </div>
@@ -78,17 +81,15 @@
 <pre class="code prettyprint linenums">
 &#x27;use strict&#x27;;
 
-const RSVP = require(&#x27;rsvp&#x27;);
-
 const lookupCommand = require(&#x27;./lookup-command&#x27;);
 const getOptionArgs = require(&#x27;../utilities/get-option-args&#x27;);
+const hash = require(&#x27;promise.hash.helper&#x27;);
 const logger = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:cli&#x27;);
 const loggerTesting = require(&#x27;heimdalljs-logger&#x27;)(&#x27;ember-cli:testing&#x27;);
 const Instrumentation = require(&#x27;../models/instrumentation&#x27;);
 const PackageInfoCache = require(&#x27;../models/package-info-cache&#x27;);
 const heimdall = require(&#x27;heimdalljs&#x27;);
 
-const Promise = RSVP.Promise;
 const onProcessInterrupt = require(&#x27;../utilities/will-interrupt-process&#x27;);
 
 class CLI {
@@ -148,10 +149,12 @@ class CLI {
      * @private
      * @property instrumentation
      */
-    this.instrumentation = options.instrumentation || new Instrumentation({
-      ui: options.ui,
-      initInstrumentation: options.initInstrumentation,
-    });
+    this.instrumentation =
+      options.instrumentation ||
+      new Instrumentation({
+        ui: options.ui,
+        initInstrumentation: options.initInstrumentation,
+      });
 
     this.packageInfoCache = new PackageInfoCache(this.ui);
 
@@ -160,14 +163,58 @@ class CLI {
 
   /**
    * @private
+   * @method maybeMakeCommand
+   * @param commandName
+   * @param commandArgs
+   * @return {null|CurrentCommand}
+   */
+  maybeMakeCommand(commandName, commandArgs) {
+    if (this._environment === undefined) {
+      throw new Error(&#x27;Unable to make command without environment, you have to execute &quot;run&quot; method first.&#x27;);
+    }
+    let CurrentCommand = lookupCommand(this._environment.commands, commandName, commandArgs, {
+      project: this._environment.project,
+      ui: this.ui,
+    });
+
+    /*
+     * XXX Need to decide what to do here about showing errors. For
+     * a non-CLI project the cache is local and probably should. For
+     * a CLI project the cache is there, but not sure when we&#x27;ll know
+     * about all the errors, because there may be multiple projects.
+     *   if (this.packageInfoCache.hasErrors()) {
+     *     this.packageInfoCache.showErrors();
+     *   }
+     */
+    let command = new CurrentCommand({
+      ui: this.ui,
+      analytics: this.analytics,
+      commands: this._environment.commands,
+      tasks: this._environment.tasks,
+      project: this._environment.project,
+      settings: this._environment.settings,
+      testing: this.testing,
+      cli: this,
+    });
+
+    return command;
+  }
+
+  /**
+   * @private
    * @method run
-   * @param environment
+   * @param {Promise&lt;object&gt;} environmentPromiseHash
    * @return {Promise}
    */
-  run(environment) {
+  async run(environmentPromiseHash) {
+    if (environmentPromiseHash === undefined) {
+      return Promise.reject(new Error(&#x27;Unable to execute &quot;run&quot; command without environment argument&#x27;));
+    }
     let shutdownOnExit = null;
 
-    return RSVP.hash(environment).then(environment =&gt; {
+    let environment = (this._environment = await hash(environmentPromiseHash));
+
+    try {
       let args = environment.cliArgs.slice();
       let commandName = args.shift();
       let commandArgs = args;
@@ -175,35 +222,11 @@ class CLI {
 
       let commandLookupCreationToken = heimdall.start(&#x27;lookup-command&#x27;);
 
-      let CurrentCommand = lookupCommand(environment.commands, commandName, commandArgs, {
-        project: environment.project,
-        ui: this.ui,
-      });
-
-
-      /*
-       * XXX Need to decide what to do here about showing errors. For
-       * a non-CLI project the cache is local and probably should. For
-       * a CLI project the cache is there, but not sure when we&#x27;ll know
-       * about all the errors, because there may be multiple projects.
-       *   if (this.packageInfoCache.hasErrors()) {
-       *     this.packageInfoCache.showErrors();
-       *   }
-       */
-      let command = new CurrentCommand({
-        ui: this.ui,
-        analytics: this.analytics,
-        commands: environment.commands,
-        tasks: environment.tasks,
-        project: environment.project,
-        settings: environment.settings,
-        testing: this.testing,
-        cli: this,
-      });
+      let command = this.maybeMakeCommand(commandName, commandArgs);
 
       commandLookupCreationToken.stop();
 
-      getOptionArgs(&#x27;--verbose&#x27;, commandArgs).forEach(arg =&gt; {
+      getOptionArgs(&#x27;--verbose&#x27;, commandArgs).forEach((arg) =&gt; {
         process.env[&#x60;EMBER_VERBOSE_${arg.toUpperCase()}&#x60;] = &#x27;true&#x27;;
       });
 
@@ -211,8 +234,9 @@ class CLI {
 
       const PlatformChecker = require(&#x27;../utilities/platform-checker&#x27;);
       let platform = new PlatformChecker(process.version);
-      let recommendation = &#x27; We recommend that you use the most-recent &quot;Active LTS&quot; version of Node.js.&#x27; +
-                           &#x27; See https://git.io/v7S5n for details.&#x27;;
+      let recommendation =
+        &#x27; We recommend that you use the most-recent &quot;Active LTS&quot; version of Node.js.&#x27; +
+        &#x27; See https://git.io/v7S5n for details.&#x27;;
 
       if (!this.testing) {
         if (platform.isDeprecated) {
@@ -220,7 +244,9 @@ class CLI {
         }
 
         if (!platform.isTested) {
-          this.ui.writeWarnLine(&#x60;Node ${process.version} is not tested against Ember CLI on your platform.${recommendation}&#x60;);
+          this.ui.writeWarnLine(
+            &#x60;Node ${process.version} is not tested against Ember CLI on your platform.${recommendation}&#x60;
+          );
         }
       }
 
@@ -240,76 +266,86 @@ class CLI {
       let instrumentation = this.instrumentation;
       let onCommandInterrupt;
 
-      let runPromise = Promise.resolve().then(() =&gt; {
-        instrumentation.stopAndReport(&#x27;init&#x27;);
-        instrumentation.start(&#x27;command&#x27;);
+      let runPromise = Promise.resolve().then(async () =&gt; {
+        let resultOrExitCode;
 
-        loggerTesting.info(&#x27;cli: command.beforeRun&#x27;);
-        onProcessInterrupt.addHandler(onCommandInterrupt);
+        try {
+          instrumentation.stopAndReport(&#x27;init&#x27;);
 
-        return command.beforeRun(commandArgs);
-      }).then(() =&gt; {
-        loggerTesting.info(&#x27;cli: command.validateAndRun&#x27;);
+          try {
+            instrumentation.start(&#x27;command&#x27;);
 
-        return command.validateAndRun(commandArgs);
-      }).then(result =&gt; {
-        instrumentation.stopAndReport(&#x27;command&#x27;, commandName, commandArgs);
+            loggerTesting.info(&#x27;cli: command.beforeRun&#x27;);
+            onProcessInterrupt.addHandler(onCommandInterrupt);
 
-        onProcessInterrupt.removeHandler(onCommandInterrupt);
+            await command.beforeRun(commandArgs);
 
-        return result;
-      }).finally(() =&gt; {
-        instrumentation.start(&#x27;shutdown&#x27;);
-        shutdownOnExit = function() {
-          instrumentation.stopAndReport(&#x27;shutdown&#x27;);
-        };
-      }).then(result =&gt; {
+            loggerTesting.info(&#x27;cli: command.validateAndRun&#x27;);
+
+            resultOrExitCode = await command.validateAndRun(commandArgs);
+          } finally {
+            instrumentation.stopAndReport(&#x27;command&#x27;, commandName, commandArgs);
+
+            onProcessInterrupt.removeHandler(onCommandInterrupt);
+          }
+        } finally {
+          instrumentation.start(&#x27;shutdown&#x27;);
+          shutdownOnExit = function () {
+            instrumentation.stopAndReport(&#x27;shutdown&#x27;);
+          };
+        }
+
         // if the help option was passed, call the help command
-        if (result === &#x27;callHelp&#x27;) {
+        if (resultOrExitCode === &#x27;callHelp&#x27;) {
           helpOptions = {
             environment,
             commandName,
             commandArgs,
           };
 
-          return this.callHelp(helpOptions);
+          resultOrExitCode = await this.callHelp(helpOptions);
         }
 
-        return result;
-      }).then(exitCode =&gt; {
+        let exitCode = resultOrExitCode;
+
         loggerTesting.info(&#x60;cli: command run complete. exitCode: ${exitCode}&#x60;);
         // TODO: fix this
         // Possibly this issue: https://github.com/joyent/node/issues/8329
         // Wait to resolve promise when running on windows.
         // This ensures that stdout is flushed so acceptance tests get full output
 
-        return new Promise(resolve =&gt; {
-          if (process.platform === &#x27;win32&#x27;) {
+        if (process.platform === &#x27;win32&#x27;) {
+          return new Promise((resolve) =&gt; {
             setTimeout(resolve, 250, exitCode);
-          } else {
-            resolve(exitCode);
-          }
-        });
+          });
+        } else {
+          return exitCode;
+        }
       });
 
-      onCommandInterrupt = () =&gt;
-        Promise.resolve(command.onInterrupt())
-          .then(() =&gt; runPromise);
+      onCommandInterrupt = async () =&gt; {
+        await command.onInterrupt();
 
-      return runPromise;
-    }).finally(() =&gt; {
+        return await runPromise;
+      };
+
+      return await runPromise;
+    } catch (error) {
+      this.logError(error);
+      return 1;
+    } finally {
       if (shutdownOnExit) {
         shutdownOnExit();
       }
-    }).catch(this.logError.bind(this));
+    }
   }
 
   /**
-    * @private
-    * @method callHelp
-    * @param options
-    * @return {Promise}
-    */
+   * @private
+   * @method callHelp
+   * @param options
+   * @return {Promise}
+   */
   callHelp(options) {
     let environment = options.environment;
     let commandName = options.commandName;
